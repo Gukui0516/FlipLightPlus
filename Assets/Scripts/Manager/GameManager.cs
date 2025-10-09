@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private bool enterTitleOnBoot = true;
 
     [Header("스테이지")]
-    [SerializeField, Tooltip("현재 스테이지. 새 게임은 1부터 시작")]
+    [SerializeField, Tooltip("현재 스테이지 (1부터 시작)")]
     private int currentStage = 1;
     public int CurrentStage => currentStage;
 
@@ -37,7 +37,8 @@ public class GameManager : MonoBehaviour
     [Header("UI 참조")]
     //public GameOverUI gameOverUI;
 
-    [SerializeField] int endingStage = 4;
+    [SerializeField, Tooltip("엔딩 진입 스테이지 번호")]
+    private int endingStage = 4;
 
 
     private void Awake()
@@ -80,14 +81,15 @@ public class GameManager : MonoBehaviour
     }
     // ======= 공개 API =======
 
+    /// <summary>
+    /// 새 게임 시작 (스테이지 1부터)
+    /// </summary>
     public void StartNewGame()
     {
         current = GameState.Boot;
-        currentStage = 0;
+        currentStage = 1;
 
-
-
-        sceneManager.LoadStage(0);
+        sceneManager.LoadStage(currentStage);
         current = GameState.Playing;
         Resume();
     }
@@ -95,6 +97,7 @@ public class GameManager : MonoBehaviour
     public void GoTitle()
     {
         current = GameState.Boot;
+        currentStage = 1; // 타이틀로 돌아가면 스테이지도 초기화
 
         sceneManager.LoadTitle();
         Resume();
@@ -105,21 +108,26 @@ public class GameManager : MonoBehaviour
         StartNewGame();
     }
 
-    // 현재 스테이지 유지한 채 게임 씬 재로드
+    /// <summary>
+    /// 현재 스테이지 유지한 채 게임 씬 재로드
+    /// </summary>
     public void ReloadStage()
     {
         current = GameState.Boot;
 
-        sceneManager.LoadStage(currentStage - 1);
+        sceneManager.LoadStage(currentStage);
         current = GameState.Playing;
         Resume();
     }
 
-    // 스테이지 +1 올리고 같은 게임 씬 재로드
-    // 예: 3 클리어 → 호출되면 currentStage=4 → 즉시 엔딩 표시
+    /// <summary>
+    /// 스테이지 +1 올리고 씬 로드
+    /// - 단일 씬 모드: 같은 씬 재로드, currentStage만 증가
+    /// - 다중 씬 모드: 다음 스테이지 씬으로 이동
+    /// </summary>
     public void AdvanceStageAndReload()
     {
-        currentStage = Mathf.Max(1, currentStage);
+        currentStage++;
 
         if (currentStage >= endingStage)
         {
@@ -127,7 +135,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        sceneManager.LoadStage(currentStage - 1);
+        sceneManager.LoadStage(currentStage);
+        current = GameState.Playing;
     }
 
     public void Pause()

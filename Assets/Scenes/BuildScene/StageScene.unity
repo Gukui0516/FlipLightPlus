@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 14105914}
+  - component: {fileID: 14105915}
   m_Layer: 5
   m_Name: LifeOutLine
   m_TagString: Untagged
@@ -159,6 +160,29 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -250, y: -150}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &14105915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14105913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 152ebd0f69b50eb4c8adc586005d01e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InvertColorChanger
+  worldStateManager: {fileID: 0}
+  autoFindComponents: 1
+  additionalObjects:
+  - {fileID: 264473602}
+  - {fileID: 1429624745}
+  - {fileID: 70951026}
+  - {fileID: 2011517303}
+  - {fileID: 496563939}
+  - {fileID: 1806824715}
+  - {fileID: 621714038}
+  - {fileID: 1000335676}
 --- !u!1 &60299624
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,6 +298,7 @@ GameObject:
   - component: {fileID: 70951027}
   - component: {fileID: 70951029}
   - component: {fileID: 70951028}
+  - component: {fileID: 70951030}
   m_Layer: 5
   m_Name: LifeSlot (3)
   m_TagString: Untagged
@@ -338,6 +363,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 70951026}
   m_CullTransparentMesh: 1
+--- !u!114 &70951030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70951026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  useCurrentColorAsOriginal: 1
 --- !u!1 &108433591
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,6 +612,7 @@ GameObject:
   - component: {fileID: 264473603}
   - component: {fileID: 264473605}
   - component: {fileID: 264473604}
+  - component: {fileID: 264473606}
   m_Layer: 5
   m_Name: LifeSlot
   m_TagString: Untagged
@@ -636,6 +677,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 264473602}
   m_CullTransparentMesh: 1
+--- !u!114 &264473606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264473602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  useCurrentColorAsOriginal: 1
 --- !u!1001 &306846530
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1236,6 +1292,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 60299625}
     m_Modifications:
+    - target: {fileID: 4164758584633021795, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 452548501}
+    - target: {fileID: 4164758584633021795, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RestartStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 4164758584633021795, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameOverButtonHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4164758584633021795, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4822053749484885557, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 115
@@ -1243,10 +1315,6 @@ PrefabInstance:
     - target: {fileID: 4968691849002971698, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
       propertyPath: m_Name
       value: GameOverUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 4968691849002971698, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7261313101462500062, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
       propertyPath: m_Pivot.x
@@ -1328,6 +1396,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9019160498752894383, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 452548501}
+    - target: {fileID: 9019160498752894383, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: QuitGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 9019160498752894383, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameOverButtonHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9019160498752894383, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1343,6 +1427,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4968691849002971698, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
   m_PrefabInstance: {fileID: 452548498}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &452548501 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4033362477646613767, guid: 6f54f14e6cf24bb47a048704d8ac45ac, type: 3}
+  m_PrefabInstance: {fileID: 452548498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452548500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f82cd89ad3e844788b525248aa4077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverButtonHandler
 --- !u!1 &496563939
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1449,7 @@ GameObject:
   - component: {fileID: 496563940}
   - component: {fileID: 496563942}
   - component: {fileID: 496563941}
+  - component: {fileID: 496563943}
   m_Layer: 5
   m_Name: LifeSlot (2)
   m_TagString: Untagged
@@ -1418,6 +1514,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496563939}
   m_CullTransparentMesh: 1
+--- !u!114 &496563943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496563939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  useCurrentColorAsOriginal: 1
 --- !u!1 &578489542
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,6 +1661,7 @@ GameObject:
   - component: {fileID: 621714039}
   - component: {fileID: 621714040}
   - component: {fileID: 621714041}
+  - component: {fileID: 621714042}
   m_Layer: 5
   m_Name: Life (2)
   m_TagString: Untagged
@@ -1614,6 +1726,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &621714042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621714038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  useCurrentColorAsOriginal: 0
 --- !u!1 &757469571
 GameObject:
   m_ObjectHideFlags: 0
@@ -6653,6 +6780,7 @@ GameObject:
   - component: {fileID: 908517066}
   - component: {fileID: 908517068}
   - component: {fileID: 908517067}
+  - component: {fileID: 908517069}
   m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
@@ -6717,6 +6845,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 908517065}
   m_CullTransparentMesh: 1
+--- !u!114 &908517069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908517065}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 0, g: 0, b: 0, a: 1}
+  invertedColor: {r: 1, g: 1, b: 1, a: 1}
+  useCurrentColorAsOriginal: 1
 --- !u!1 &1000335676
 GameObject:
   m_ObjectHideFlags: 0
@@ -6728,6 +6871,7 @@ GameObject:
   - component: {fileID: 1000335679}
   - component: {fileID: 1000335678}
   - component: {fileID: 1000335677}
+  - component: {fileID: 1000335680}
   m_Layer: 5
   m_Name: Life (1)
   m_TagString: Untagged
@@ -6792,6 +6936,21 @@ RectTransform:
   m_AnchoredPosition: {x: 112, y: -41}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1000335680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000335676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  useCurrentColorAsOriginal: 0
 --- !u!1001 &1063798350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6887,7 +7046,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9172944943095993679, guid: cfef3bf7e5b50e847aecac7d2141b110, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1806824717}
   m_SourcePrefab: {fileID: 100100000, guid: cfef3bf7e5b50e847aecac7d2141b110, type: 3}
 --- !u!224 &1063798351 stripped
 RectTransform:
@@ -6899,7 +7061,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5113468136343907637, guid: cfef3bf7e5b50e847aecac7d2141b110, type: 3}
   m_PrefabInstance: {fileID: 1063798350}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1806824715}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -7218,6 +7380,7 @@ GameObject:
   - component: {fileID: 1420547266}
   - component: {fileID: 1420547268}
   - component: {fileID: 1420547267}
+  - component: {fileID: 1420547269}
   m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
@@ -7283,6 +7446,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1420547265}
   m_CullTransparentMesh: 1
+--- !u!114 &1420547269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420547265}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 0, g: 0, b: 0, a: 1}
+  invertedColor: {r: 1, g: 1, b: 1, a: 1}
+  useCurrentColorAsOriginal: 1
 --- !u!1 &1429624745
 GameObject:
   m_ObjectHideFlags: 0
@@ -7294,6 +7472,7 @@ GameObject:
   - component: {fileID: 1429624746}
   - component: {fileID: 1429624748}
   - component: {fileID: 1429624747}
+  - component: {fileID: 1429624749}
   m_Layer: 5
   m_Name: LifeSlot (1)
   m_TagString: Untagged
@@ -7358,6 +7537,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1429624745}
   m_CullTransparentMesh: 1
+--- !u!114 &1429624749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429624745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  useCurrentColorAsOriginal: 1
 --- !u!1001 &1492725461
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7856,6 +8050,7 @@ MonoBehaviour:
   stageScenes:
   - sceneAsset: {fileID: 102900000, guid: e92518b8121952946a2784fe1542f097, type: 3}
     sceneName: StageScene
+  useSingleStageScene: 1
 --- !u!114 &1674293236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7915,6 +8110,26 @@ MonoBehaviour:
   _spriteRenderer: {fileID: 0}
   _originalColor: {r: 1, g: 1, b: 1, a: 1}
   _invertedColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!1 &1806824715 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9172944943095993679, guid: cfef3bf7e5b50e847aecac7d2141b110, type: 3}
+  m_PrefabInstance: {fileID: 1063798350}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1806824717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806824715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  useCurrentColorAsOriginal: 0
 --- !u!1 &1855584978
 GameObject:
   m_ObjectHideFlags: 0
@@ -7975,6 +8190,7 @@ GameObject:
   - component: {fileID: 1859140656}
   - component: {fileID: 1859140655}
   - component: {fileID: 1859140654}
+  - component: {fileID: 1859140657}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -8065,6 +8281,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1859140657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859140652}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 152ebd0f69b50eb4c8adc586005d01e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InvertColorChanger
+  worldStateManager: {fileID: 0}
+  autoFindComponents: 1
+  additionalObjects:
+  - {fileID: 1420547265}
+  - {fileID: 908517065}
 --- !u!4 &1883796222 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 826759626425491300, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
@@ -8081,6 +8314,7 @@ GameObject:
   - component: {fileID: 2011517304}
   - component: {fileID: 2011517306}
   - component: {fileID: 2011517305}
+  - component: {fileID: 2011517307}
   m_Layer: 5
   m_Name: LifeSlot (4)
   m_TagString: Untagged
@@ -8145,6 +8379,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011517303}
   m_CullTransparentMesh: 1
+--- !u!114 &2011517307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011517303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266f4f09b60da0f4b8cab682de810faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIInvertibleColor
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  useCurrentColorAsOriginal: 1
 --- !u!1001 &2090562328
 PrefabInstance:
   m_ObjectHideFlags: 0
