@@ -23,6 +23,7 @@ public abstract class BaseEnemy : MonoBehaviour
     protected EnemyRotation rotationModule;
     protected EnemyVisibility visibilityModule;
     protected EnemyDespawn despawnModule;
+    protected Rigidbody2D rb;
 
     #endregion
 
@@ -41,6 +42,7 @@ public abstract class BaseEnemy : MonoBehaviour
         rotationModule = GetComponent<EnemyRotation>();
         visibilityModule = GetComponent<EnemyVisibility>();
         despawnModule = GetComponent<EnemyDespawn>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void OnEnable()
