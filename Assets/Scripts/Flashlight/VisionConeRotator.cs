@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class VisionConeRotator : MonoBehaviour
 {
@@ -66,7 +67,7 @@ public class VisionConeRotator : MonoBehaviour
 
     Vector2 GetMouseDirection()
     {
-        Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mousePos.z = 0f;
         
         Vector2 direction = (mousePos - transform.position).normalized;
@@ -77,10 +78,20 @@ public class VisionConeRotator : MonoBehaviour
     {
         if (playerTransform == null) return lastMovementDirection;
         
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        Vector2 movementInput = Vector2.zero;
         
-        Vector2 movementInput = new Vector2(horizontal, vertical).normalized;
+        // WASD 또는 방향키 입력 처리
+        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            movementInput.x = -1f;
+        else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            movementInput.x = 1f;
+            
+        if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
+            movementInput.y = -1f;
+        else if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
+            movementInput.y = 1f;
+        
+        movementInput = movementInput.normalized;
         
         if (movementInput != Vector2.zero)
         {

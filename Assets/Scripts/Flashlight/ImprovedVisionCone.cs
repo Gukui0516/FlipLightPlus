@@ -36,11 +36,6 @@ public class ImprovedVisionCone : MonoBehaviour
     [Range(32, 128)]
     [SerializeField] private int uniformRayCount = 60;
     
-    [Header("⚙️ GPU 설정 (향후 지원)")]
-    [Tooltip("GPU 사용 여부 (현재 CPU 모드)")]
-    [SerializeField] private bool useGPU = false;
-    [SerializeField] private ComputeShader visionCompute;
-    
     [Header("🎯 레이어")]
     [SerializeField] private LayerMask obstacleLayer;
     [SerializeField] private LayerMask targetLayer;
@@ -117,8 +112,7 @@ public class ImprovedVisionCone : MonoBehaviour
 
     void Start()
     {
-        // GPU는 향후 지원 예정
-        useGPU = false;
+        
     }
 
     void OnEnable()
@@ -810,11 +804,7 @@ public class ImprovedVisionCone : MonoBehaviour
         }
     }
     
-    public void SetUseGPU(bool value)
-    {
-        Debug.LogWarning("GPU 모드는 현재 지원되지 않습니다. CPU 모드로 실행됩니다.");
-        useGPU = false;
-    }
+    
     
     public void ProcessAllVisibleTargets(System.Action<Transform> action)
     {

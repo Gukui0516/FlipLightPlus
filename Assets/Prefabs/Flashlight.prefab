@@ -82,6 +82,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -103,6 +105,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -122,14 +125,12 @@ MonoBehaviour:
   viewRadius: 10
   viewAngle: 90
   uniformRayCount: 60
-  useGPU: 1
-  visionCompute: {fileID: 7200000, guid: 56fac564934eec84cb77a8d1f6f7c217, type: 3}
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   targetLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   flashlightColor: {r: 1, g: 1, b: 1, a: 1}
   visionMaterial: {fileID: 0}
   obstacleUpdateInterval: 0.1
