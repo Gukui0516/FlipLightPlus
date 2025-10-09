@@ -127,10 +127,10 @@ MonoBehaviour:
   uniformRayCount: 60
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   targetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   flashlightColor: {r: 1, g: 1, b: 1, a: 1}
   visionMaterial: {fileID: 0}
   obstacleUpdateInterval: 0.1

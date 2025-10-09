@@ -19,7 +19,7 @@ public class LifeUI : MonoBehaviour
     {
         for (int i = 0; i < lifeImage.Length; i++)
         {
-            if (currentLife <= i)//현제 목숨이 지금 반복 수 이하인 경우
+            if (currentLife <= i)//현재 목숨이 지금 반복 수 이하인 경우
             {
                 lifeImage[i].enabled = false;//비활성화
             }

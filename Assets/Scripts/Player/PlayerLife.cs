@@ -40,6 +40,8 @@ public class PlayerLife : MonoBehaviour
             if (currentLife < 0)//라이프가 0미만이면
             {
                 playerImage.color = Color.black;//검은색으로 
+
+
                 return;
             }
             else
@@ -48,6 +50,12 @@ public class PlayerLife : MonoBehaviour
             }
             lifeUI.LifeUIUpdate(currentLife);
             StartCoroutine(invincibilityTimes());//무적 시작
+        }
+        
+        if(currentLife <= 0)//라이프가 0이하면
+        {
+            //GameOver
+            GameManager.Instance.GameOver();//게임오버
         }
     }
     private IEnumerator invincibilityTimes()

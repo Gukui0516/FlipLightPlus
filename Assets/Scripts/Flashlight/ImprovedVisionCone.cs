@@ -99,7 +99,7 @@ public class ImprovedVisionCone : MonoBehaviour
     void Awake()
     {
         // OnEnable보다 먼저 초기화
-        Debug.Log("[ImprovedVisionCone] Awake - 초기화 시작");
+//        Debug.Log("[ImprovedVisionCone] Awake - 초기화 시작");
         
         // 먼저 컴포넌트 초기화 (meshRenderer 등)
         InitializeComponents();
@@ -107,7 +107,10 @@ public class ImprovedVisionCone : MonoBehaviour
         // 그 다음 색상 팔레트 빌드
         RebuildColorMap();
         originalColor = flashlightColor; // 원래 색상 저장
-        Debug.Log($"[ImprovedVisionCone] 원래 색상 저장: {originalColor}");
+//        Debug.Log($"[ImprovedVisionCone] 원래 색상 저장: {originalColor}");
+
+        if (worldStateManager == null)
+            worldStateManager = FindFirstObjectByType<WorldStateManager>();
     }
 
     void Start()
@@ -661,16 +664,16 @@ public class ImprovedVisionCone : MonoBehaviour
             var e = colorPalette[i];
             if (string.IsNullOrWhiteSpace(e.key)) continue;
             colorMap[e.key] = e.color;
-            Debug.Log($"[ImprovedVisionCone] 색상 팔레트 등록: '{e.key}' = {e.color}");
+//            Debug.Log($"[ImprovedVisionCone] 색상 팔레트 등록: '{e.key}' = {e.color}");
         }
         
-        Debug.Log($"[ImprovedVisionCone] 색상 팔레트 빌드 완료. 총 {colorMap.Count}개 등록");
+//        Debug.Log($"[ImprovedVisionCone] 색상 팔레트 빌드 완료. 총 {colorMap.Count}개 등록");
     }
     
     public void SetVisionColor(Color newColor)
     {
         flashlightColor = newColor;
-        Debug.Log($"[ImprovedVisionCone] 색상 변경: {newColor}");
+//        Debug.Log($"[ImprovedVisionCone] 색상 변경: {newColor}");
         if (meshRenderer != null && meshRenderer.material != null)
         {
             meshRenderer.material.SetColor("_Color", flashlightColor);
@@ -691,7 +694,7 @@ public class ImprovedVisionCone : MonoBehaviour
             return false;
         }
         
-        Debug.Log($"[ImprovedVisionCone] 팔레트에서 '{key}' 색상 적용: {picked}");
+        //Debug.Log($"[ImprovedVisionCone] 팔레트에서 '{key}' 색상 적용: {picked}");
         SetVisionColor(picked);
         return true;
     }
@@ -729,7 +732,7 @@ public class ImprovedVisionCone : MonoBehaviour
         if (worldStateManager != null)
         {
             worldStateManager.onIsInvertedChanged.AddListener(HandleInvertedChanged);
-            Debug.Log($"[ImprovedVisionCone] WorldStateManager 이벤트 구독 완료");
+//            Debug.Log($"[ImprovedVisionCone] WorldStateManager 이벤트 구독 완료");
         }
         else
         {
@@ -747,24 +750,24 @@ public class ImprovedVisionCone : MonoBehaviour
     {
         if (worldStateManager != null)
         {
-            Debug.Log($"[ImprovedVisionCone] 초기 동기화: IsInverted = {worldStateManager.IsInverted}");
+//            Debug.Log($"[ImprovedVisionCone] 초기 동기화: IsInverted = {worldStateManager.IsInverted}");
             HandleInvertedChanged(worldStateManager.IsInverted);
         }
     }
 
     private void HandleInvertedChanged(bool inverted)
     {
-        Debug.Log($"[ImprovedVisionCone] 반전 상태 변경: {inverted}");
+//        Debug.Log($"[ImprovedVisionCone] 반전 상태 변경: {inverted}");
         isInverted = inverted;
 
         if (inverted) 
         {
-            Debug.Log("[ImprovedVisionCone] 반전 색상으로 변경 시도...");
+//            Debug.Log("[ImprovedVisionCone] 반전 색상으로 변경 시도...");
             ChangeVisionInverted();
         }
         else 
         {
-            Debug.Log("[ImprovedVisionCone] 일반 색상으로 복귀 시도...");
+//            Debug.Log("[ImprovedVisionCone] 일반 색상으로 복귀 시도...");
             ChangeVisionNormal();
         }
     }
