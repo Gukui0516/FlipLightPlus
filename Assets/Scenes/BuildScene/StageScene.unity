@@ -1169,8 +1169,8 @@ GameObject:
   - component: {fileID: 438601237}
   - component: {fileID: 438601239}
   m_Layer: 0
-  m_Name: Battery
-  m_TagString: Exit
+  m_Name: Electric generator
+  m_TagString: ElectricGenerator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1280,11 +1280,25 @@ MonoBehaviour:
   currentGauge: 0
   chargePerSecond: 15
   drainPerSecond: 5
+  thresholds:
+  - thresholdPercent: 33
+    waitTime: 3
+    neverDecrease: 0
+  - thresholdPercent: 66
+    waitTime: 3
+    neverDecrease: 0
+  - thresholdPercent: 100
+    waitTime: 0
+    neverDecrease: 1
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 256
   gaugeFillImage: {fileID: 908517067}
   autoFindFillImage: 1
+  conditionThreshold: 100
+  onConditionMet:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &452548498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8341,7 +8355,7 @@ GameObject:
   - component: {fileID: 1637777784}
   m_Layer: 0
   m_Name: Exit
-  m_TagString: Untagged
+  m_TagString: Exit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8377,8 +8391,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExitDoorController
   _doorRotatePoint: {fileID: 646455605}
   _openAngle: 180
-  _openOpenTime: 1.5
+  _openTime: 1.5
   _originRotateY: 0
+  requiredGaugeCount: 1
 --- !u!1 &1674293234
 GameObject:
   m_ObjectHideFlags: 0
