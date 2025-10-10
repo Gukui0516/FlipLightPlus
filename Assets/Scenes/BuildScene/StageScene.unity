@@ -8974,6 +8974,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1683887175248793963, guid: 40a1bc7a54c8452469363a7b3459ccc6, type: 3}
   m_PrefabInstance: {fileID: 2090562328}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2129101665 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8887935938070739936, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
+  m_PrefabInstance: {fileID: 425118329815727502}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &425118329815727502
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9040,7 +9045,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 64650702803858151, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1883796222}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8887935938070739936, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7602229007518542513}
   m_SourcePrefab: {fileID: 100100000, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
 --- !u!1001 &1628848941398542673
 PrefabInstance:
@@ -9124,12 +9132,34 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2846537204087850183, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
   m_PrefabInstance: {fileID: 425118329815727502}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2129101665}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b24f4ceee448345439ecc72cdfe7932a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &7602229007518542511 stripped
+CircleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1100138164244557713, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
+  m_PrefabInstance: {fileID: 425118329815727502}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7602229007518542513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129101665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c826cf3da25158429ea4f7b0b9c71ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerContact
+  checkRadius: {fileID: 7602229007518542511}
+  playerLife: {fileID: 7602229007518542506}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1001 &8202159032711088043
 PrefabInstance:
   m_ObjectHideFlags: 0

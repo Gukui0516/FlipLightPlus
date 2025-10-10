@@ -42,10 +42,20 @@ public class PlayerControllerRB : MonoBehaviour
     {
         InitializeInputManager();
         InitializeRb();
+        if (_playerActionMap != null)
+        {
+            _playerActionMap.Enable();
+        }
+        else
+        {
+            Debug.LogWarning("Player ActionMap이 설정되지 않았습니다!");
+        }
     }
 
     private void OnEnable()
     {
+        InitializeInputManager();
+        InitializeRb();
         SetVelocityAndSync(_rb.linearVelocity);
         
         // ✅ ActionMap 전체 활성화
@@ -59,6 +69,7 @@ public class PlayerControllerRB : MonoBehaviour
         {
             _moveAction.performed += OnMove;
             _moveAction.canceled += OnMove;
+            Debug.Log("Move Action subscribed.");
         }
     }
 
@@ -97,8 +108,9 @@ public class PlayerControllerRB : MonoBehaviour
         {
             _lastDirNorm = moveInput.normalized;
         }
-        
+
         _input = moveInput;
+        Debug.Log($"Move Input: {_input}, LastDirNorm: {_lastDirNorm}");
     }
 
     #endregion
