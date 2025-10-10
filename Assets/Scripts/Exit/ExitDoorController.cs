@@ -10,8 +10,22 @@ public class ExitDoorController : MonoBehaviour
     [SerializeField] private float _originRotateY;
 
     [Header("게이지 조건 설정")]
-    [Tooltip("문이 열리기 위해 필요한 최소 게이지 만족 개수")]
-    [SerializeField] private int requiredGaugeCount = 1;
+    [Tooltip("자동으로 필요 게이지 개수를 설정")]
+    [SerializeField] private bool autoSetRequiredCount = true;
+    
+    [Tooltip("자동 설정 모드 선택")]
+    [SerializeField] private AutoSetMode autoMode = AutoSetMode.MatchRegisteredCount;
+    
+    [Tooltip("수동 설정 시: 문이 열리기 위해 필요한 최소 게이지 만족 개수")]
+    [SerializeField] private int manualRequiredGaugeCount = 1;
+    
+    private int requiredGaugeCount = 1; // 실제 사용되는 값
+    
+    public enum AutoSetMode
+    {
+        MatchRegisteredCount,  // 등록된 게이지 개수와 같게
+        MatchStageNumber      // 현재 스테이지 숫자와 같게
+    }
     
     [Header("탈출 트리거 설정")]
     [Tooltip("문이 열렸을 때 활성화할 BoxCollider2D (IsTrigger = true 권장)")]
@@ -19,11 +33,22 @@ public class ExitDoorController : MonoBehaviour
     [Tooltip("플레이어를 식별할 태그")]
     [SerializeField] private string playerTag = "Player";
     
+    [Header("등록 완료 대기 시간")]
+    [Tooltip("씬 시작 후 이 시간이 지나면 자동으로 등록을 완료합니다 (0 = 즉시)")]
+    [SerializeField] private float autoFinalizeDelay = 0.5f;
+    
     private List<LightGaugeSystem> registeredGauges = new List<LightGaugeSystem>();
     private int satisfiedGaugeCount = 0;
     private bool _isOpening = false;
     private bool _isOpen = false;
-    private bool _hasPlayerEscaped = false; // 중복 실행 방지
+    private bool _hasPlayerEscaped = false;
+    private bool _isRegistrationFinalized = false;
+
+    // 외부 접근용 프로퍼티
+    public int RequiredGaugeCount => requiredGaugeCount;
+    public int RegisteredGaugeCount => registeredGauges.Count;
+    public int SatisfiedGaugeCount => satisfiedGaugeCount;
+    public bool IsRegistrationFinalized => _isRegistrationFinalized;
 
     void Start()
     {
@@ -38,12 +63,18 @@ public class ExitDoorController : MonoBehaviour
         
         satisfiedGaugeCount = 0;
         
+        // 수동 모드면 바로 설정
+        if (!autoSetRequiredCount)
+        {
+            requiredGaugeCount = manualRequiredGaugeCount;
+            Debug.Log($"ExitDoorController: 수동 모드 - 필요 게이지 개수: {requiredGaugeCount}");
+        }
+        
         // 탈출 트리거는 초기에 비활성화
         if (exitTriggerCollider != null)
         {
             exitTriggerCollider.enabled = false;
             
-            // IsTrigger 설정 확인
             if (!exitTriggerCollider.isTrigger)
             {
                 Debug.LogWarning("ExitDoorController: exitTriggerCollider의 IsTrigger가 false입니다. true로 설정하는 것을 권장합니다.");
@@ -53,6 +84,28 @@ public class ExitDoorController : MonoBehaviour
         {
             Debug.LogWarning("ExitDoorController: exitTriggerCollider가 할당되지 않았습니다!");
         }
+        
+        // 자동 완료 모드가 활성화되어 있으면 일정 시간 후 등록 완료
+        if (autoFinalizeDelay > 0)
+        {
+            StartCoroutine(AutoFinalizeRegistration());
+        }
+        else if (autoFinalizeDelay == 0)
+        {
+            StartCoroutine(FinalizeNextFrame());
+        }
+    }
+    
+    private IEnumerator FinalizeNextFrame()
+    {
+        yield return null;
+        FinalizeRegistration();
+    }
+    
+    private IEnumerator AutoFinalizeRegistration()
+    {
+        yield return new WaitForSeconds(autoFinalizeDelay);
+        FinalizeRegistration();
     }
 
     void Update()
@@ -82,11 +135,120 @@ public class ExitDoorController : MonoBehaviour
         }
         
         registeredGauges.Add(gauge);
-        
-        // 게이지의 조건 만족 이벤트 구독
         gauge.onConditionMet.AddListener(() => OnGaugeConditionMet(gauge));
         
         Debug.Log($"ExitDoorController: {gauge.gameObject.name} 등록 완료 (총 {registeredGauges.Count}개)");
+    }
+    
+    /// <summary>
+    /// 등록을 완료하고 필요한 게이지 개수를 확정합니다
+    /// </summary>
+    public void FinalizeRegistration()
+    {
+        if (_isRegistrationFinalized)
+        {
+            Debug.LogWarning("ExitDoorController: 이미 등록이 완료되었습니다.");
+            return;
+        }
+        
+        _isRegistrationFinalized = true;
+        
+        // 자동 설정 모드 처리
+        if (autoSetRequiredCount)
+        {
+            switch (autoMode)
+            {
+                case AutoSetMode.MatchRegisteredCount:
+                    requiredGaugeCount = registeredGauges.Count;
+                    Debug.Log($"ExitDoorController: 자동 설정 완료 (등록 개수) - 등록된 게이지: {registeredGauges.Count}개, 필요 개수: {requiredGaugeCount}개");
+                    break;
+                    
+                case AutoSetMode.MatchStageNumber:
+                    if (GameManager.Instance != null)
+                    {
+                        requiredGaugeCount = GameManager.Instance.CurrentStage;
+                        Debug.Log($"ExitDoorController: 자동 설정 완료 (스테이지 숫자) - 현재 스테이지: {GameManager.Instance.CurrentStage}, 필요 개수: {requiredGaugeCount}개");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("ExitDoorController: GameManager를 찾을 수 없어 등록 개수로 설정합니다.");
+                        requiredGaugeCount = registeredGauges.Count;
+                    }
+                    break;
+            }
+        }
+        
+        // 이미 조건을 만족했는지 확인
+        CheckAndOpenDoor();
+    }
+    
+    /// <summary>
+    /// 필요한 게이지 개수를 수동으로 설정합니다
+    /// </summary>
+    public void SetRequiredGaugeCount(int count)
+    {
+        if (count < 0)
+        {
+            Debug.LogError($"ExitDoorController: 잘못된 게이지 개수입니다: {count}");
+            return;
+        }
+        
+        requiredGaugeCount = count;
+        autoSetRequiredCount = false;
+        _isRegistrationFinalized = true;
+        
+        Debug.Log($"ExitDoorController: 필요 게이지 개수 수동 설정: {requiredGaugeCount}개");
+        CheckAndOpenDoor();
+    }
+    
+    /// <summary>
+    /// 필요한 게이지 개수를 비율로 설정합니다
+    /// </summary>
+    public void SetRequiredGaugeCountByRatio(float ratio)
+    {
+        ratio = Mathf.Clamp01(ratio);
+        int count = Mathf.Max(1, Mathf.CeilToInt(registeredGauges.Count * ratio));
+        SetRequiredGaugeCount(count);
+        
+        Debug.Log($"ExitDoorController: 비율 기반 설정 ({ratio * 100}%) - {count}/{registeredGauges.Count}개");
+    }
+    
+    /// <summary>
+    /// 스테이지 번호에 따라 필요 게이지 개수를 설정하는 메서드
+    /// </summary>
+    public void SetRequiredGaugeCountByStage(int stageNumber)
+    {
+        if (registeredGauges.Count == 0)
+        {
+            Debug.LogWarning("ExitDoorController: 등록된 게이지가 없어 스테이지 기반 설정을 할 수 없습니다.");
+            return;
+        }
+        
+        int count;
+        
+        // 스테이지 1-3: 30%
+        if (stageNumber <= 3)
+        {
+            count = Mathf.Max(1, Mathf.CeilToInt(registeredGauges.Count * 0.3f));
+        }
+        // 스테이지 4-6: 50%
+        else if (stageNumber <= 6)
+        {
+            count = Mathf.Max(1, Mathf.CeilToInt(registeredGauges.Count * 0.5f));
+        }
+        // 스테이지 7-9: 70%
+        else if (stageNumber <= 9)
+        {
+            count = Mathf.Max(1, Mathf.CeilToInt(registeredGauges.Count * 0.7f));
+        }
+        // 스테이지 10+: 100%
+        else
+        {
+            count = registeredGauges.Count;
+        }
+        
+        SetRequiredGaugeCount(count);
+        Debug.Log($"ExitDoorController: 스테이지 {stageNumber} - 필요 게이지: {count}/{registeredGauges.Count}개");
     }
     
     /// <summary>
@@ -95,10 +257,7 @@ public class ExitDoorController : MonoBehaviour
     private void OnGaugeConditionMet(LightGaugeSystem gauge)
     {
         satisfiedGaugeCount++;
-        
         Debug.Log($"ExitDoorController: 게이지 조건 만족! ({satisfiedGaugeCount}/{requiredGaugeCount})");
-        
-        // 필요한 개수만큼 만족했는지 확인
         CheckAndOpenDoor();
     }
     
@@ -107,10 +266,12 @@ public class ExitDoorController : MonoBehaviour
     /// </summary>
     private void CheckAndOpenDoor()
     {
+        if (!_isRegistrationFinalized)
+            return;
+            
         if (satisfiedGaugeCount >= requiredGaugeCount && !_isOpen && !_isOpening)
         {
             Debug.Log($"ExitDoorController: 모든 조건 만족! 문을 엽니다.");
-            
             OpenDoor();
         }
     }
@@ -141,9 +302,6 @@ public class ExitDoorController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 문을 등속도로 여는 코루틴
-    /// </summary>
     private IEnumerator OpenDoorCoroutine()
     {
         _isOpening = true;
@@ -175,20 +333,15 @@ public class ExitDoorController : MonoBehaviour
         _isOpening = false;
         _isOpen = true;
         
-        // 문이 완전히 열렸을 때 탈출 트리거 활성화
         ActivateExitTrigger();
         
         Debug.Log("ExitDoorController: 문이 완전히 열렸습니다!");
     }
 
-    /// <summary>
-    /// 문을 등속도로 닫는 코루틴
-    /// </summary>
     private IEnumerator CloseDoorCoroutine()
     {
         _isOpening = true;
         
-        // 문을 닫을 때는 트리거 비활성화
         if (exitTriggerCollider != null)
         {
             exitTriggerCollider.enabled = false;
@@ -223,9 +376,6 @@ public class ExitDoorController : MonoBehaviour
         _isOpen = false;
     }
     
-    /// <summary>
-    /// 탈출 트리거를 활성화합니다
-    /// </summary>
     private void ActivateExitTrigger()
     {
         if (exitTriggerCollider != null)
@@ -235,44 +385,30 @@ public class ExitDoorController : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 플레이어가 트리거에 진입했을 때 호출 (Trigger 모드)
-    /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // 이미 탈출 처리했거나 문이 열려있지 않으면 무시
         if (_hasPlayerEscaped || !_isOpen)
             return;
         
-        // 플레이어 태그 확인
         if (other.CompareTag(playerTag))
         {
             OnPlayerEscape();
         }
     }
     
-    /// <summary>
-    /// 플레이어가 충돌했을 때 호출 (Collision 모드 - IsTrigger = false인 경우)
-    /// </summary>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 이미 탈출 처리했거나 문이 열려있지 않으면 무시
         if (_hasPlayerEscaped || !_isOpen)
             return;
         
-        // 플레이어 태그 확인
         if (collision.gameObject.CompareTag(playerTag))
         {
             OnPlayerEscape();
         }
     }
     
-    /// <summary>
-    /// 플레이어가 탈출에 성공했을 때 처리
-    /// </summary>
     private void OnPlayerEscape()
     {
-        // 중복 실행 방지
         if (_hasPlayerEscaped)
             return;
         
@@ -280,7 +416,6 @@ public class ExitDoorController : MonoBehaviour
         
         Debug.Log("ExitDoorController: 플레이어 탈출 성공!");
         
-        // GameManager를 통해 다음 스테이지로 진입
         if (GameManager.Instance != null)
         {
             GameManager.Instance.AdvanceStageAndReload();
@@ -291,13 +426,23 @@ public class ExitDoorController : MonoBehaviour
         }
     }
     
-    // 디버그용: 현재 등록된 게이지 정보
-    public void PrintRegisteredGauges()
+    /// <summary>
+    /// 디버그용: 현재 상태 출력
+    /// </summary>
+    public void PrintStatus()
     {
         Debug.Log($"=== ExitDoorController 상태 ===");
+        Debug.Log($"자동 설정 모드: {autoSetRequiredCount} ({autoMode})");
+        Debug.Log($"등록 완료 여부: {_isRegistrationFinalized}");
         Debug.Log($"등록된 게이지 수: {registeredGauges.Count}");
         Debug.Log($"조건 만족 게이지 수: {satisfiedGaugeCount}/{requiredGaugeCount}");
         Debug.Log($"문 상태: {(_isOpen ? "열림" : "닫힘")}");
         Debug.Log($"탈출 완료 여부: {_hasPlayerEscaped}");
+        
+        Debug.Log("등록된 게이지 목록:");
+        foreach (var gauge in registeredGauges)
+        {
+            Debug.Log($"  - {gauge.gameObject.name} (조건 만족: {gauge.IsConditionMet})");
+        }
     }
 }

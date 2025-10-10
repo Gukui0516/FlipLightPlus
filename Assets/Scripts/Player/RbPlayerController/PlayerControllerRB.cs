@@ -39,8 +39,10 @@ public class PlayerControllerRB : MonoBehaviour
 
     private Vector2 _lastDirNorm = Vector2.right;
     
+    // 이동 제어
+    private bool _canMove = true;
+    
     // 넉백 상태
-    private bool _isKnockedBack;
     private Coroutine _knockbackCoroutine;
     
     // InputAction 참조
@@ -89,7 +91,7 @@ public class PlayerControllerRB : MonoBehaviour
         {
             StopCoroutine(_knockbackCoroutine);
             _knockbackCoroutine = null;
-            _isKnockedBack = false;
+            _canMove = true;
         }
         
         // InputAction 이벤트 구독 해제
@@ -106,10 +108,15 @@ public class PlayerControllerRB : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        
+    }
+
     private void FixedUpdate()
     {
-        // 넉백 중에는 이동 처리 스킵
-        if (!_isKnockedBack)
+        // 이동 가능할 때만 이동 처리
+        if (_canMove)
         {
             ApplyMovement();
         }
@@ -122,9 +129,10 @@ public class PlayerControllerRB : MonoBehaviour
     /// </summary>
     private void OnMove(InputAction.CallbackContext context)
     {
-        // 넉백 중에는 입력 무시
-        if (_isKnockedBack)
+        // 이동 불가능 시 입력 무시 및 입력값 초기화
+        if (!_canMove)
         {
+            _input = Vector2.zero;
             return;
         }
         
@@ -192,6 +200,8 @@ public class PlayerControllerRB : MonoBehaviour
 
     #region Knockback Methods
     
+    
+    
     /// <summary>
     /// 넉백 적용
     /// </summary>
@@ -218,7 +228,7 @@ public class PlayerControllerRB : MonoBehaviour
     /// </summary>
     private IEnumerator KnockbackCoroutine(Vector2 direction, float force, float duration)
     {
-        _isKnockedBack = true;
+        _canMove = false;
         float elapsed = 0f;
         
         Vector2 initialVelocity = direction * force;
@@ -244,7 +254,7 @@ public class PlayerControllerRB : MonoBehaviour
     /// </summary>
     private void EndKnockback()
     {
-        _isKnockedBack = false;
+        _canMove = true;
         _knockbackCoroutine = null;
         
         // 넉백 종료 시 속도를 0으로 설정하거나, 
@@ -277,9 +287,21 @@ public class PlayerControllerRB : MonoBehaviour
     }
     
     /// <summary>
-    /// 넉백 중인지 확인
+    /// 이동 가능 여부 확인 및 설정
     /// </summary>
-    public bool IsKnockedBack => _isKnockedBack;
+    public bool CanMove 
+    { 
+        get => _canMove;
+        set
+        {
+            _canMove = value;
+            // 이동 불가능 상태로 전환 시 입력값 초기화
+            if (!_canMove)
+            {
+                _input = Vector2.zero;
+            }
+        }
+    }
     
     #endregion
 

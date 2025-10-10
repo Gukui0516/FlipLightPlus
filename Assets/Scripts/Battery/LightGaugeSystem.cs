@@ -167,8 +167,8 @@ public class LightGaugeSystem : MonoBehaviour
         {
             GaugeThreshold threshold = thresholds[i];
             
-            // 이전엔 방지턱 위였고, 지금은 방지턱 아래로 떨어진 경우
-            if (previousPercent > threshold.thresholdPercent && newPercent <= threshold.thresholdPercent)
+            // 이전엔 방지턱 이상이었고, 지금은 방지턱 아래로 떨어진 경우
+            if (previousPercent >= threshold.thresholdPercent && newPercent < threshold.thresholdPercent)  // 여기 수정!
             {
                 // 방지턱에 정확히 고정
                 currentGauge = (threshold.thresholdPercent / 100f) * maxGauge;
