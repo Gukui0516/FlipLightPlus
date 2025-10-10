@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Pool;
 using System.Collections;
 
@@ -29,6 +29,9 @@ public class ItemSpawner : MonoBehaviour
 
     [Header("Refs")]
     [SerializeField] private WorldStateManager world;
+
+    [Header("WallCollider")]
+    [SerializeField] private LayerMask wallLayer;
 
     private Camera mainCamera;
     private Transform player;
@@ -180,11 +183,19 @@ public class ItemSpawner : MonoBehaviour
 
     Vector2 GetRandomSpawnPosition()
     {
-        Vector2 center = mainCamera.transform.position;
-        float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-        float x = center.x + Mathf.Cos(randomAngle) * spawnDistance;
-        float y = center.y + Mathf.Sin(randomAngle) * spawnDistance;
-        return new Vector2(x, y);
+        for (int i = 0; i < 5000; i++)
+        {
+            Vector2 center = mainCamera.transform.position;
+            float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+            float x = center.x + Mathf.Cos(randomAngle) * spawnDistance;
+            float y = center.y + Mathf.Sin(randomAngle) * spawnDistance;
+            if (Physics2D.OverlapBox(new Vector2(x, y), new Vector2(1, 1), 0f, wallLayer) == null)
+            {
+                return new Vector2(x, y);
+            }
+        }
+        Debug.Log("횟수 초과");
+        return new Vector2(0, 0);
     }
 
     bool IsOutsideCameraView(Vector2 position)
