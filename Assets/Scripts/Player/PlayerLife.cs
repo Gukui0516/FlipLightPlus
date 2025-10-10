@@ -14,6 +14,17 @@ public class PlayerLife : MonoBehaviour
     [SerializeField] SpriteRenderer playerImage;//플레이어 이미지
     //[SerializeField] Flashlight2D flashlight;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    [SerializeField] private PlayerDeath deathSeq;      // 위 스크립트
+
+    void Awake()
+    {
+        // 자동 바인딩
+        if (!deathSeq) deathSeq = GetComponent<PlayerDeath>();
+        if (!deathSeq) deathSeq = GetComponentInChildren<PlayerDeath>(true);
+    }
+
+
     void Start()
     {
         currentLife=startLife;
@@ -54,10 +65,16 @@ public class PlayerLife : MonoBehaviour
         
         if(currentLife <= 0)//라이프가 0이하면
         {
-            //GameOver
-            GameManager.Instance.GameOver();//게임오버
+
+
+            // 죽음 애니메이션만 호출
+            if (deathSeq) deathSeq.PlayOnce();
+            else GameManager.Instance.GameOver(); // 안전망
+
         }
     }
+
+
     private IEnumerator invincibilityTimes()
     {
         invincibile = true;//무적 온
