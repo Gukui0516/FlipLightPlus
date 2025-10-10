@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7287264506710318287}
   - component: {fileID: 4305433941597399}
   - component: {fileID: 206935014082265735}
+  - component: {fileID: 2409007207886258647}
   m_Layer: 5
   m_Name: LifeSlot
   m_TagString: Untagged
@@ -94,6 +95,21 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   invertedColor: {r: 0, g: 0, b: 0, a: 1}
   useCurrentColorAsOriginal: 1
+--- !u!114 &2409007207886258647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324991914159847903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &3976482960418395527
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,6 +122,7 @@ GameObject:
   - component: {fileID: 4342299285520811475}
   - component: {fileID: 8886397576603904383}
   - component: {fileID: 8885787825613639886}
+  - component: {fileID: 8232580486340955064}
   m_Layer: 5
   m_Name: Life
   m_TagString: Untagged
@@ -185,6 +202,21 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   invertedColor: {r: 0, g: 0, b: 0, a: 1}
   useCurrentColorAsOriginal: 1
+--- !u!114 &8232580486340955064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3976482960418395527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &4564007459206948481
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,6 +706,7 @@ GameObject:
   - component: {fileID: 3889916023592870115}
   - component: {fileID: 9163933151136227415}
   - component: {fileID: 5956704969901003428}
+  - component: {fileID: 7023389771337471225}
   m_Layer: 5
   m_Name: Life
   m_TagString: Untagged
@@ -753,6 +786,21 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   invertedColor: {r: 0, g: 0, b: 0, a: 1}
   useCurrentColorAsOriginal: 1
+--- !u!114 &7023389771337471225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8536269909273575655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8687077657224823655
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,6 +813,7 @@ GameObject:
   - component: {fileID: 8316103460507933816}
   - component: {fileID: 9199978207360195586}
   - component: {fileID: 5266458380377466529}
+  - component: {fileID: 2594159938941457319}
   m_Layer: 5
   m_Name: Life
   m_TagString: Untagged
@@ -844,6 +893,21 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   invertedColor: {r: 0, g: 0, b: 0, a: 1}
   useCurrentColorAsOriginal: 1
+--- !u!114 &2594159938941457319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8687077657224823655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8729170681687582440
 GameObject:
   m_ObjectHideFlags: 0
