@@ -45,24 +45,9 @@ public class PlayerContact : MonoBehaviour
             // 올바른 레이어 비교 방식
             if ((enemyLayer.value & (1 << hit.gameObject.layer)) != 0)
             {
-                if (hit.gameObject.CompareTag("Enemy"))
-                {
-                    if (worldStateManager.IsInverted == true)
-                        return;
-                    playerLife.LifeDecrease();
-                    Debug.Log(hit.gameObject.name);
-                    // GetComponentInChildren<Flashlight2D>().isOn = false;
-                    // GameManager.Instance.GameOver();
-                    isContact = true;
-                }
-                else if (hit.gameObject.CompareTag("EnemyWhite"))
-                {
-                    playerLife.LifeDecrease();
-                    Debug.Log(hit.gameObject.name);
-                    // GetComponentInChildren<Flashlight2D>().isOn = false;
-                    // GameManager.Instance.GameOver();
-                    isContact = true;
-                }
+                playerLife.LifeDecrease();
+                Debug.Log(hit.gameObject.name);
+                isContact = true;
             }
 
             if (hit.gameObject.CompareTag("Item"))
