@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 793540923169711125}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.044, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -141,6 +141,8 @@ GameObject:
   - component: {fileID: 2530673690263635235}
   - component: {fileID: 8505478348503281568}
   - component: {fileID: 5101757877946332033}
+  - component: {fileID: 2991263178886935004}
+  - component: {fileID: 130786832301607578}
   m_Layer: 7
   m_Name: LightSeekerEnemy
   m_TagString: EnemyWhite
@@ -212,7 +214,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 15
-  m_Sprite: {fileID: -9184058023981356023, guid: 672e340701d159c41a4f058ad52ced67, type: 3}
+  m_Sprite: {fileID: -9184058023981356023, guid: f13f9ffff7367cd4a95a8e9812d91097, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
@@ -220,7 +222,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!58 &9081447919679675988
@@ -383,6 +385,41 @@ MonoBehaviour:
   manualRadius: 0.5
   circleSegments: 64
   showOutline: 1
+--- !u!114 &2991263178886935004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3217619446867333131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05ed9b7c70d147840b4ea3982a99e629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDieAnimation
+  animator: {fileID: 0}
+--- !u!95 &130786832301607578
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3217619446867333131}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4841b1eb5a38050409ed85bf0a1bb334, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5039513654778996251
 GameObject:
   m_ObjectHideFlags: 0
