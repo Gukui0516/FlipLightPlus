@@ -40,15 +40,7 @@ public class PlayerContact : MonoBehaviour
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, checkRadius.radius);
         foreach (Collider2D hit in hits)
         {
-            //Debug.Log(isContact + " " + hit.gameObject.layer + " " + enemyLayer);
-            if (isContact) break;
-            // 올바른 레이어 비교 방식
-            if ((enemyLayer.value & (1 << hit.gameObject.layer)) != 0)
-            {
-                playerLife.LifeDecrease();
-                Debug.Log(hit.gameObject.name);
-                isContact = true;
-            }
+            
 
             if (hit.gameObject.CompareTag("Item"))
             {
@@ -64,6 +56,17 @@ public class PlayerContact : MonoBehaviour
                 }
                 //아이템 효과 발동 시키는 코드
             }
+            //Debug.Log(isContact + " " + hit.gameObject.layer + " " + enemyLayer);
+            if (isContact) break;
+            // 올바른 레이어 비교 방식
+            if ((enemyLayer.value & (1 << hit.gameObject.layer)) != 0)
+            {
+                playerLife.LifeDecrease();
+                Debug.Log(hit.gameObject.name);
+                isContact = true;
+            }
+
+            
         }
     }
     
