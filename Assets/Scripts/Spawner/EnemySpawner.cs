@@ -35,6 +35,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private List<EnemySpawnData> enemyTypes = new List<EnemySpawnData>();
     [SerializeField] private float spawnDistance = 15f;
 
+    [Header("Map Boundaries")]
+    [SerializeField] private Vector2 mapMin = new Vector2(-50f, -50f);
+    [SerializeField] private Vector2 mapMax = new Vector2(50f, 50f);
+    [SerializeField] private bool enableMapBoundary = true;
+
     private Camera mainCamera;
     private Transform player;
     private int totalEnemyCount = 0;
@@ -152,6 +157,8 @@ public class EnemySpawner : MonoBehaviour
                 Debug.Log($"[EnemySpawner] Started spawner for {enemyData.enemyName} (maxCount: {enemyData.maxCount}, interval: {enemyData.spawnInterval}s)");
             }
         }
+
+        Debug.Log($"[EnemySpawner] Map Boundary: ({mapMin.x}, {mapMin.y}) ~ ({mapMax.x}, {mapMax.y})");
     }
 
     void StopAllSpawners()
@@ -176,7 +183,8 @@ public class EnemySpawner : MonoBehaviour
             {
                 Vector2 spawnPosition = GetRandomSpawnPosition();
 
-                if (IsOutsideCameraView(spawnPosition))
+                // ⭐ 카메라 밖 + 맵 범위 안 체크
+                if (IsOutsideCameraView(spawnPosition) && IsInsideMapBoundary(spawnPosition))
                 {
                     SpawnEnemy(data, spawnPosition);
                 }
@@ -214,6 +222,15 @@ public class EnemySpawner : MonoBehaviour
         return viewportPoint.x < 0 || viewportPoint.x > 1 ||
                viewportPoint.y < 0 || viewportPoint.y > 1;
     }
+
+    bool IsInsideMapBoundary(Vector2 position)
+    {
+        if (!enableMapBoundary) return true;
+
+        return position.x >= mapMin.x && position.x <= mapMax.x &&
+               position.y >= mapMin.y && position.y <= mapMax.y;
+    }
+
 
     #endregion
 
@@ -255,6 +272,82 @@ public class EnemySpawner : MonoBehaviour
                       $"(Interval: {data.spawnInterval}s, Pool: {data.poolCapacity}/{data.poolMaxSize})");
         }
         Debug.Log($"Total Active: {totalEnemyCount}");
+    }
+
+    #endregion
+
+
+    #region Gizmos
+
+    void OnDrawGizmos()
+    {
+        if (!enableMapBoundary) return;
+
+        // 맵 경계 박스 그리기
+        Gizmos.color = Color.yellow;
+        Vector3 center = new Vector3(
+            (mapMin.x + mapMax.x) / 2f,
+            (mapMin.y + mapMax.y) / 2f,
+            0f
+        );
+        Vector3 size = new Vector3(
+            mapMax.x - mapMin.x,
+            mapMax.y - mapMin.y,
+            0.1f
+        );
+        Gizmos.DrawWireCube(center, size);
+
+        // 스폰 거리 원 그리기 (플레이 중일 때)
+        if (Application.isPlaying && player != null)
+        {
+            Gizmos.color = Color.cyan;
+            DrawCircle(player.position, spawnDistance, 64);
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (!enableMapBoundary) return;
+
+        // 선택되었을 때 더 진한 색으로 표시
+        Gizmos.color = new Color(1f, 1f, 0f, 0.3f);
+        Vector3 center = new Vector3(
+            (mapMin.x + mapMax.x) / 2f,
+            (mapMin.y + mapMax.y) / 2f,
+            0f
+        );
+        Vector3 size = new Vector3(
+            mapMax.x - mapMin.x,
+            mapMax.y - mapMin.y,
+            0.1f
+        );
+        Gizmos.DrawCube(center, size);
+
+        // 코너 마커
+        Gizmos.color = Color.red;
+        float markerSize = 1f;
+        Gizmos.DrawWireSphere(new Vector3(mapMin.x, mapMin.y, 0), markerSize);
+        Gizmos.DrawWireSphere(new Vector3(mapMax.x, mapMin.y, 0), markerSize);
+        Gizmos.DrawWireSphere(new Vector3(mapMin.x, mapMax.y, 0), markerSize);
+        Gizmos.DrawWireSphere(new Vector3(mapMax.x, mapMax.y, 0), markerSize);
+    }
+
+    void DrawCircle(Vector3 center, float radius, int segments)
+    {
+        float angleStep = 360f / segments;
+        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
+
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            Vector3 newPoint = center + new Vector3(
+                Mathf.Cos(angle) * radius,
+                Mathf.Sin(angle) * radius,
+                0
+            );
+            Gizmos.DrawLine(prevPoint, newPoint);
+            prevPoint = newPoint;
+        }
     }
 
     #endregion
