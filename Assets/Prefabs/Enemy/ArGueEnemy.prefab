@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 8505478348503281568}
   - component: {fileID: 5101757877946332033}
   m_Layer: 7
-  m_Name: ArGue
+  m_Name: ArGueEnemy
   m_TagString: EnemyAgwi
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

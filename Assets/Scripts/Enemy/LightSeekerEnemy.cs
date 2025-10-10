@@ -22,6 +22,9 @@ public class LightSeekerEnemy : BaseEnemy
 
     protected override void InitializeEnemy()
     {
+        // 색상 초기화 (죽을 때 흰색으로 변경되므로)
+        ResetColor();
+
         // Visibility 모듈 초기화
         if (visibilityModule != null)
         {
@@ -98,6 +101,8 @@ public class LightSeekerEnemy : BaseEnemy
         }
     }
 
+
+
     protected override void OnEnterLight()
     {
         // 반전 상태에서 손전등 들어가면 속도 초기화 (멈추므로)
@@ -116,14 +121,50 @@ public class LightSeekerEnemy : BaseEnemy
         }
     }
 
+    /// <summary>
+    /// 죽을 때 강제로 보이게 함
+    /// </summary>
+    private void ForceVisible()
+    {
+        SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+
+        foreach (var sr in spriteRenderers)
+        {
+            if (sr != null)
+            {
+                sr.color = Color.black;
+            }
+        }
+    }
+
+
     private void ResetSpeed()
     {
         currentSpeed = lightSeekerBaseSpeed;
         timeInLight = 0f;
     }
 
+    private void ResetColor()
+    {
+        SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+
+        foreach (var sr in spriteRenderers)
+        {
+            if (sr != null)
+            {
+                // 투명하게 초기화 (알파 0)
+                Color color = sr.color;
+                color.a = 0f;
+                sr.color = color;
+            }
+        }
+    }
+
+
+
     public override void Die()
     {
+        ForceVisible(); // 죽을 때는 무조건 보이게
         base.Die();
         ResetSpeed();
     }
