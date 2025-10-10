@@ -248,9 +248,10 @@ MonoBehaviour:
   state: 0
   detectionRange: 8
   eyebrows: {fileID: 1739637055597289970}
+  wakeNotice: {fileID: 8557972979162626387}
   eyebrowMaxSize: 0
-  wakeCondition: 0
-  rushDelay: 1
+  wakeDelay: 0
+  wakeDelayMax: 1
   wakeSpeed: 0.7
   sleepSpeed: 1.4
 --- !u!114 &5122035691410426771
@@ -763,5 +764,10 @@ PrefabInstance:
 --- !u!4 &5816789468164474995 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6367730071362866807, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
+  m_PrefabInstance: {fileID: 641723300023977476}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8557972979162626387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9089351352867651415, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
   m_PrefabInstance: {fileID: 641723300023977476}
   m_PrefabAsset: {fileID: 0}
