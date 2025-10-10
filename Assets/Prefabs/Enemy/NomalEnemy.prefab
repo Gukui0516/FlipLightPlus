@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf472638747879744a36231888bdd98d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 7
   stoppingDistance: 0
   worldStateManager: {fileID: 0}
 --- !u!114 &5965394269043838820
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useOutline: 0
-  eyesVisibleDistance: 5
+  eyesVisibleDistance: 8
   lightSeekerVisibilityDistance: 10
   enemyOutline: {fileID: 8342198941621022990}
   eyesObject: {fileID: 7569755935291372203}

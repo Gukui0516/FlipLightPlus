@@ -303,10 +303,10 @@ MonoBehaviour:
   speed: 2
   stoppingDistance: 0
   worldStateManager: {fileID: 0}
-  lightSeekerBaseSpeed: 1
+  lightSeekerBaseSpeed: 2
   speedIncreaseRate: 1.2
   speedIncreaseInterval: 0.1
-  maxSpeed: 8
+  maxSpeed: 12
 --- !u!114 &5122035691410426771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useOutline: 1
   eyesVisibleDistance: 10
-  lightSeekerVisibilityDistance: 5
+  lightSeekerVisibilityDistance: 8
   enemyOutline: {fileID: 5101757877946332033}
   eyesObject: {fileID: 793540923169711125}
 --- !u!114 &8505478348503281568
