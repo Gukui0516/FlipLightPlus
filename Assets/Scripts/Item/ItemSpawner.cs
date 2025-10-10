@@ -14,16 +14,21 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] private int maxItems = 10;
     [SerializeField] private float spawnDistance = 15f;
 
+    [Header("Map Boundaries")]
+    [SerializeField] private Vector2 mapMin = new Vector2(-50f, -50f);
+    [SerializeField] private Vector2 mapMax = new Vector2(50f, 50f);
+    [SerializeField] private bool enableMapBoundary = true;
+
     [Header("Pool Settings")]
     [SerializeField] private int defaultPoolCapacity = 10;
     [SerializeField] private int maxPoolSize = 20;
 
     [Header("Despawn Settings")]
     [SerializeField] private float despawnDistance = 25f;
-    [SerializeField] private float optionalMaxLifetime = -1f; // 거리 기반 반환 조건 안 걸릴 때 안전장치로
+    [SerializeField] private float optionalMaxLifetime = -1f;
 
     [Header("Refs")]
-    [SerializeField] private WorldStateManager world; // 씬의 매니저 연결(권장)
+    [SerializeField] private WorldStateManager world;
 
     private Camera mainCamera;
     private Transform player;
@@ -40,7 +45,6 @@ public class ItemSpawner : MonoBehaviour
         if (Instance == null) Instance = this;
         else { Destroy(gameObject); return; }
 
-        // world 참조가 비어 있으면 런타임에서 한 번 찾아서 캐시(폴백)
         if (!world)
         {
 #if UNITY_2023_1_OR_NEWER
@@ -49,7 +53,7 @@ public class ItemSpawner : MonoBehaviour
             world = FindObjectOfType<WorldStateManager>();
 #endif
             if (!world)
-                Debug.LogWarning("[ItemSpawner] WorldStateManager를 찾지 못했습니다. 인스펙터에 연결하거나 씬에 1개 배치하세요.");
+                Debug.LogWarning("[ItemSpawner] WorldStateManager를 찾지 못했습니다.");
         }
 
         itemPool = new ObjectPool<GameObject>(
@@ -71,20 +75,26 @@ public class ItemSpawner : MonoBehaviour
         if (playerGO) player = playerGO.transform;
         else Debug.LogWarning("[ItemSpawner] Player 태그 오브젝트를 찾지 못했습니다.");
 
-        // 게임 시작 시 첫 아이템 즉시 생성
         SpawnInitialItem();
-
         StartCoroutine(SpawnCoroutine());
+
+        Debug.Log($"[ItemSpawner] Map Boundary: ({mapMin.x}, {mapMin.y}) ~ ({mapMax.x}, {mapMax.y})");
     }
 
-    /// <summary>
-    /// 게임 시작 시 첫 아이템을 생성
-    /// </summary>
     void SpawnInitialItem()
     {
         Vector2 spawnPosition = GetRandomSpawnPosition();
-        SpawnItem(spawnPosition);
-        Debug.Log($"[ItemSpawner] Initial item spawned at {spawnPosition}");
+
+        // 맵 범위 안에 있을 때만 생성
+        if (IsInsideMapBoundary(spawnPosition))
+        {
+            SpawnItem(spawnPosition);
+            Debug.Log($"[ItemSpawner] Initial item spawned at {spawnPosition}");
+        }
+        else
+        {
+            Debug.LogWarning($"[ItemSpawner] Initial spawn position {spawnPosition} is outside map boundary");
+        }
     }
 
     #endregion
@@ -96,7 +106,6 @@ public class ItemSpawner : MonoBehaviour
         GameObject item = Instantiate(itemPrefab);
         item.SetActive(false);
 
-        // 아이템에 PooledItem 컴포넌트 보장
         if (!item.TryGetComponent<PooledItem>(out _))
             item.AddComponent<PooledItem>();
 
@@ -107,15 +116,14 @@ public class ItemSpawner : MonoBehaviour
     {
         item.SetActive(true);
 
-        // 1) 거리/수명 체크 세팅
         var pooled = item.GetComponent<PooledItem>();
         if (pooled != null)
         {
             pooled.Setup(
                 player,
                 despawnDistance,
-                ReleaseItem,            // 아이템이 직접 풀로 돌아가도록 콜백 전달
-                optionalMaxLifetime     // -1이면 끔
+                ReleaseItem,
+                optionalMaxLifetime
             );
         }
         else
@@ -123,20 +131,16 @@ public class ItemSpawner : MonoBehaviour
             Debug.LogWarning($"[ItemSpawner] PooledItem 누락: {item.name}");
         }
 
-        // 2) 월드 매니저 주입 + 먹힘 시 풀 반환 연결
         if (item.TryGetComponent<InvertPickup>(out var pickup)
             || item.GetComponentInChildren<InvertPickup>(true) is InvertPickup childPickup && (pickup = childPickup) != null)
         {
             pickup.Init(world);
-            // 먹혔을 때 Release로 되돌아오게
             pickup.onConsumed = () => ReleaseItem(item);
         }
-        // 다른 타입의 아이템 가능성은 정보용 로그 생략
     }
 
     void OnReleaseItem(GameObject item)
     {
-        // 풀로 반납 시 비활성화만 (파괴 금지)
         item.SetActive(false);
     }
 
@@ -161,12 +165,12 @@ public class ItemSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(spawnInterval);
 
-            // CountActive 기준으로 생성 제한 판단
             if (itemPool.CountActive < maxItems)
             {
                 Vector2 spawnPosition = GetRandomSpawnPosition();
 
-                if (IsOutsideCameraView(spawnPosition))
+                // 카메라 밖 + 맵 범위 안 체크
+                if (IsOutsideCameraView(spawnPosition) && IsInsideMapBoundary(spawnPosition))
                 {
                     SpawnItem(spawnPosition);
                 }
@@ -190,10 +194,93 @@ public class ItemSpawner : MonoBehaviour
                viewportPoint.y < 0 || viewportPoint.y > 1;
     }
 
+    bool IsInsideMapBoundary(Vector2 position)
+    {
+        if (!enableMapBoundary) return true;
+
+        return position.x >= mapMin.x && position.x <= mapMax.x &&
+               position.y >= mapMin.y && position.y <= mapMax.y;
+    }
+
     void SpawnItem(Vector2 position)
     {
         GameObject item = itemPool.Get();
         item.transform.SetPositionAndRotation(position, Quaternion.identity);
+    }
+
+    #endregion
+
+    #region Gizmos
+
+    void OnDrawGizmos()
+    {
+        if (!enableMapBoundary) return;
+
+        // 맵 경계 박스
+        Gizmos.color = Color.green;
+        Vector3 center = new Vector3(
+            (mapMin.x + mapMax.x) / 2f,
+            (mapMin.y + mapMax.y) / 2f,
+            0f
+        );
+        Vector3 size = new Vector3(
+            mapMax.x - mapMin.x,
+            mapMax.y - mapMin.y,
+            0.1f
+        );
+        Gizmos.DrawWireCube(center, size);
+
+        // 스폰 거리 원 (플레이 중일 때)
+        if (Application.isPlaying && player != null)
+        {
+            Gizmos.color = Color.cyan;
+            DrawCircle(player.position, spawnDistance, 64);
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (!enableMapBoundary) return;
+
+        // 선택되었을 때 반투명 박스
+        Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
+        Vector3 center = new Vector3(
+            (mapMin.x + mapMax.x) / 2f,
+            (mapMin.y + mapMax.y) / 2f,
+            0f
+        );
+        Vector3 size = new Vector3(
+            mapMax.x - mapMin.x,
+            mapMax.y - mapMin.y,
+            0.1f
+        );
+        Gizmos.DrawCube(center, size);
+
+        // 코너 마커
+        Gizmos.color = Color.red;
+        float markerSize = 1f;
+        Gizmos.DrawWireSphere(new Vector3(mapMin.x, mapMin.y, 0), markerSize);
+        Gizmos.DrawWireSphere(new Vector3(mapMax.x, mapMin.y, 0), markerSize);
+        Gizmos.DrawWireSphere(new Vector3(mapMin.x, mapMax.y, 0), markerSize);
+        Gizmos.DrawWireSphere(new Vector3(mapMax.x, mapMax.y, 0), markerSize);
+    }
+
+    void DrawCircle(Vector3 center, float radius, int segments)
+    {
+        float angleStep = 360f / segments;
+        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
+
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            Vector3 newPoint = center + new Vector3(
+                Mathf.Cos(angle) * radius,
+                Mathf.Sin(angle) * radius,
+                0
+            );
+            Gizmos.DrawLine(prevPoint, newPoint);
+            prevPoint = newPoint;
+        }
     }
 
     #endregion
