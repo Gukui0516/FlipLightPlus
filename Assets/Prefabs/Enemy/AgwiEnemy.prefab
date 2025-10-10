@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 8505478348503281568}
   - component: {fileID: 5101757877946332033}
   m_Layer: 7
-  m_Name: ArGueEnemy
+  m_Name: AgwiEnemy
   m_TagString: EnemyAgwi
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,7 +225,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -245,13 +245,12 @@ MonoBehaviour:
   speed: 15
   stoppingDistance: 1.5
   worldStateManager: {fileID: 0}
-  state: 0
   detectionRange: 8
   eyebrows: {fileID: 1739637055597289970}
   wakeNotice: {fileID: 8557972979162626387}
   eyebrowMaxSize: 0
-  wakeDelay: 0
   wakeDelayMax: 1
+  rushDuration: 3
   wakeSpeed: 0.7
   sleepSpeed: 1.4
 --- !u!114 &5122035691410426771

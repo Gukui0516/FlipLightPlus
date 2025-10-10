@@ -13,6 +13,13 @@ public class MovementSettings : ScriptableObject
     [Tooltip("Y축 최대 속도")]
     public float maxSpeedY = 10f;
 
+    [Header("Inverted Max Speeds")]
+    [Tooltip("반전 상태일 때 X축 최대 속도")]
+    public float invertedMaxSpeedX = 18f;
+    
+    [Tooltip("반전 상태일 때 Y축 최대 속도")]
+    public float invertedMaxSpeedY = 15f;
+
     [Header("Acceleration & Deceleration")]
     [Tooltip("가속 곡선 (0~1)")]
     public AnimationCurve accelerationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
@@ -62,6 +69,8 @@ public class MovementSettings : ScriptableObject
         // 속도/시간 값 안전장치
         maxSpeedX = Mathf.Max(0.1f, maxSpeedX);
         maxSpeedY = Mathf.Max(0.1f, maxSpeedY);
+        invertedMaxSpeedX = Mathf.Max(0.1f, invertedMaxSpeedX);
+        invertedMaxSpeedY = Mathf.Max(0.1f, invertedMaxSpeedY);
         accelerationTime = Mathf.Max(0.01f, accelerationTime);
         decelerationTime = Mathf.Max(0.01f, decelerationTime);
     }
