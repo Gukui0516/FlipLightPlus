@@ -15,9 +15,10 @@ public class AgwiEnemy : BaseEnemy
     [Header("LightSeeker Speed Settings")]
     [SerializeField] private float detectionRange = 8.0f;
     [SerializeField] private Transform eyebrows;
-    [SerializeField] private float eyebrowMaxSize;
-    [SerializeField] private bool wakeCondition;//기상 조건(가깝거나 빛에 닿거나)
-    [SerializeField] private float rushDelay = 1f;//돌진 딜레이
+    [SerializeField] private GameObject wakeNotice;//일어난거 알림할 오브젝트(아이템 오프할거임)
+    [SerializeField] private float eyebrowMaxSize;//눈썹 최대 길이
+    [SerializeField] private float wakeDelay = 0f;//돌진 딜레이 누적치
+    [SerializeField] private float wakeDelayMax = 1f;//돌진 딜레이 최대치
     [SerializeField] private float wakeSpeed = 0.4f;//눈 뜨는 속도
     [SerializeField] private float sleepSpeed = 0.2f;//눈 감는 속도
 
@@ -53,7 +54,8 @@ public class AgwiEnemy : BaseEnemy
                     
                     if (eyebrows.localScale.x <= 0)//눈을 다 뜬 상태라면
                     {
-                        state = state.Rush;//일단 돌진 ㄱ
+                        wakeNotice.SetActive(false);
+                        state = state.Wake;//일단 대기상태
                     }
                 }
                 else
@@ -65,9 +67,18 @@ public class AgwiEnemy : BaseEnemy
                         eyebrows.localScale = new Vector2(eyebrowMaxSize, eyebrows.localScale.y);
                     }
                 }
-                break;
+            break;
+            case state.Wake:
+                if (wakeDelay < wakeDelayMax)
+                {
+                    wakeDelay += Time.deltaTime;//딜레이 다 될까지 참는다
+                }
+                else
+                {
+                    state=state.Rush;//돌진ㄱ
+                }
+            break;
         }
-        // 속도 증가 로직
     }
     
 
@@ -75,7 +86,7 @@ public class AgwiEnemy : BaseEnemy
     {        
         if (state==state.Rush)//돌진 상태면
         {
-            rb.freezeRotation = true;
+            rb.freezeRotation = true;//각도 고정
             return true;//이동
         }
 
@@ -104,17 +115,6 @@ public class AgwiEnemy : BaseEnemy
     protected override float GetCurrentSpeed()
     {
         return speed;
-    }
-
-
-    protected override void OnEnterLight()
-    {
-
-    }
-
-    protected override void OnExitLight()
-    {
-
     }
 
 
