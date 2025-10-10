@@ -36,34 +36,56 @@ public class PlayerControllerRB : MonoBehaviour
     
     // InputAction 참조
     private InputAction _moveAction;
-
+    private InputActionMap _playerActionMap;
+    
     private void Awake()
     {
         InitializeInputManager();
         InitializeRb();
+        if (_playerActionMap != null)
+        {
+            _playerActionMap.Enable();
+        }
+        else
+        {
+            Debug.LogWarning("Player ActionMap이 설정되지 않았습니다!");
+        }
     }
 
     private void OnEnable()
     {
+        InitializeInputManager();
+        InitializeRb();
         SetVelocityAndSync(_rb.linearVelocity);
         
-        // InputAction 활성화 및 이벤트 구독
+        // ✅ ActionMap 전체 활성화
+        if (_playerActionMap != null)
+        {
+            _playerActionMap.Enable();
+        }
+        
+        // InputAction 이벤트 구독
         if (_moveAction != null)
         {
-            _moveAction.Enable();
             _moveAction.performed += OnMove;
             _moveAction.canceled += OnMove;
+            Debug.Log("Move Action subscribed.");
         }
     }
 
     private void OnDisable()
     {
-        // InputAction 이벤트 구독 해제 및 비활성화
+        // InputAction 이벤트 구독 해제
         if (_moveAction != null)
         {
             _moveAction.performed -= OnMove;
             _moveAction.canceled -= OnMove;
-            _moveAction.Disable();
+        }
+        
+        // ✅ ActionMap 전체 비활성화
+        if (_playerActionMap != null)
+        {
+            _playerActionMap.Disable();
         }
     }
 
@@ -81,13 +103,14 @@ public class PlayerControllerRB : MonoBehaviour
     {
         Vector2 moveInput = context.ReadValue<Vector2>();
         
-        // 입력이 있을 때만 방향 업데이트
-        if (_input.sqrMagnitude > 0.01f)
+        // ✅ 수정: moveInput을 먼저 체크
+        if (moveInput.sqrMagnitude > 0.01f)
         {
-            _lastDirNorm = _input.normalized;
+            _lastDirNorm = moveInput.normalized;
         }
-        
+
         _input = moveInput;
+        Debug.Log($"Move Input: {_input}, LastDirNorm: {_lastDirNorm}");
     }
 
     #endregion
@@ -110,12 +133,20 @@ public class PlayerControllerRB : MonoBehaviour
             return;
         }
 
-        // InputAction 찾기 (Action Map: "Player", Action: "Move")
-        _moveAction = inputActions.FindAction("Player/Move");
+        // Action Map 찾기 및 저장
+        _playerActionMap = inputActions.FindActionMap("Player");
+        if (_playerActionMap == null)
+        {
+            Debug.LogError("'Player' ActionMap을 찾을 수 없습니다!");
+            return;
+        }
+
+        // InputAction 찾기
+        _moveAction = _playerActionMap.FindAction("Move");
         
         if (_moveAction == null)
         {
-            Debug.LogError("'Player/Move' InputAction을 찾을 수 없습니다!");
+            Debug.LogError("'Move' InputAction을 찾을 수 없습니다!");
         }
     }
 
