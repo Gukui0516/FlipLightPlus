@@ -9,6 +9,7 @@ using System.Collections;
 /// - X/Y 최대속도가 다른 타원 한계 처리
 /// - InputAction 에셋 직접 사용
 /// - 넉백(Knockback) 지원
+/// - Inverted 상태에 따른 최대 속도 변경
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerControllerRB : MonoBehaviour
@@ -49,10 +50,25 @@ public class PlayerControllerRB : MonoBehaviour
     private InputAction _moveAction;
     private InputActionMap _playerActionMap;
     
+    // WorldStateManager 참조
+    private WorldStateManager _worldStateManager;
+    private bool _isInverted = false;
+    
+    // 최대 속도 전환 상태
+    private bool _isTransitioningSpeed = false;
+    private float _speedTransitionProgress = 0f;
+    private float _speedTransitionDuration = 0.3f; // 전환에 걸리는 시간
+    
+    // 현재 적용할 최대 속도 (Inverted 상태 고려)
+    private float CurrentMaxSpeedX => _isInverted ? movementSettings.invertedMaxSpeedX : movementSettings.maxSpeedX;
+    private float CurrentMaxSpeedY => _isInverted ? movementSettings.invertedMaxSpeedY : movementSettings.maxSpeedY;
+    
     private void Awake()
     {
         InitializeInputManager();
         InitializeRb();
+        FindWorldStateManager();
+        
         if (_playerActionMap != null)
         {
             _playerActionMap.Enable();
@@ -67,9 +83,10 @@ public class PlayerControllerRB : MonoBehaviour
     {
         InitializeInputManager();
         InitializeRb();
+        FindWorldStateManager();
         SetVelocityAndSync(_rb.linearVelocity);
         
-        // ✅ ActionMap 전체 활성화
+        // ActionMap 전체 활성화
         if (_playerActionMap != null)
         {
             _playerActionMap.Enable();
@@ -80,8 +97,10 @@ public class PlayerControllerRB : MonoBehaviour
         {
             _moveAction.performed += OnMove;
             _moveAction.canceled += OnMove;
-            Debug.Log("Move Action subscribed.");
         }
+        
+        // WorldStateManager 이벤트 구독
+        SubscribeWorldStateManager();
     }
 
     private void OnDisable()
@@ -101,11 +120,14 @@ public class PlayerControllerRB : MonoBehaviour
             _moveAction.canceled -= OnMove;
         }
         
-        // ✅ ActionMap 전체 비활성화
+        // ActionMap 전체 비활성화
         if (_playerActionMap != null)
         {
             _playerActionMap.Disable();
         }
+        
+        // WorldStateManager 이벤트 구독 해제
+        UnsubscribeWorldStateManager();
     }
 
     private void Update()
@@ -121,6 +143,102 @@ public class PlayerControllerRB : MonoBehaviour
             ApplyMovement();
         }
     }
+
+    #region WorldStateManager Integration
+    
+    /// <summary>
+    /// WorldStateManager 찾기
+    /// </summary>
+    private void FindWorldStateManager()
+    {
+        if (_worldStateManager == null)
+        {
+            _worldStateManager = FindAnyObjectByType<WorldStateManager>();
+            
+            if (_worldStateManager == null)
+            {
+                Debug.LogWarning("WorldStateManager를 찾을 수 없습니다!");
+            }
+            else
+            {
+                _isInverted = _worldStateManager.IsInverted;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// WorldStateManager 이벤트 구독
+    /// </summary>
+    private void SubscribeWorldStateManager()
+    {
+        if (_worldStateManager != null)
+        {
+            _worldStateManager.onIsInvertedChanged.AddListener(OnInvertedStateChanged);
+        }
+    }
+    
+    /// <summary>
+    /// WorldStateManager 이벤트 구독 해제
+    /// </summary>
+    private void UnsubscribeWorldStateManager()
+    {
+        if (_worldStateManager != null)
+        {
+            _worldStateManager.onIsInvertedChanged.RemoveListener(OnInvertedStateChanged);
+        }
+    }
+    
+    /// <summary>
+    /// Inverted 상태 변경 콜백
+    /// </summary>
+    private void OnInvertedStateChanged(bool isInverted)
+    {
+        bool wasInverted = _isInverted;
+        _isInverted = isInverted;
+        
+        if (wasInverted != isInverted)
+        {
+            HandleMaxSpeedChange();
+        }
+    }
+    
+    /// <summary>
+    /// 최대 속도 변경 처리
+    /// </summary>
+    private void HandleMaxSpeedChange()
+    {
+        Vector2 currentVelocity = _rb.linearVelocity;
+        float currentSpeed = currentVelocity.magnitude;
+        
+        if (_isInverted)
+        {
+            // Inverted 시작: 더 높은 maxSpeed로 변경
+            // 현재 속도를 유지하고 새로운 maxSpeed로 가속 가능
+            // 특별한 처리 없이 자연스럽게 가속됨
+        }
+        else
+        {
+            // Inverted 종료: 더 낮은 maxSpeed로 변경
+            // 현재 속도가 새로운 maxSpeed를 초과하면 감속 필요
+            float newMaxSpeed = Mathf.Sqrt(
+                Mathf.Pow(CurrentMaxSpeedX, 2) + 
+                Mathf.Pow(CurrentMaxSpeedY, 2)
+            );
+            
+            if (currentSpeed > newMaxSpeed)
+            {
+                // 감속이 필요한 경우 감속 상태로 전환
+                if (!_decelerating)
+                {
+                    _decelerating = true;
+                    _uDecel = 0f;
+                    _decelStartSpeed = ToNormalizedSpace(currentVelocity).magnitude;
+                }
+            }
+        }
+    }
+    
+    #endregion
 
     #region InputAction Handling
     
@@ -138,7 +256,6 @@ public class PlayerControllerRB : MonoBehaviour
         
         Vector2 moveInput = context.ReadValue<Vector2>();
         
-        // ✅ 수정: moveInput을 먼저 체크
         if (moveInput.sqrMagnitude > 0.01f)
         {
             _lastDirNorm = moveInput.normalized;
@@ -199,8 +316,6 @@ public class PlayerControllerRB : MonoBehaviour
     #endregion
 
     #region Knockback Methods
-    
-    
     
     /// <summary>
     /// 넉백 적용
@@ -344,8 +459,8 @@ public class PlayerControllerRB : MonoBehaviour
     {
         // 입력 방향을 정규화 공간으로 변환
         Vector2 inputDirNorm = new Vector2(
-            _input.x / Mathf.Max(movementSettings.maxSpeedX, 1e-6f),
-            _input.y / Mathf.Max(movementSettings.maxSpeedY, 1e-6f)
+            _input.x / Mathf.Max(CurrentMaxSpeedX, 1e-6f),
+            _input.y / Mathf.Max(CurrentMaxSpeedY, 1e-6f)
         );
         
         if (inputDirNorm.sqrMagnitude > 1e-8f)
@@ -379,7 +494,7 @@ public class PlayerControllerRB : MonoBehaviour
     {
         if (angle <= movementSettings.noLossTurnAngle)
         {
-            // ✅ 수정: 손실 없는 회전이지만 목표 속도는 준수
+            // 손실 없는 회전이지만 목표 속도는 준수
             _turning = false;
             _uTurn = 0f;
             
@@ -402,7 +517,7 @@ public class PlayerControllerRB : MonoBehaviour
         }
         else
         {
-            // ✅ 수정: 중간 구간도 목표 속도 준수
+            // 중간 구간도 목표 속도 준수
             _turning = false;
             _uTurn = 0f;
             
@@ -435,7 +550,7 @@ public class PlayerControllerRB : MonoBehaviour
             _turnLossLerp = lossLerp;
         }
 
-        // ✅ 수정: 목표 속도도 고려하여 최종 타겟 계산
+        // 목표 속도도 고려하여 최종 타겟 계산
         float turnTargetSpeed = _turnStartSpeed * retainRatio;
         float targetSpeed = Mathf.Min(goalSpeed, turnTargetSpeed);
 
@@ -507,8 +622,8 @@ public class PlayerControllerRB : MonoBehaviour
     private Vector2 ToNormalizedSpace(Vector2 worldVelocity)
     {
         return new Vector2(
-            worldVelocity.x / Mathf.Max(movementSettings.maxSpeedX, 1e-6f),
-            worldVelocity.y / Mathf.Max(movementSettings.maxSpeedY, 1e-6f)
+            worldVelocity.x / Mathf.Max(CurrentMaxSpeedX, 1e-6f),
+            worldVelocity.y / Mathf.Max(CurrentMaxSpeedY, 1e-6f)
         );
     }
 
@@ -518,8 +633,8 @@ public class PlayerControllerRB : MonoBehaviour
     private Vector2 ToWorldSpace(Vector2 normalizedVelocity)
     {
         return new Vector2(
-            normalizedVelocity.x * Mathf.Max(movementSettings.maxSpeedX, 1e-6f),
-            normalizedVelocity.y * Mathf.Max(movementSettings.maxSpeedY, 1e-6f)
+            normalizedVelocity.x * Mathf.Max(CurrentMaxSpeedX, 1e-6f),
+            normalizedVelocity.y * Mathf.Max(CurrentMaxSpeedY, 1e-6f)
         );
     }
 
