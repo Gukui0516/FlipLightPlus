@@ -121,7 +121,6 @@ GameObject:
   - component: {fileID: 2846537204087850183}
   - component: {fileID: 2790562953399974763}
   - component: {fileID: 4076102999245697277}
-  - component: {fileID: 2282291647012354772}
   m_Layer: 0
   m_Name: PlayerRB
   m_TagString: Player
@@ -255,7 +254,7 @@ MonoBehaviour:
   playerLife: {fileID: 2846537204087850183}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
 --- !u!114 &2846537204087850183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,20 +316,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSettings: {fileID: 11400000, guid: 7c21b4e85e8f2a54e8e435436c518367, type: 2}
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
---- !u!114 &2282291647012354772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8887935938070739936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c826cf3da25158429ea4f7b0b9c71ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkRadius: {fileID: 1100138164244557713}
-  playerLife: {fileID: 2846537204087850183}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0

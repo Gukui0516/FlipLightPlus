@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  stoppingDistance: 0.5
+  stoppingDistance: 0
   worldStateManager: {fileID: 0}
   lightSeekerBaseSpeed: 1
   speedIncreaseRate: 1.2
