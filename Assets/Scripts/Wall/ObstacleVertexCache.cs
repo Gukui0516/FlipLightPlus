@@ -98,7 +98,7 @@ public class ObstacleVertexCache : MonoBehaviour, IObstacleWithVertices
         UpdateWorldVertices();
         isCached = true;
         
-        Debug.Log($"✅ {gameObject.name}: {cachedLocalVertices.Count}개 꼭지점 캐싱 완료");
+//        Debug.Log($"✅ {gameObject.name}: {cachedLocalVertices.Count}개 꼭지점 캐싱 완료");
     }
 
     void ExtractVerticesFromCollider()
@@ -131,7 +131,7 @@ public class ObstacleVertexCache : MonoBehaviour, IObstacleWithVertices
             cachedLocalVertices.Add(offset + new Vector2(halfSize.x, halfSize.y));   // 우상
             cachedLocalVertices.Add(offset + new Vector2(-halfSize.x, halfSize.y));  // 좌상
             
-            Debug.Log($"⬛ BoxCollider2D 감지: 4개 꼭지점 생성");
+//            Debug.Log($"⬛ BoxCollider2D 감지: 4개 꼭지점 생성");
         }
         else if (col is CircleCollider2D circle)
         {

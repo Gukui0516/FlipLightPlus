@@ -28,6 +28,13 @@ public class WorldStateManager : MonoBehaviour
     void Awake()
     {
         SetPalette(startBackgroundWhite, startFlashlightBlack);
+        if (GameManager.Instance != null)
+            GameManager.Instance.RegisterWorldStateManager(this);
+    }
+    void Start()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.RegisterWorldStateManager(this);
     }
 
     public void SetPalette(bool bgWhite, bool lightBlack)
