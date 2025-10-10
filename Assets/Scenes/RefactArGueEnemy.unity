@@ -804,11 +804,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &361161168 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 171004403586355978, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
-  m_PrefabInstance: {fileID: 795941379}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &370119444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2095,15 +2090,15 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1405005184}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 171004403586355978, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 171004403586355978, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 171004403586355978, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2140,6 +2135,34 @@ PrefabInstance:
     - target: {fileID: 4211986355052887415, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: m_Name
       value: EnemySpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[2].maxCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[2].enemyName
+      value: AgwiEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[2].enemyPrefab
+      value: 
+      objectReference: {fileID: 3217619446867333131, guid: 795eb77e202f151448f1b9e8920b0f92, type: 3}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[2].poolMaxSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[2].poolCapacity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[2].spawnInterval
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -46571,6 +46594,9 @@ MonoBehaviour:
   spawnInterval: 2
   maxItems: 10
   spawnDistance: 15
+  mapMin: {x: -50, y: -50}
+  mapMax: {x: 50, y: 50}
+  enableMapBoundary: 1
   defaultPoolCapacity: 10
   maxPoolSize: 20
   despawnDistance: 25
@@ -46588,8 +46614,7 @@ Transform:
   m_LocalPosition: {x: 500, y: 500, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 361161168}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1420547265
@@ -47327,8 +47352,8 @@ MonoBehaviour:
     sceneAsset: {fileID: 102900000, guid: 03d025b569c40124a8936bb2858fccae, type: 3}
     sceneName: EndScene
   stageScenes:
-  - sceneAsset: {fileID: 102900000, guid: e92518b8121952946a2784fe1542f097, type: 3}
-    sceneName: StageScene
+  - sceneAsset: {fileID: 102900000, guid: d1dca7b4ce62f3047801803deb292086, type: 3}
+    sceneName: RefactArGueEnemy
   useSingleStageScene: 1
 --- !u!114 &1674293236
 MonoBehaviour:
@@ -48160,6 +48185,7 @@ SceneRoots:
   - {fileID: 60299625}
   - {fileID: 578489543}
   - {fileID: 1492951381}
+  - {fileID: 795941379}
   - {fileID: 1405005184}
   - {fileID: 1168156464}
   - {fileID: 425118329815727502}
