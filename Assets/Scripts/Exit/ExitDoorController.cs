@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public class ExitDoorController : MonoBehaviour
@@ -25,11 +26,16 @@ public class ExitDoorController : MonoBehaviour
     
     [Tooltip("자동 설정 모드 선택")]
     [SerializeField] private AutoSetMode autoMode = AutoSetMode.MatchRegisteredCount;
-    
+
     [Tooltip("수동 설정 시: 문이 열리기 위해 필요한 최소 게이지 만족 개수")]
     [SerializeField] private int manualRequiredGaugeCount = 1;
     
+    [Header("이펙트 설정")]
+    [Tooltip("문이 열릴 조건이 만족되었을 때 활성화할 이펙트 게임오브젝트")]
+    [SerializeField] private GameObject openEffectGameObject;
+    
     private int requiredGaugeCount = 1;
+    
     
     public enum AutoSetMode
     {
@@ -97,6 +103,12 @@ public class ExitDoorController : MonoBehaviour
         {
             doorCheckPoint = transform;
             Debug.Log("ExitDoorController: doorCheckPoint가 할당되지 않아 자신의 Transform을 사용합니다.");
+        }
+        
+        // 이펙트 초기화 (비활성화 상태로)
+        if (openEffectGameObject != null)
+        {
+            openEffectGameObject.SetActive(false);
         }
         
         satisfiedGaugeCount = 0;
@@ -276,7 +288,7 @@ public class ExitDoorController : MonoBehaviour
     }
     
     /// <summary>
-    /// 조건을 확인하고 카메라 뷰포트 대기 상태로 전환
+    /// 조건을 확인하고, 조건 만족 시 이펙트를 활성화하고 카메라 뷰포트 대기 상태로 전환
     /// </summary>
     private void CheckAndOpenDoor()
     {
@@ -285,8 +297,25 @@ public class ExitDoorController : MonoBehaviour
             
         if (satisfiedGaugeCount >= requiredGaugeCount && !_isOpen && !_isOpening && !_isWaitingForCameraView)
         {
-            Debug.Log($"ExitDoorController: 모든 조건 만족! 카메라 뷰포트 대기 중...");
+            Debug.Log($"ExitDoorController: 모든 조건 만족! 이펙트 활성화 및 카메라 뷰포트 대기 중...");
+            
+            // 조건 만족 시 이펙트 활성화
+            ActivateOpenEffect();
+            
+            // 카메라 뷰포트 대기 시작
             StartCoroutine(WaitForCameraView());
+        }
+    }
+    
+    /// <summary>
+    /// 문 열림 이펙트 활성화
+    /// </summary>
+    private void ActivateOpenEffect()
+    {
+        if (openEffectGameObject != null)
+        {
+            openEffectGameObject.SetActive(true);
+            Debug.Log("ExitDoorController: 문 열림 이펙트 활성화!");
         }
     }
     
@@ -557,6 +586,7 @@ public class ExitDoorController : MonoBehaviour
         Debug.Log($"문 상태: {(_isOpen ? "열림" : "닫힘")}");
         Debug.Log($"카메라 대기 중: {_isWaitingForCameraView}");
         Debug.Log($"탈출 완료 여부: {_hasPlayerEscaped}");
+        Debug.Log($"이펙트 활성화 여부: {(openEffectGameObject != null ? openEffectGameObject.activeSelf.ToString() : "할당되지 않음")}");
         
         Debug.Log("등록된 게이지 목록:");
         foreach (var gauge in registeredGauges)

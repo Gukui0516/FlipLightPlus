@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 900d27286c03a9b4aabae38729ef3105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AgwiEnemy
-  speed: 15
+  speed: 20
   stoppingDistance: 1.5
   worldStateManager: {fileID: 0}
   detectionRange: 8

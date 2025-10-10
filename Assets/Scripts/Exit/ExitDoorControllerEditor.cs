@@ -69,6 +69,18 @@ public class ExitDoorControllerEditor : Editor
         
         EditorGUILayout.Space(10);
         
+        // === 이펙트 설정 ===
+        EditorGUILayout.LabelField("이펙트 설정", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("openEffectGameObject"), new GUIContent("Open Effect GameObject", "조건 만족 시 활성화할 이펙트"));
+        
+        EditorGUILayout.HelpBox(
+            "모든 게이지 조건이 만족되면 이 이펙트가 활성화됩니다.\n" +
+            "플레이어가 다가와서 카메라에 문이 보이면 문이 열립니다.", 
+            MessageType.Info
+        );
+        
+        EditorGUILayout.Space(10);
+        
         // === 탈출 트리거 설정 ===
         EditorGUILayout.LabelField("탈출 트리거 설정", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("exitTriggerCollider"), new GUIContent("Exit Trigger Collider", "문이 열렸을 때 활성화할 BoxCollider2D"));
