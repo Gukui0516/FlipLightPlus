@@ -15,20 +15,19 @@ public class PlayerLife : MonoBehaviour
     //[SerializeField] Flashlight2D flashlight;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    [SerializeField] private PlayerDeath deathSeq;      // 위 스크립트
+    bool isDead;
+    Animator anim;
 
-    void Awake()
-    {
-        // 자동 바인딩
-        if (!deathSeq) deathSeq = GetComponent<PlayerDeath>();
-        if (!deathSeq) deathSeq = GetComponentInChildren<PlayerDeath>(true);
-    }
+    // 외곽선용 SpriteRenderer 
+    [SerializeField] GameObject outlineRenderer;
 
 
     void Start()
     {
         currentLife=startLife;
         lifeUI.LifeUIUpdate(currentLife);
+
+        anim = GetComponent<Animator>();
     }
 
     public void LifeIncrease()
@@ -65,14 +64,31 @@ public class PlayerLife : MonoBehaviour
         
         if(currentLife <= 0)//라이프가 0이하면
         {
+            if (isDead) return;
+            isDead = true;
 
+            if (outlineRenderer) outlineRenderer.SetActive(false);
 
-            // 죽음 애니메이션만 호출
-            if (deathSeq) deathSeq.PlayOnce();
-            else GameManager.Instance.GameOver(); // 안전망
+            // (정지 전에 대비하려면) 애니를 리얼타임으로 돌리기
+            anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+
+            anim.SetBool("IsDead", true);          // 죽음 애니 트리거
+
 
         }
     }
+
+    bool gameOverRequested; // 중복 방지
+
+    // 애니메이션 이벤트로 호출
+    public void OnDeathAnimFinished()
+    {
+        if (gameOverRequested) return;
+        gameOverRequested = true;
+
+        GameManager.Instance.GameOver();
+    }
+
 
 
     private IEnumerator invincibilityTimes()
