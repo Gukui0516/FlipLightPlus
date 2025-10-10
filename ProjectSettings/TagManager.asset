@@ -8,6 +8,7 @@ TagManager:
   - EnemyWhite
   - Item
   - Exit
+  - EnemyAgwi
   layers:
   - Default
   - TransparentFX

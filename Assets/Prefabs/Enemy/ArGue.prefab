@@ -28,10 +28,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3530351476339553646}
-  - {fileID: 347606858369209924}
-  - {fileID: 7868051714953356998}
+  m_Children: []
   m_Father: {fileID: 6807073466166103477}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2375283517094215243
@@ -44,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7868051714953356998}
   m_Layer: 7
-  m_Name: EyeBrow
+  m_Name: empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,13 +55,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2375283517094215243}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1739637055597289970}
-  m_Father: {fileID: 5082699046220954161}
+  - {fileID: 3530351476339553646}
+  - {fileID: 347606858369209924}
+  m_Father: {fileID: 6807073466166103477}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3217619446867333131
 GameObject:
@@ -78,7 +77,7 @@ GameObject:
   - component: {fileID: 1179436562999968646}
   - component: {fileID: 9081447919679675988}
   - component: {fileID: 1374186192906355288}
-  - component: {fileID: 1973434832726502052}
+  - component: {fileID: 6709494930251769197}
   - component: {fileID: 5122035691410426771}
   - component: {fileID: 2653086107433009462}
   - component: {fileID: 2530673690263635235}
@@ -104,6 +103,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7868051714953356998}
   - {fileID: 5082699046220954161}
   - {fileID: 6170444199963757688}
   - {fileID: 5816789468164474995}
@@ -215,7 +215,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -230,7 +230,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1973434832726502052
+--- !u!114 &6709494930251769197
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -239,16 +239,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 3217619446867333131}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20f1afd2dc3ef1c40923569d9bd93311, type: 3}
+  m_Script: {fileID: 11500000, guid: 900d27286c03a9b4aabae38729ef3105, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  stoppingDistance: 0.5
+  m_EditorClassIdentifier: Assembly-CSharp::AgwiEnemy
+  speed: 15
+  stoppingDistance: 1.5
   worldStateManager: {fileID: 0}
-  lightSeekerBaseSpeed: 1
-  speedIncreaseRate: 1.2
-  speedIncreaseInterval: 0.1
-  maxSpeed: 8
+  state: 0
+  detectionRange: 8
+  eyebrows: {fileID: 1739637055597289970}
+  eyebrowMaxSize: 0
+  wakeCondition: 0
+  rushDelay: 1
+  wakeSpeed: 0.7
+  sleepSpeed: 1.4
 --- !u!114 &5122035691410426771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,7 +342,7 @@ GameObject:
   - component: {fileID: 1739637055597289970}
   - component: {fileID: 5237375471606224880}
   m_Layer: 7
-  m_Name: Square
+  m_Name: EyeBrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -544,12 +548,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5817027577867902412}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
   m_LocalPosition: {x: -0.5, y: -1.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5082699046220954161}
+  m_Father: {fileID: 7868051714953356998}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &1052684946518673027
 SpriteRenderer:
@@ -634,12 +638,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7159356139636110238}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
   m_LocalPosition: {x: 0.5, y: -1.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5082699046220954161}
+  m_Father: {fileID: 7868051714953356998}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &2942126645794031455
 SpriteRenderer:
@@ -707,14 +711,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6807073466166103477}
     m_Modifications:
-    - target: {fileID: 6367730071362866807, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6367730071362866807, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6367730071362866807, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

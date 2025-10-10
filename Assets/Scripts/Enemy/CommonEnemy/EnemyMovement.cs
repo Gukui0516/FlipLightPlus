@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 적의 이동 로직을 담당하는 모듈
@@ -23,7 +23,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (distance > stoppingDistance)
         {
-            Vector2 direction = (player.position - transform.position).normalized;
+            Vector2 direction = (transform.rotation) * Vector2.down.normalized;
             rb.linearVelocity = direction * speed;
         }
         else

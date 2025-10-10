@@ -13,21 +13,20 @@ public class AgwiEnemy : BaseEnemy
 {
     [SerializeField] state state=state.Sleep;
     [Header("LightSeeker Speed Settings")]
-    [SerializeField] private float baseSpeed = 2.0f;
     [SerializeField] private float detectionRange = 8.0f;
     [SerializeField] private Transform eyebrows;
+    [SerializeField] private float eyebrowMaxSize;
     [SerializeField] private bool wakeCondition;//기상 조건(가깝거나 빛에 닿거나)
     [SerializeField] private float rushDelay = 1f;//돌진 딜레이
-    [SerializeField] private float wakeSpeed = 0.8f;//눈 뜨는 속도
-    [SerializeField] private float sleepSpeed = 0.4f;//눈 감는 속도
+    [SerializeField] private float wakeSpeed = 0.4f;//눈 뜨는 속도
+    [SerializeField] private float sleepSpeed = 0.2f;//눈 감는 속도
 
-    private float currentSpeed;
     private float timeInLight = 0f;
 
     protected override void Awake()
     {
+        eyebrowMaxSize = eyebrows.localScale.x;
         base.Awake();
-        currentSpeed = baseSpeed;
     }
 
     protected override void InitializeEnemy()
@@ -38,7 +37,6 @@ public class AgwiEnemy : BaseEnemy
             visibilityModule.Initialize(EnemyType.Agwi);
         }
         // 속도 초기화
-        currentSpeed = baseSpeed;
         timeInLight = 0f;
         isInLight = false;
     }
@@ -51,35 +49,34 @@ public class AgwiEnemy : BaseEnemy
             case state.Sleep:
                 if (Vector2.Distance(transform.position, player.transform.position) <= detectionRange || isInLight)//감지거리 안이라면
                 {
-                    eyebrows.localScale = new Vector2(eyebrows.localScale.x-wakeSpeed, eyebrows.localScale.y);//눈썹 크기 조절
-
+                    eyebrows.localScale = new Vector2(eyebrows.localScale.x-wakeSpeed*Time.deltaTime, eyebrows.localScale.y);//눈썹 크기 조절
+                    
                     if (eyebrows.localScale.x <= 0)//눈을 다 뜬 상태라면
                     {
-                        state = state.Wake;//일어남
+                        state = state.Rush;//일단 돌진 ㄱ
                     }
                 }
                 else
                 {
-                    eyebrows.localScale = new Vector2(eyebrows.localScale.x + sleepSpeed, eyebrows.localScale.y);//눈썹 크기 조절
-                }
-                break;
-            case state.Wake:
-                if ( < 0f)
-                {
-                    timeInLight = 0f;
+                    eyebrows.localScale = new Vector2(eyebrows.localScale.x + sleepSpeed * Time.deltaTime, eyebrows.localScale.y);//눈썹 크기 조절
+
+                    if (eyebrows.localScale.x >= eyebrowMaxSize)//눈썹 최대 크기 넘기면
+                    {
+                        eyebrows.localScale = new Vector2(eyebrowMaxSize, eyebrows.localScale.y);
+                    }
                 }
                 break;
         }
         // 속도 증가 로직
     }
+    
 
     protected override bool ShouldMove()
     {        
-        if (state==state.Rush)//돌진 상태가 아니면
+        if (state==state.Rush)//돌진 상태면
         {
-
-            //이동 코드
-            return false;//이동 방향이 고정되어야 하기 때문에 베이스 코드 안거치고 그냥 이동시킴
+            rb.freezeRotation = true;
+            return true;//이동
         }
 
         // 평소: 돌진 안함
@@ -89,7 +86,7 @@ public class AgwiEnemy : BaseEnemy
     protected override bool ShouldRotate()
     {
         // 반전 상태: Normal처럼 손전등 밖에서만 회전
-        if (state == state.Rush)//돌진 상태가 아닐때 회전 안함
+        if (state == state.Rush)//돌진 상태일 때 회전 안함
         {
             return false;
         }
@@ -106,7 +103,7 @@ public class AgwiEnemy : BaseEnemy
 
     protected override float GetCurrentSpeed()
     {
-        return currentSpeed;
+        return speed;
     }
 
 
