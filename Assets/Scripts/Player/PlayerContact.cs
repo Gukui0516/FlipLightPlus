@@ -8,6 +8,7 @@ public class PlayerContact : MonoBehaviour
     public LayerMask enemyLayer;
     bool isInverted = false;
     private WorldStateManager worldStateManager;
+    
     private void Awake()
     {
         isContact = false;
@@ -17,6 +18,7 @@ public class PlayerContact : MonoBehaviour
             Debug.LogError("WorldStateManager not found");
         }
     }
+    
     private void Start()
     {
         isContact = false;
@@ -26,7 +28,13 @@ public class PlayerContact : MonoBehaviour
             Debug.LogError("WorldStateManager not found");
         }
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    //무적 시간 종료 시 isContact 리셋하는 메서드
+    public void ResetContact()
+    {
+        isContact = false;
+    }
+    
     public void CheckContact()//체크할 태그 이름
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, checkRadius.radius);
@@ -45,7 +53,7 @@ public class PlayerContact : MonoBehaviour
                     Debug.Log(hit.gameObject.name);
                     // GetComponentInChildren<Flashlight2D>().isOn = false;
                     // GameManager.Instance.GameOver();
-                    //isContact = true;
+                    isContact = true;
                 }
                 else if (hit.gameObject.CompareTag("EnemyWhite"))
                 {
@@ -53,7 +61,7 @@ public class PlayerContact : MonoBehaviour
                     Debug.Log(hit.gameObject.name);
                     // GetComponentInChildren<Flashlight2D>().isOn = false;
                     // GameManager.Instance.GameOver();
-                    //isContact = true;
+                    isContact = true;
                 }
             }
 
@@ -71,9 +79,9 @@ public class PlayerContact : MonoBehaviour
                 }
                 //아이템 효과 발동 시키는 코드
             }
-
         }
     }
+    
     private void Update()
     {
         CheckContact();
