@@ -46602,6 +46602,9 @@ MonoBehaviour:
   despawnDistance: 25
   optionalMaxLifetime: -1
   world: {fileID: 0}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &1405005184
 Transform:
   m_ObjectHideFlags: 0
@@ -47971,6 +47974,10 @@ PrefabInstance:
       propertyPath: lifeUI
       value: 
       objectReference: {fileID: 1383074405}
+    - target: {fileID: 4076102999245697277, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
+      propertyPath: movementSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 90101755c79e41a42a3d67504f75b198, type: 2}
     - target: {fileID: 8887935938070739936, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       propertyPath: m_Name
       value: PlayerRB
