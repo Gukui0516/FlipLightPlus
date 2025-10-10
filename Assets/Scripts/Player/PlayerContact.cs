@@ -40,8 +40,6 @@ public class PlayerContact : MonoBehaviour
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, checkRadius.radius);
         foreach (Collider2D hit in hits)
         {
-            
-
             if (hit.gameObject.CompareTag("Item"))
             {
                 Debug.Log("아이템 " + hit.name + " 획득");
