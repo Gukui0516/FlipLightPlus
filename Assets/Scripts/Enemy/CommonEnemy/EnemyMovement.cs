@@ -5,19 +5,30 @@ using UnityEngine;
 /// </summary>
 public class EnemyMovement : MonoBehaviour
 {
+    private Rigidbody2D rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     /// <summary>
     /// 플레이어를 향해 이동
     /// </summary>
     public void MoveTowardsPlayer(Transform player, float speed, float stoppingDistance)
     {
-        if (player == null) return;
+        if (player == null || rb == null) return;
 
         float distance = Vector2.Distance(transform.position, player.position);
 
         if (distance > stoppingDistance)
         {
             Vector2 direction = (player.position - transform.position).normalized;
-            transform.position += (Vector3)(direction * speed * Time.deltaTime);
+            rb.linearVelocity = direction * speed;
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
         }
     }
 }

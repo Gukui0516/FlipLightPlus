@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public enum GameState { Boot, Playing, Paused, GameOver }
@@ -43,14 +43,20 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        // Instance를 먼저 체크하되, 자신이 진짜인지 판단
+        if (Instance == null)
         {
-            Destroy(gameObject);
-            return;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        else if (Instance != this)
+        {
+            // 자신이 가짜라면 즉시 파괴하고 초기화 중단
+            Destroy(gameObject);
+            return; // ⭐ 중요: 이후 초기화 로직 실행 안함
+        }
 
+        // 진짜 GameManager만 여기까지 도달
         if (!sceneManager)
             sceneManager = GetComponent<SceneManager>();
 

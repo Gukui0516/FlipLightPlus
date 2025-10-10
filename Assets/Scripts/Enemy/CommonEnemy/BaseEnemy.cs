@@ -85,13 +85,25 @@ public abstract class BaseEnemy : MonoBehaviour
             visibilityModule.UpdateVisibility(player, isInLight, isInverted);
         }
 
-        // 반전시 정지 여부 확인
-        if (IsStoppedByInversion()) return;
-
         // 회전
         if (rotationModule != null && player != null && ShouldRotate())
         {
             rotationModule.RotateTowardsPlayer(player);
+        }
+    }
+
+    // 물리 기반 이동은 FixedUpdate로 분리
+    protected virtual void FixedUpdate()
+    {
+        // 반전시 정지 여부 확인
+        if (IsStoppedByInversion())
+        {
+            // 반전 시 멈춤
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+            return;
         }
 
         // 이동
@@ -100,6 +112,14 @@ public abstract class BaseEnemy : MonoBehaviour
             if (movementModule != null)
             {
                 movementModule.MoveTowardsPlayer(player, GetCurrentSpeed(), stoppingDistance);
+            }
+        }
+        else
+        {
+            // 이동하지 않을 때 멈춤
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
             }
         }
     }
