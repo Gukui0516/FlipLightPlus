@@ -355,6 +355,8 @@ public class ExitDoorController : MonoBehaviour
                         viewportPoint.x >= 0 && viewportPoint.x <= 1 && 
                         viewportPoint.y >= 0 && viewportPoint.y <= 1;
         
+        Debug.Log($"ExitDoorController: 뷰포트 체크 - Position: {viewportPoint}, InView: {isInView}");
+        
         return isInView;
     }
     
