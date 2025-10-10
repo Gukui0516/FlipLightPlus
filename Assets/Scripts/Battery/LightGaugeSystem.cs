@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class GaugeThreshold
@@ -58,10 +59,12 @@ public class LightGaugeSystem : MonoBehaviour
     public bool IsInLight => isInLight;
     public bool IsConditionMet => isConditionMet;
     
-    void Start()
+    private void Start()
     {
+        // ExitDoorController에 자신을 등록
+        RegisterToExitDoor();
         // 자동으로 Fill 이미지 찾기
-        if (gaugeFillImage == null && autoFindFillImage)
+        if (gaugeFillImage == null && autoFindFillImage) 
         {
             gaugeFillImage = GetComponentInChildren<Image>();
             
@@ -80,9 +83,6 @@ public class LightGaugeSystem : MonoBehaviour
         
         // Fill 이미지 초기 설정
         UpdateGaugeUI();
-        
-        // ExitDoorController에 자신을 등록
-        RegisterToExitDoor();
     }
     
     void Update()
@@ -198,21 +198,13 @@ public class LightGaugeSystem : MonoBehaviour
     
     private void RegisterToExitDoor()
     {
-        GameObject exitDoorObj = GameObject.FindGameObjectWithTag("Exit");
+        Debug.Log($"{gameObject.name}이(가) ExitDoor에 등록을 시도합니다.");
+        ExitDoorController exitDoor = FindFirstObjectByType<ExitDoorController>();
         
-        if (exitDoorObj != null)
+        if (exitDoor != null)
         {
-            ExitDoorController doorController = exitDoorObj.GetComponent<ExitDoorController>();
-            
-            if (doorController != null)
-            {
-                doorController.RegisterGauge(this);
-                Debug.Log($"{gameObject.name}이(가) ExitDoor에 등록되었습니다.");
-            }
-            else
-            {
-                Debug.LogError("ExitDoor 태그를 가진 오브젝트에 ExitDoorController가 없습니다!");
-            }
+            exitDoor.RegisterGauge(this);
+            Debug.Log($"{gameObject.name}이(가) ExitDoor에 등록되었습니다.");
         }
         else
         {

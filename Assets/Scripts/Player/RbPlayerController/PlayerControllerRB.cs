@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 /// <summary>
 /// 2D XY 커브 가속/감속 컨트롤러 (이동 전용)
@@ -7,6 +8,7 @@ using UnityEngine.InputSystem;
 /// - AnimationCurve 기반 가속/감속
 /// - X/Y 최대속도가 다른 타원 한계 처리
 /// - InputAction 에셋 직접 사용
+/// - 넉백(Knockback) 지원
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerControllerRB : MonoBehaviour
@@ -16,6 +18,9 @@ public class PlayerControllerRB : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionAsset inputActions;
+    
+    [Header("Knockback")]
+    [SerializeField] private AnimationCurve knockbackCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
     
     private Rigidbody2D _rb;
     private Vector2 _input;
@@ -33,6 +38,10 @@ public class PlayerControllerRB : MonoBehaviour
     private float _turnLossLerp;
 
     private Vector2 _lastDirNorm = Vector2.right;
+    
+    // 넉백 상태
+    private bool _isKnockedBack;
+    private Coroutine _knockbackCoroutine;
     
     // InputAction 참조
     private InputAction _moveAction;
@@ -75,6 +84,14 @@ public class PlayerControllerRB : MonoBehaviour
 
     private void OnDisable()
     {
+        // 넉백 코루틴 정리
+        if (_knockbackCoroutine != null)
+        {
+            StopCoroutine(_knockbackCoroutine);
+            _knockbackCoroutine = null;
+            _isKnockedBack = false;
+        }
+        
         // InputAction 이벤트 구독 해제
         if (_moveAction != null)
         {
@@ -91,7 +108,11 @@ public class PlayerControllerRB : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ApplyMovement();
+        // 넉백 중에는 이동 처리 스킵
+        if (!_isKnockedBack)
+        {
+            ApplyMovement();
+        }
     }
 
     #region InputAction Handling
@@ -101,6 +122,12 @@ public class PlayerControllerRB : MonoBehaviour
     /// </summary>
     private void OnMove(InputAction.CallbackContext context)
     {
+        // 넉백 중에는 입력 무시
+        if (_isKnockedBack)
+        {
+            return;
+        }
+        
         Vector2 moveInput = context.ReadValue<Vector2>();
         
         // ✅ 수정: moveInput을 먼저 체크
@@ -110,7 +137,6 @@ public class PlayerControllerRB : MonoBehaviour
         }
 
         _input = moveInput;
-        Debug.Log($"Move Input: {_input}, LastDirNorm: {_lastDirNorm}");
     }
 
     #endregion
@@ -161,6 +187,99 @@ public class PlayerControllerRB : MonoBehaviour
         _rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         _rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
+    
+    #endregion
+
+    #region Knockback Methods
+    
+    /// <summary>
+    /// 넉백 적용
+    /// </summary>
+    /// <param name="direction">넉백 방향 (정규화된 벡터)</param>
+    /// <param name="force">넉백 힘 (월드 유닛/초)</param>
+    /// <param name="duration">넉백 지속 시간 (초)</param>
+    public void ApplyKnockback(Vector2 direction, float force, float duration)
+    {
+        // 이전 넉백이 진행 중이면 중단
+        if (_knockbackCoroutine != null)
+        {
+            StopCoroutine(_knockbackCoroutine);
+        }
+        
+        // 기존 이동 상태 초기화
+        ResetMovementState();
+        
+        // 넉백 시작
+        _knockbackCoroutine = StartCoroutine(KnockbackCoroutine(direction.normalized, force, duration));
+    }
+    
+    /// <summary>
+    /// 넉백 코루틴
+    /// </summary>
+    private IEnumerator KnockbackCoroutine(Vector2 direction, float force, float duration)
+    {
+        _isKnockedBack = true;
+        float elapsed = 0f;
+        
+        Vector2 initialVelocity = direction * force;
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            
+            // 커브를 적용한 넉백 감쇠
+            float curveValue = knockbackCurve.Evaluate(t);
+            _rb.linearVelocity = initialVelocity * curveValue;
+            
+            yield return null;
+        }
+        
+        // 넉백 종료 처리
+        EndKnockback();
+    }
+    
+    /// <summary>
+    /// 넉백 종료 처리
+    /// </summary>
+    private void EndKnockback()
+    {
+        _isKnockedBack = false;
+        _knockbackCoroutine = null;
+        
+        // 넉백 종료 시 속도를 0으로 설정하거나, 
+        // 현재 속도를 유지하려면 아래 줄을 주석 처리
+        _rb.linearVelocity = Vector2.zero;
+        
+        // 이동 상태 초기화 (선택사항)
+        ResetMovementState();
+    }
+    
+    /// <summary>
+    /// 이동 상태 초기화 (관성 제거)
+    /// </summary>
+    private void ResetMovementState()
+    {
+        _input = Vector2.zero;
+        _rb.linearVelocity = Vector2.zero;
+        
+        // 가속/감속 상태 초기화
+        _uAccel = 0f;
+        _decelerating = false;
+        _uDecel = 0f;
+        _decelStartSpeed = 0f;
+        
+        // 턴 상태 초기화
+        _turning = false;
+        _uTurn = 0f;
+        _turnStartSpeed = 0f;
+        _turnLossLerp = 0f;
+    }
+    
+    /// <summary>
+    /// 넉백 중인지 확인
+    /// </summary>
+    public bool IsKnockedBack => _isKnockedBack;
     
     #endregion
 

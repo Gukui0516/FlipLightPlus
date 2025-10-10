@@ -13,10 +13,17 @@ public class ExitDoorController : MonoBehaviour
     [Tooltip("문이 열리기 위해 필요한 최소 게이지 만족 개수")]
     [SerializeField] private int requiredGaugeCount = 1;
     
+    [Header("탈출 트리거 설정")]
+    [Tooltip("문이 열렸을 때 활성화할 BoxCollider2D (IsTrigger = true 권장)")]
+    [SerializeField] private BoxCollider2D exitTriggerCollider;
+    [Tooltip("플레이어를 식별할 태그")]
+    [SerializeField] private string playerTag = "Player";
+    
     private List<LightGaugeSystem> registeredGauges = new List<LightGaugeSystem>();
     private int satisfiedGaugeCount = 0;
     private bool _isOpening = false;
     private bool _isOpen = false;
+    private bool _hasPlayerEscaped = false; // 중복 실행 방지
 
     void Start()
     {
@@ -27,6 +34,24 @@ public class ExitDoorController : MonoBehaviour
         else
         {
             Debug.LogError("ExitDoorController: _doorRotatePoint가 할당되지 않았습니다!");
+        }
+        
+        satisfiedGaugeCount = 0;
+        
+        // 탈출 트리거는 초기에 비활성화
+        if (exitTriggerCollider != null)
+        {
+            exitTriggerCollider.enabled = false;
+            
+            // IsTrigger 설정 확인
+            if (!exitTriggerCollider.isTrigger)
+            {
+                Debug.LogWarning("ExitDoorController: exitTriggerCollider의 IsTrigger가 false입니다. true로 설정하는 것을 권장합니다.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("ExitDoorController: exitTriggerCollider가 할당되지 않았습니다!");
         }
     }
 
@@ -85,7 +110,7 @@ public class ExitDoorController : MonoBehaviour
         if (satisfiedGaugeCount >= requiredGaugeCount && !_isOpen && !_isOpening)
         {
             Debug.Log($"ExitDoorController: 모든 조건 만족! 문을 엽니다.");
-            _isOpen = true;
+            
             OpenDoor();
         }
     }
@@ -150,6 +175,9 @@ public class ExitDoorController : MonoBehaviour
         _isOpening = false;
         _isOpen = true;
         
+        // 문이 완전히 열렸을 때 탈출 트리거 활성화
+        ActivateExitTrigger();
+        
         Debug.Log("ExitDoorController: 문이 완전히 열렸습니다!");
     }
 
@@ -159,6 +187,13 @@ public class ExitDoorController : MonoBehaviour
     private IEnumerator CloseDoorCoroutine()
     {
         _isOpening = true;
+        
+        // 문을 닫을 때는 트리거 비활성화
+        if (exitTriggerCollider != null)
+        {
+            exitTriggerCollider.enabled = false;
+        }
+        
         float elapsedTime = 0f;
         float startRotation = _originRotateY + _openAngle;
         float targetRotation = _originRotateY;
@@ -188,6 +223,74 @@ public class ExitDoorController : MonoBehaviour
         _isOpen = false;
     }
     
+    /// <summary>
+    /// 탈출 트리거를 활성화합니다
+    /// </summary>
+    private void ActivateExitTrigger()
+    {
+        if (exitTriggerCollider != null)
+        {
+            exitTriggerCollider.enabled = true;
+            Debug.Log("ExitDoorController: 탈출 트리거 활성화!");
+        }
+    }
+    
+    /// <summary>
+    /// 플레이어가 트리거에 진입했을 때 호출 (Trigger 모드)
+    /// </summary>
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // 이미 탈출 처리했거나 문이 열려있지 않으면 무시
+        if (_hasPlayerEscaped || !_isOpen)
+            return;
+        
+        // 플레이어 태그 확인
+        if (other.CompareTag(playerTag))
+        {
+            OnPlayerEscape();
+        }
+    }
+    
+    /// <summary>
+    /// 플레이어가 충돌했을 때 호출 (Collision 모드 - IsTrigger = false인 경우)
+    /// </summary>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 이미 탈출 처리했거나 문이 열려있지 않으면 무시
+        if (_hasPlayerEscaped || !_isOpen)
+            return;
+        
+        // 플레이어 태그 확인
+        if (collision.gameObject.CompareTag(playerTag))
+        {
+            OnPlayerEscape();
+        }
+    }
+    
+    /// <summary>
+    /// 플레이어가 탈출에 성공했을 때 처리
+    /// </summary>
+    private void OnPlayerEscape()
+    {
+        // 중복 실행 방지
+        if (_hasPlayerEscaped)
+            return;
+        
+        _hasPlayerEscaped = true;
+        
+        Debug.Log("ExitDoorController: 플레이어 탈출 성공!");
+        
+        // GameManager를 통해 다음 스테이지로 진입
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.AdvanceStageAndReload();
+        }
+        else
+        {
+            Debug.LogError("ExitDoorController: GameManager.Instance를 찾을 수 없습니다!");
+        }
+    }
+    
     // 디버그용: 현재 등록된 게이지 정보
     public void PrintRegisteredGauges()
     {
@@ -195,5 +298,6 @@ public class ExitDoorController : MonoBehaviour
         Debug.Log($"등록된 게이지 수: {registeredGauges.Count}");
         Debug.Log($"조건 만족 게이지 수: {satisfiedGaugeCount}/{requiredGaugeCount}");
         Debug.Log($"문 상태: {(_isOpen ? "열림" : "닫힘")}");
+        Debug.Log($"탈출 완료 여부: {_hasPlayerEscaped}");
     }
 }
