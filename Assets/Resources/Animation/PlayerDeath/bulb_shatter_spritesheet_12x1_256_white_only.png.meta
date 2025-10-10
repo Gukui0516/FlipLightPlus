@@ -1,0 +1,837 @@
+fileFormatVersion: 2
+guid: d99c44f81b896d74caa723d388b56e6c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6773377257353329015
+    second: bulb_shatter_spritesheet_12x1_256_white_only_0
+  - first:
+      213: -800142608356208076
+    second: bulb_shatter_spritesheet_12x1_256_white_only_1
+  - first:
+      213: -4734752118907134911
+    second: bulb_shatter_spritesheet_12x1_256_white_only_2
+  - first:
+      213: -1434472975094500289
+    second: bulb_shatter_spritesheet_12x1_256_white_only_3
+  - first:
+      213: 5042590526747431160
+    second: bulb_shatter_spritesheet_12x1_256_white_only_4
+  - first:
+      213: -514221099844411039
+    second: bulb_shatter_spritesheet_12x1_256_white_only_5
+  - first:
+      213: -4380993113516615052
+    second: bulb_shatter_spritesheet_12x1_256_white_only_6
+  - first:
+      213: -834547929517812912
+    second: bulb_shatter_spritesheet_12x1_256_white_only_7
+  - first:
+      213: 8922125457932823441
+    second: bulb_shatter_spritesheet_12x1_256_white_only_8
+  - first:
+      213: -6038398929274576273
+    second: bulb_shatter_spritesheet_12x1_256_white_only_9
+  - first:
+      213: 4565222915268113942
+    second: bulb_shatter_spritesheet_12x1_256_white_only_10
+  - first:
+      213: 7830164422552080596
+    second: bulb_shatter_spritesheet_12x1_256_white_only_11
+  - first:
+      213: -2130732114250110286
+    second: bulb_shatter_spritesheet_12x1_256_white_only_12
+  - first:
+      213: 5934755411655487696
+    second: bulb_shatter_spritesheet_12x1_256_white_only_13
+  - first:
+      213: -4672832080538964534
+    second: bulb_shatter_spritesheet_12x1_256_white_only_14
+  - first:
+      213: 4645996587734804793
+    second: bulb_shatter_spritesheet_12x1_256_white_only_15
+  - first:
+      213: -6499812664832676372
+    second: bulb_shatter_spritesheet_12x1_256_white_only_16
+  - first:
+      213: 2303890853330364350
+    second: bulb_shatter_spritesheet_12x1_256_white_only_17
+  - first:
+      213: -824617932774659136
+    second: bulb_shatter_spritesheet_12x1_256_white_only_18
+  - first:
+      213: -7532978586702666890
+    second: bulb_shatter_spritesheet_12x1_256_white_only_19
+  - first:
+      213: 2357525764344201779
+    second: bulb_shatter_spritesheet_12x1_256_white_only_20
+  - first:
+      213: 2530904321376663336
+    second: bulb_shatter_spritesheet_12x1_256_white_only_21
+  - first:
+      213: 1854306296921147920
+    second: bulb_shatter_spritesheet_12x1_256_white_only_22
+  - first:
+      213: -7531645308376256080
+    second: bulb_shatter_spritesheet_12x1_256_white_only_23
+  - first:
+      213: 86586145817356084
+    second: bulb_shatter_spritesheet_12x1_256_white_only_24
+  - first:
+      213: 3309889912545056585
+    second: bulb_shatter_spritesheet_12x1_256_white_only_25
+  - first:
+      213: -4052237415740582261
+    second: bulb_shatter_spritesheet_12x1_256_white_only_26
+  - first:
+      213: -6095223402240440488
+    second: bulb_shatter_spritesheet_12x1_256_white_only_27
+  - first:
+      213: -1361871471802143663
+    second: bulb_shatter_spritesheet_12x1_256_white_only_28
+  - first:
+      213: 2164542665089350620
+    second: bulb_shatter_spritesheet_12x1_256_white_only_29
+  - first:
+      213: -3526975949831102392
+    second: bulb_shatter_spritesheet_12x1_256_white_only_30
+  - first:
+      213: -5027662913356391746
+    second: bulb_shatter_spritesheet_12x1_256_white_only_31
+  - first:
+      213: -2190156664771309329
+    second: bulb_shatter_spritesheet_12x1_256_white_only_32
+  - first:
+      213: -6596268140170368847
+    second: bulb_shatter_spritesheet_12x1_256_white_only_33
+  - first:
+      213: 3138603289808929783
+    second: bulb_shatter_spritesheet_12x1_256_white_only_34
+  - first:
+      213: -1968295057822002517
+    second: bulb_shatter_spritesheet_12x1_256_white_only_35
+  - first:
+      213: -7167568339960109657
+    second: bulb_shatter_spritesheet_12x1_256_white_only_36
+  - first:
+      213: -7528153651671968705
+    second: bulb_shatter_spritesheet_12x1_256_white_only_37
+  - first:
+      213: 5976501387356350797
+    second: bulb_shatter_spritesheet_12x1_256_white_only_38
+  - first:
+      213: -1707972296098402663
+    second: bulb_shatter_spritesheet_12x1_256_white_only_39
+  - first:
+      213: -5860374289336565882
+    second: bulb_shatter_spritesheet_12x1_256_white_only_40
+  - first:
+      213: -7426389287252423513
+    second: bulb_shatter_spritesheet_12x1_256_white_only_41
+  - first:
+      213: -5652161265567055483
+    second: bulb_shatter_spritesheet_12x1_256_white_only_42
+  - first:
+      213: -4461258003931990446
+    second: bulb_shatter_spritesheet_12x1_256_white_only_43
+  - first:
+      213: 178648068643427603
+    second: bulb_shatter_spritesheet_12x1_256_white_only_44
+  - first:
+      213: 5930749550067990800
+    second: bulb_shatter_spritesheet_12x1_256_white_only_45
+  - first:
+      213: 1595411864193007532
+    second: bulb_shatter_spritesheet_12x1_256_white_only_46
+  - first:
+      213: 7568720198588504793
+    second: bulb_shatter_spritesheet_12x1_256_white_only_47
+  - first:
+      213: 209839294664102349
+    second: bulb_shatter_spritesheet_12x1_256_white_only_48
+  - first:
+      213: -7309656163092542791
+    second: bulb_shatter_spritesheet_12x1_256_white_only_49
+  - first:
+      213: -5421788116266173179
+    second: bulb_shatter_spritesheet_12x1_256_white_only_50
+  - first:
+      213: -2533912845110506098
+    second: bulb_shatter_spritesheet_12x1_256_white_only_51
+  - first:
+      213: 8902263872997685387
+    second: bulb_shatter_spritesheet_12x1_256_white_only_52
+  - first:
+      213: 1456174521310343080
+    second: bulb_shatter_spritesheet_12x1_256_white_only_53
+  - first:
+      213: 7348209472583123973
+    second: bulb_shatter_spritesheet_12x1_256_white_only_54
+  - first:
+      213: -3814794301069397385
+    second: bulb_shatter_spritesheet_12x1_256_white_only_55
+  - first:
+      213: -2066052465445571847
+    second: bulb_shatter_spritesheet_12x1_256_white_only_56
+  - first:
+      213: -6865290431581275829
+    second: bulb_shatter_spritesheet_12x1_256_white_only_57
+  - first:
+      213: -3180458070024605651
+    second: bulb_shatter_spritesheet_12x1_256_white_only_58
+  - first:
+      213: 573372365883489242
+    second: bulb_shatter_spritesheet_12x1_256_white_only_59
+  - first:
+      213: 7659851158653137251
+    second: bulb_shatter_spritesheet_12x1_256_white_only_60
+  - first:
+      213: 334152153774979125
+    second: bulb_shatter_spritesheet_12x1_256_white_only_61
+  - first:
+      213: -3554455671941893131
+    second: bulb_shatter_spritesheet_12x1_256_white_only_62
+  - first:
+      213: -8830149624069204853
+    second: bulb_shatter_spritesheet_12x1_256_white_only_63
+  - first:
+      213: 1903281951069827129
+    second: bulb_shatter_spritesheet_12x1_256_white_only_64
+  - first:
+      213: 574502341972604330
+    second: bulb_shatter_spritesheet_12x1_256_white_only_65
+  - first:
+      213: -5017952666759983656
+    second: bulb_shatter_spritesheet_12x1_256_white_only_66
+  - first:
+      213: -403659200327476172
+    second: bulb_shatter_spritesheet_12x1_256_white_only_67
+  - first:
+      213: -5768324832558746137
+    second: bulb_shatter_spritesheet_12x1_256_white_only_68
+  - first:
+      213: 7718343097554891010
+    second: bulb_shatter_spritesheet_12x1_256_white_only_69
+  - first:
+      213: -1935349075496008456
+    second: bulb_shatter_spritesheet_12x1_256_white_only_70
+  - first:
+      213: 5260790363107931454
+    second: bulb_shatter_spritesheet_12x1_256_white_only_71
+  - first:
+      213: 6630707491744658845
+    second: bulb_shatter_spritesheet_12x1_256_white_only_72
+  - first:
+      213: -2661407106642714541
+    second: bulb_shatter_spritesheet_12x1_256_white_only_73
+  - first:
+      213: 4733517752292509312
+    second: bulb_shatter_spritesheet_12x1_256_white_only_74
+  - first:
+      213: -381359067118100034
+    second: bulb_shatter_spritesheet_12x1_256_white_only_75
+  - first:
+      213: 3787980648342076143
+    second: bulb_shatter_spritesheet_12x1_256_white_only_76
+  - first:
+      213: 7290272862110439650
+    second: bulb_shatter_spritesheet_12x1_256_white_only_77
+  - first:
+      213: 4617479135218496991
+    second: bulb_shatter_spritesheet_12x1_256_white_only_78
+  - first:
+      213: -1793621059932799540
+    second: bulb_shatter_spritesheet_12x1_256_white_only_79
+  - first:
+      213: -8535783978467097542
+    second: bulb_shatter_spritesheet_12x1_256_white_only_80
+  - first:
+      213: -1720380520459340363
+    second: bulb_shatter_spritesheet_12x1_256_white_only_81
+  - first:
+      213: 2315879315091102535
+    second: bulb_shatter_spritesheet_12x1_256_white_only_82
+  - first:
+      213: -2903551747923644223
+    second: bulb_shatter_spritesheet_12x1_256_white_only_83
+  - first:
+      213: 7237394487146563185
+    second: bulb_shatter_spritesheet_12x1_256_white_only_84
+  - first:
+      213: 4304014761577246418
+    second: bulb_shatter_spritesheet_12x1_256_white_only_85
+  - first:
+      213: 4544230690641851549
+    second: bulb_shatter_spritesheet_12x1_256_white_only_86
+  - first:
+      213: 9117727619919466291
+    second: bulb_shatter_spritesheet_12x1_256_white_only_87
+  - first:
+      213: 2228517747123133873
+    second: bulb_shatter_spritesheet_12x1_256_white_only_88
+  - first:
+      213: 5294749418538487509
+    second: bulb_shatter_spritesheet_12x1_256_white_only_89
+  - first:
+      213: -7716375536410772150
+    second: bulb_shatter_spritesheet_12x1_256_white_only_90
+  - first:
+      213: 3946039513251466510
+    second: bulb_shatter_spritesheet_12x1_256_white_only_91
+  - first:
+      213: 6707033410817787970
+    second: bulb_shatter_spritesheet_12x1_256_white_only_92
+  - first:
+      213: -8764790720345069264
+    second: bulb_shatter_spritesheet_12x1_256_white_only_93
+  - first:
+      213: 5122223405912141938
+    second: bulb_shatter_spritesheet_12x1_256_white_only_94
+  - first:
+      213: -5724265853006757476
+    second: bulb_shatter_spritesheet_12x1_256_white_only_95
+  - first:
+      213: 6452841900158279892
+    second: bulb_shatter_spritesheet_12x1_256_white_only_96
+  - first:
+      213: -766065502056236971
+    second: bulb_shatter_spritesheet_12x1_256_white_only_97
+  - first:
+      213: -3950544312639568304
+    second: bulb_shatter_spritesheet_12x1_256_white_only_98
+  - first:
+      213: 3148502846620802330
+    second: bulb_shatter_spritesheet_12x1_256_white_only_99
+  - first:
+      213: 182007985250516379
+    second: bulb_shatter_spritesheet_12x1_256_white_only_100
+  - first:
+      213: 5089772901927854957
+    second: bulb_shatter_spritesheet_12x1_256_white_only_101
+  - first:
+      213: 2540319838506478584
+    second: bulb_shatter_spritesheet_12x1_256_white_only_102
+  - first:
+      213: -6305593772925297982
+    second: bulb_shatter_spritesheet_12x1_256_white_only_103
+  - first:
+      213: -5758594561777495899
+    second: bulb_shatter_spritesheet_12x1_256_white_only_104
+  - first:
+      213: -8694993176326463374
+    second: bulb_shatter_spritesheet_12x1_256_white_only_105
+  - first:
+      213: 6631469928425334703
+    second: bulb_shatter_spritesheet_12x1_256_white_only_106
+  - first:
+      213: -4520128701229714311
+    second: bulb_shatter_spritesheet_12x1_256_white_only_107
+  - first:
+      213: 3513590632767983546
+    second: bulb_shatter_spritesheet_12x1_256_white_only_108
+  - first:
+      213: -5816192021251151477
+    second: bulb_shatter_spritesheet_12x1_256_white_only_109
+  - first:
+      213: -6228938173249134218
+    second: bulb_shatter_spritesheet_12x1_256_white_only_110
+  - first:
+      213: -191275654948606457
+    second: bulb_shatter_spritesheet_12x1_256_white_only_111
+  - first:
+      213: -3838612252645812750
+    second: bulb_shatter_spritesheet_12x1_256_white_only_112
+  - first:
+      213: 8029045594433264279
+    second: bulb_shatter_spritesheet_12x1_256_white_only_113
+  - first:
+      213: -3445566927371910800
+    second: bulb_shatter_spritesheet_12x1_256_white_only_114
+  - first:
+      213: 7765301707556099815
+    second: bulb_shatter_spritesheet_12x1_256_white_only_115
+  - first:
+      213: 1055086206930675628
+    second: bulb_shatter_spritesheet_12x1_256_white_only_116
+  - first:
+      213: -8525081444607070995
+    second: bulb_shatter_spritesheet_12x1_256_white_only_117
+  - first:
+      213: -6022130692770798946
+    second: bulb_shatter_spritesheet_12x1_256_white_only_118
+  - first:
+      213: -4019654489247501634
+    second: bulb_shatter_spritesheet_12x1_256_white_only_119
+  - first:
+      213: 7105500722951333675
+    second: bulb_shatter_spritesheet_12x1_256_white_only_120
+  - first:
+      213: -5554903718135828562
+    second: bulb_shatter_spritesheet_12x1_256_white_only_121
+  - first:
+      213: 5643450929019119530
+    second: bulb_shatter_spritesheet_12x1_256_white_only_122
+  - first:
+      213: 6761655041834713108
+    second: bulb_shatter_spritesheet_12x1_256_white_only_123
+  - first:
+      213: 6303467759500301992
+    second: bulb_shatter_spritesheet_12x1_256_white_only_124
+  - first:
+      213: 3279464518023567678
+    second: bulb_shatter_spritesheet_12x1_256_white_only_125
+  - first:
+      213: -5745328061973359853
+    second: bulb_shatter_spritesheet_12x1_256_white_only_126
+  - first:
+      213: 6293567913473454622
+    second: bulb_shatter_spritesheet_12x1_256_white_only_127
+  - first:
+      213: -4392665903240898301
+    second: bulb_shatter_spritesheet_12x1_256_white_only_128
+  - first:
+      213: 2767320569587485613
+    second: bulb_shatter_spritesheet_12x1_256_white_only_129
+  - first:
+      213: -2790891139517109613
+    second: bulb_shatter_spritesheet_12x1_256_white_only_130
+  - first:
+      213: 3103136664955098231
+    second: bulb_shatter_spritesheet_12x1_256_white_only_131
+  - first:
+      213: -7418766059950678757
+    second: bulb_shatter_spritesheet_12x1_256_white_only_132
+  - first:
+      213: 4848540828882694797
+    second: bulb_shatter_spritesheet_12x1_256_white_only_133
+  - first:
+      213: 6549780375717154754
+    second: bulb_shatter_spritesheet_12x1_256_white_only_134
+  - first:
+      213: 2131254873306461831
+    second: bulb_shatter_spritesheet_12x1_256_white_only_135
+  - first:
+      213: 4937609567294819474
+    second: bulb_shatter_spritesheet_12x1_256_white_only_136
+  - first:
+      213: 6193597443989312477
+    second: bulb_shatter_spritesheet_12x1_256_white_only_137
+  - first:
+      213: -5651117234029178603
+    second: bulb_shatter_spritesheet_12x1_256_white_only_138
+  - first:
+      213: -1212163267570688873
+    second: bulb_shatter_spritesheet_12x1_256_white_only_139
+  - first:
+      213: 8200762843542863840
+    second: bulb_shatter_spritesheet_12x1_256_white_only_140
+  - first:
+      213: 7043969804628712741
+    second: bulb_shatter_spritesheet_12x1_256_white_only_141
+  - first:
+      213: -5259013460975473541
+    second: bulb_shatter_spritesheet_12x1_256_white_only_142
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 190
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 779314a8abedffd50800000000000000
+      internalID: 6773377257353329015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 432164b798255e4f0800000000000000
+      internalID: -800142608356208076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14c130d9808ca4eb0800000000000000
+      internalID: -4734752118907134911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f343897ed6ab71ce0800000000000000
+      internalID: -1434472975094500289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_4
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f0d7860e51eaf540800000000000000
+      internalID: 5042590526747431160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_5
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16163c752ae1dd8f0800000000000000
+      internalID: -514221099844411039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_6
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47ad86989f59333c0800000000000000
+      internalID: -4380993113516615052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_7
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0539d0964171b64f0800000000000000
+      internalID: -834547929517812912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_8
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19b2e8125d1c1db70800000000000000
+      internalID: 8922125457932823441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_9
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f626d78aa2c433ca0800000000000000
+      internalID: -6038398929274576273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_10
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6167709cd0eea5f30800000000000000
+      internalID: 4565222915268113942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bulb_shatter_spritesheet_12x1_256_white_only_11
+      rect:
+        serializedVersion: 2
+        x: 2816
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d05e1b6e055aac60800000000000000
+      internalID: 7830164422552080596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 1979e67e8c3474f40b9c35bc65b797e1
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":256.0,"y":256.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      bulb_shatter_spritesheet_12x1_256_white_only_0: 6773377257353329015
+      bulb_shatter_spritesheet_12x1_256_white_only_1: -800142608356208076
+      bulb_shatter_spritesheet_12x1_256_white_only_10: 4565222915268113942
+      bulb_shatter_spritesheet_12x1_256_white_only_11: 7830164422552080596
+      bulb_shatter_spritesheet_12x1_256_white_only_2: -4734752118907134911
+      bulb_shatter_spritesheet_12x1_256_white_only_3: -1434472975094500289
+      bulb_shatter_spritesheet_12x1_256_white_only_4: 5042590526747431160
+      bulb_shatter_spritesheet_12x1_256_white_only_5: -514221099844411039
+      bulb_shatter_spritesheet_12x1_256_white_only_6: -4380993113516615052
+      bulb_shatter_spritesheet_12x1_256_white_only_7: -834547929517812912
+      bulb_shatter_spritesheet_12x1_256_white_only_8: 8922125457932823441
+      bulb_shatter_spritesheet_12x1_256_white_only_9: -6038398929274576273
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
