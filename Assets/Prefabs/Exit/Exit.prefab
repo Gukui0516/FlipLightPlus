@@ -30,6 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6247046688207238519}
+  - {fileID: 7421273983064884729}
   m_Father: {fileID: 6727648077056302959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1785852280639630443
@@ -48,7 +49,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7450325925531047914
 Transform:
   m_ObjectHideFlags: 0
@@ -111,7 +112,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -8875459422156313299, guid: 4ab5aca81f5b0884ea6ddbaf84751932, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -133,7 +134,7 @@ GameObject:
   - component: {fileID: 6247046688207238519}
   - component: {fileID: 3774653355513771788}
   m_Layer: 0
-  m_Name: ExitDoor
+  m_Name: ExitDoorLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,8 +149,8 @@ Transform:
   m_GameObject: {fileID: 2952308683435723705}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 3, z: 1}
+  m_LocalPosition: {x: 0.9961, y: -0, z: 0}
+  m_LocalScale: {x: 3.0914445, y: 4.655249, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4494020868454564245}
@@ -201,7 +202,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 5213229242370633579, guid: 75e48704ed536ea46aa172791a3c8509, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -212,6 +213,94 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &4713392762779527218
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7421273983064884729}
+  m_Layer: 0
+  m_Name: ExitDoorRight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7421273983064884729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713392762779527218}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4494020868454564245}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5875699920886446255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6407842403851460010}
+  - component: {fileID: 4887851487741275323}
+  m_Layer: 9
+  m_Name: Effect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6407842403851460010
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5875699920886446255}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6727648077056302959}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4887851487741275323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5875699920886446255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab09cc0854551547b87ce01ed830ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemLight
+  lineSprite: {fileID: 0}
+  color: {r: 1, g: 1, b: 1, a: 1}
+  invertedColor: {r: 0, g: 0, b: 0, a: 1}
+  sortingLayerName: Default
+  orderInLayer: 0
+  intervalSeconds: 0.6
+  growDuration: 0.15
+  holdDuration: 0.05
+  fadeDuration: 0.25
+  travelDuration: 20
+  travelSpeed: 10
+  lengthRange: {x: 2, y: 10}
+  thickness: 1
 --- !u!1 &7829608845136837941
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,6 +334,7 @@ Transform:
   m_Children:
   - {fileID: 7450325925531047914}
   - {fileID: 4494020868454564245}
+  - {fileID: 6407842403851460010}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2314818590021527709
@@ -263,9 +353,12 @@ MonoBehaviour:
   _openAngle: 180
   _openTime: 1.5
   _originRotateY: 0
-  requiredGaugeCount: 1
+  autoSetRequiredCount: 1
+  autoMode: 0
+  manualRequiredGaugeCount: 1
   exitTriggerCollider: {fileID: 8619071423703515888}
   playerTag: Player
+  autoFinalizeDelay: 0.5
 --- !u!61 &8619071423703515888
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class ExitDoorController : MonoBehaviour
 {
-    [SerializeField] private Transform _doorRotatePoint;
-    [SerializeField] private float _openAngle = 180f;
+    [Header("문 회전 설정")]
+    [SerializeField] private Transform _leftDoorRotatePoint;
+    [SerializeField] private Transform _rightDoorRotatePoint;
+    [SerializeField] private float _openAngle = 90f;
     [SerializeField] private float _openTime = 1.5f;
-    [SerializeField] private float _originRotateY;
+    private float _leftOriginRotateY;
+    private float _rightOriginRotateY;
+
+    [Header("카메라 뷰포트 체크")]
+    [SerializeField] private Camera mainCamera;
+    [Tooltip("문이 카메라 뷰포트에 들어왔는지 체크할 Transform (문의 중심점 권장)")]
+    [SerializeField] private Transform doorCheckPoint;
+    [Tooltip("카메라 뷰포트 체크 간격 (초)")]
+    [SerializeField] private float viewportCheckInterval = 0.2f;
 
     [Header("게이지 조건 설정")]
     [Tooltip("자동으로 필요 게이지 개수를 설정")]
@@ -19,12 +29,12 @@ public class ExitDoorController : MonoBehaviour
     [Tooltip("수동 설정 시: 문이 열리기 위해 필요한 최소 게이지 만족 개수")]
     [SerializeField] private int manualRequiredGaugeCount = 1;
     
-    private int requiredGaugeCount = 1; // 실제 사용되는 값
+    private int requiredGaugeCount = 1;
     
     public enum AutoSetMode
     {
-        MatchRegisteredCount,  // 등록된 게이지 개수와 같게
-        MatchStageNumber      // 현재 스테이지 숫자와 같게
+        MatchRegisteredCount,
+        MatchStageNumber
     }
     
     [Header("탈출 트리거 설정")]
@@ -43,8 +53,8 @@ public class ExitDoorController : MonoBehaviour
     private bool _isOpen = false;
     private bool _hasPlayerEscaped = false;
     private bool _isRegistrationFinalized = false;
+    private bool _isWaitingForCameraView = false;
 
-    // 외부 접근용 프로퍼티
     public int RequiredGaugeCount => requiredGaugeCount;
     public int RegisteredGaugeCount => registeredGauges.Count;
     public int SatisfiedGaugeCount => satisfiedGaugeCount;
@@ -52,13 +62,41 @@ public class ExitDoorController : MonoBehaviour
 
     void Start()
     {
-        if (_doorRotatePoint != null)
+        // 왼쪽 문 초기화
+        if (_leftDoorRotatePoint != null)
         {
-            _originRotateY = _doorRotatePoint.localEulerAngles.y;
+            _leftOriginRotateY = _leftDoorRotatePoint.localEulerAngles.y;
         }
         else
         {
-            Debug.LogError("ExitDoorController: _doorRotatePoint가 할당되지 않았습니다!");
+            Debug.LogError("ExitDoorController: _leftDoorRotatePoint가 할당되지 않았습니다!");
+        }
+        
+        // 오른쪽 문 초기화
+        if (_rightDoorRotatePoint != null)
+        {
+            _rightOriginRotateY = _rightDoorRotatePoint.localEulerAngles.y;
+        }
+        else
+        {
+            Debug.LogError("ExitDoorController: _rightDoorRotatePoint가 할당되지 않았습니다!");
+        }
+        
+        // 메인 카메라 자동 할당
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+            if (mainCamera == null)
+            {
+                Debug.LogError("ExitDoorController: 메인 카메라를 찾을 수 없습니다!");
+            }
+        }
+        
+        // doorCheckPoint 자동 할당 (할당되지 않은 경우 자신의 Transform 사용)
+        if (doorCheckPoint == null)
+        {
+            doorCheckPoint = transform;
+            Debug.Log("ExitDoorController: doorCheckPoint가 할당되지 않아 자신의 Transform을 사용합니다.");
         }
         
         satisfiedGaugeCount = 0;
@@ -113,13 +151,10 @@ public class ExitDoorController : MonoBehaviour
         // 테스트용: 스페이스바로 문 열기
         if (Input.GetKeyDown(KeyCode.Space) && !_isOpen && !_isOpening)
         {
-            OpenDoor();
+            OpenDoorImmediately();
         }
     }
     
-    /// <summary>
-    /// LightGaugeSystem을 등록하고 이벤트를 구독합니다
-    /// </summary>
     public void RegisterGauge(LightGaugeSystem gauge)
     {
         if (gauge == null)
@@ -140,9 +175,6 @@ public class ExitDoorController : MonoBehaviour
         Debug.Log($"ExitDoorController: {gauge.gameObject.name} 등록 완료 (총 {registeredGauges.Count}개)");
     }
     
-    /// <summary>
-    /// 등록을 완료하고 필요한 게이지 개수를 확정합니다
-    /// </summary>
     public void FinalizeRegistration()
     {
         if (_isRegistrationFinalized)
@@ -153,7 +185,6 @@ public class ExitDoorController : MonoBehaviour
         
         _isRegistrationFinalized = true;
         
-        // 자동 설정 모드 처리
         if (autoSetRequiredCount)
         {
             switch (autoMode)
@@ -178,13 +209,9 @@ public class ExitDoorController : MonoBehaviour
             }
         }
         
-        // 이미 조건을 만족했는지 확인
         CheckAndOpenDoor();
     }
     
-    /// <summary>
-    /// 필요한 게이지 개수를 수동으로 설정합니다
-    /// </summary>
     public void SetRequiredGaugeCount(int count)
     {
         if (count < 0)
@@ -201,9 +228,6 @@ public class ExitDoorController : MonoBehaviour
         CheckAndOpenDoor();
     }
     
-    /// <summary>
-    /// 필요한 게이지 개수를 비율로 설정합니다
-    /// </summary>
     public void SetRequiredGaugeCountByRatio(float ratio)
     {
         ratio = Mathf.Clamp01(ratio);
@@ -213,9 +237,6 @@ public class ExitDoorController : MonoBehaviour
         Debug.Log($"ExitDoorController: 비율 기반 설정 ({ratio * 100}%) - {count}/{registeredGauges.Count}개");
     }
     
-    /// <summary>
-    /// 스테이지 번호에 따라 필요 게이지 개수를 설정하는 메서드
-    /// </summary>
     public void SetRequiredGaugeCountByStage(int stageNumber)
     {
         if (registeredGauges.Count == 0)
@@ -226,22 +247,18 @@ public class ExitDoorController : MonoBehaviour
         
         int count;
         
-        // 스테이지 1-3: 30%
         if (stageNumber <= 3)
         {
             count = Mathf.Max(1, Mathf.CeilToInt(registeredGauges.Count * 0.3f));
         }
-        // 스테이지 4-6: 50%
         else if (stageNumber <= 6)
         {
             count = Mathf.Max(1, Mathf.CeilToInt(registeredGauges.Count * 0.5f));
         }
-        // 스테이지 7-9: 70%
         else if (stageNumber <= 9)
         {
             count = Mathf.Max(1, Mathf.CeilToInt(registeredGauges.Count * 0.7f));
         }
-        // 스테이지 10+: 100%
         else
         {
             count = registeredGauges.Count;
@@ -251,9 +268,6 @@ public class ExitDoorController : MonoBehaviour
         Debug.Log($"ExitDoorController: 스테이지 {stageNumber} - 필요 게이지: {count}/{registeredGauges.Count}개");
     }
     
-    /// <summary>
-    /// 게이지가 조건을 만족했을 때 호출되는 콜백
-    /// </summary>
     private void OnGaugeConditionMet(LightGaugeSystem gauge)
     {
         satisfiedGaugeCount++;
@@ -262,24 +276,63 @@ public class ExitDoorController : MonoBehaviour
     }
     
     /// <summary>
-    /// 조건을 확인하고 문을 엽니다
+    /// 조건을 확인하고 카메라 뷰포트 대기 상태로 전환
     /// </summary>
     private void CheckAndOpenDoor()
     {
         if (!_isRegistrationFinalized)
             return;
             
-        if (satisfiedGaugeCount >= requiredGaugeCount && !_isOpen && !_isOpening)
+        if (satisfiedGaugeCount >= requiredGaugeCount && !_isOpen && !_isOpening && !_isWaitingForCameraView)
         {
-            Debug.Log($"ExitDoorController: 모든 조건 만족! 문을 엽니다.");
-            OpenDoor();
+            Debug.Log($"ExitDoorController: 모든 조건 만족! 카메라 뷰포트 대기 중...");
+            StartCoroutine(WaitForCameraView());
         }
     }
     
     /// <summary>
-    /// 문을 여는 공개 메서드
+    /// 문이 카메라 뷰포트에 보일 때까지 대기
     /// </summary>
-    public void OpenDoor()
+    private IEnumerator WaitForCameraView()
+    {
+        _isWaitingForCameraView = true;
+        
+        while (!IsDoorInCameraView())
+        {
+            yield return new WaitForSeconds(viewportCheckInterval);
+        }
+        
+        Debug.Log("ExitDoorController: 문이 카메라에 보입니다! 문을 엽니다.");
+        _isWaitingForCameraView = false;
+        OpenDoorImmediately();
+    }
+    
+    /// <summary>
+    /// 문이 카메라 뷰포트 내에 있는지 확인
+    /// </summary>
+    private bool IsDoorInCameraView()
+    {
+        if (mainCamera == null || doorCheckPoint == null)
+        {
+            Debug.LogWarning("ExitDoorController: 카메라 또는 체크포인트가 없어 즉시 열립니다.");
+            return true;
+        }
+        
+        Vector3 viewportPoint = mainCamera.WorldToViewportPoint(doorCheckPoint.position);
+        
+        // 뷰포트 좌표는 (0,0) ~ (1,1) 범위
+        // z > 0 이면 카메라 앞쪽에 있음
+        bool isInView = viewportPoint.z > 0 && 
+                        viewportPoint.x >= 0 && viewportPoint.x <= 1 && 
+                        viewportPoint.y >= 0 && viewportPoint.y <= 1;
+        
+        return isInView;
+    }
+    
+    /// <summary>
+    /// 즉시 문을 여는 메서드 (테스트용)
+    /// </summary>
+    public void OpenDoorImmediately()
     {
         if (!_isOpening && !_isOpen)
         {
@@ -306,36 +359,70 @@ public class ExitDoorController : MonoBehaviour
     {
         _isOpening = true;
         float elapsedTime = 0f;
-        float startRotation = _originRotateY;
-        float targetRotation = _originRotateY + _openAngle;
+        
+        // 왼쪽 문: 반시계 방향 회전 (음수)
+        float leftStartRotation = _leftOriginRotateY;
+        float leftTargetRotation = _leftOriginRotateY - _openAngle;
+        
+        // 오른쪽 문: 시계 방향 회전 (양수)
+        float rightStartRotation = _rightOriginRotateY;
+        float rightTargetRotation = _rightOriginRotateY + _openAngle;
 
         while (elapsedTime < _openTime)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / _openTime;
             
-            float currentRotation = Mathf.Lerp(startRotation, targetRotation, t);
-            _doorRotatePoint.localEulerAngles = new Vector3(
-                _doorRotatePoint.localEulerAngles.x,
-                currentRotation,
-                _doorRotatePoint.localEulerAngles.z
-            );
+            // 왼쪽 문 회전
+            if (_leftDoorRotatePoint != null)
+            {
+                float leftCurrentRotation = Mathf.Lerp(leftStartRotation, leftTargetRotation, t);
+                _leftDoorRotatePoint.localEulerAngles = new Vector3(
+                    _leftDoorRotatePoint.localEulerAngles.x,
+                    leftCurrentRotation,
+                    _leftDoorRotatePoint.localEulerAngles.z
+                );
+            }
+            
+            // 오른쪽 문 회전
+            if (_rightDoorRotatePoint != null)
+            {
+                float rightCurrentRotation = Mathf.Lerp(rightStartRotation, rightTargetRotation, t);
+                _rightDoorRotatePoint.localEulerAngles = new Vector3(
+                    _rightDoorRotatePoint.localEulerAngles.x,
+                    rightCurrentRotation,
+                    _rightDoorRotatePoint.localEulerAngles.z
+                );
+            }
 
             yield return null;
         }
 
-        _doorRotatePoint.localEulerAngles = new Vector3(
-            _doorRotatePoint.localEulerAngles.x,
-            targetRotation,
-            _doorRotatePoint.localEulerAngles.z
-        );
+        // 최종 위치 설정
+        if (_leftDoorRotatePoint != null)
+        {
+            _leftDoorRotatePoint.localEulerAngles = new Vector3(
+                _leftDoorRotatePoint.localEulerAngles.x,
+                leftTargetRotation,
+                _leftDoorRotatePoint.localEulerAngles.z
+            );
+        }
+        
+        if (_rightDoorRotatePoint != null)
+        {
+            _rightDoorRotatePoint.localEulerAngles = new Vector3(
+                _rightDoorRotatePoint.localEulerAngles.x,
+                rightTargetRotation,
+                _rightDoorRotatePoint.localEulerAngles.z
+            );
+        }
 
         _isOpening = false;
         _isOpen = true;
         
         ActivateExitTrigger();
         
-        Debug.Log("ExitDoorController: 문이 완전히 열렸습니다!");
+        Debug.Log("ExitDoorController: 양쪽 문이 완전히 열렸습니다!");
     }
 
     private IEnumerator CloseDoorCoroutine()
@@ -348,29 +435,63 @@ public class ExitDoorController : MonoBehaviour
         }
         
         float elapsedTime = 0f;
-        float startRotation = _originRotateY + _openAngle;
-        float targetRotation = _originRotateY;
+        
+        // 왼쪽 문: 원위치로
+        float leftStartRotation = _leftOriginRotateY - _openAngle;
+        float leftTargetRotation = _leftOriginRotateY;
+        
+        // 오른쪽 문: 원위치로
+        float rightStartRotation = _rightOriginRotateY + _openAngle;
+        float rightTargetRotation = _rightOriginRotateY;
 
         while (elapsedTime < _openTime)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / _openTime;
             
-            float currentRotation = Mathf.Lerp(startRotation, targetRotation, t);
-            _doorRotatePoint.localEulerAngles = new Vector3(
-                _doorRotatePoint.localEulerAngles.x,
-                currentRotation,
-                _doorRotatePoint.localEulerAngles.z
-            );
+            // 왼쪽 문 회전
+            if (_leftDoorRotatePoint != null)
+            {
+                float leftCurrentRotation = Mathf.Lerp(leftStartRotation, leftTargetRotation, t);
+                _leftDoorRotatePoint.localEulerAngles = new Vector3(
+                    _leftDoorRotatePoint.localEulerAngles.x,
+                    leftCurrentRotation,
+                    _leftDoorRotatePoint.localEulerAngles.z
+                );
+            }
+            
+            // 오른쪽 문 회전
+            if (_rightDoorRotatePoint != null)
+            {
+                float rightCurrentRotation = Mathf.Lerp(rightStartRotation, rightTargetRotation, t);
+                _rightDoorRotatePoint.localEulerAngles = new Vector3(
+                    _rightDoorRotatePoint.localEulerAngles.x,
+                    rightCurrentRotation,
+                    _rightDoorRotatePoint.localEulerAngles.z
+                );
+            }
 
             yield return null;
         }
 
-        _doorRotatePoint.localEulerAngles = new Vector3(
-            _doorRotatePoint.localEulerAngles.x,
-            targetRotation,
-            _doorRotatePoint.localEulerAngles.z
-        );
+        // 최종 위치 설정
+        if (_leftDoorRotatePoint != null)
+        {
+            _leftDoorRotatePoint.localEulerAngles = new Vector3(
+                _leftDoorRotatePoint.localEulerAngles.x,
+                leftTargetRotation,
+                _leftDoorRotatePoint.localEulerAngles.z
+            );
+        }
+        
+        if (_rightDoorRotatePoint != null)
+        {
+            _rightDoorRotatePoint.localEulerAngles = new Vector3(
+                _rightDoorRotatePoint.localEulerAngles.x,
+                rightTargetRotation,
+                _rightDoorRotatePoint.localEulerAngles.z
+            );
+        }
 
         _isOpening = false;
         _isOpen = false;
@@ -426,9 +547,6 @@ public class ExitDoorController : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 디버그용: 현재 상태 출력
-    /// </summary>
     public void PrintStatus()
     {
         Debug.Log($"=== ExitDoorController 상태 ===");
@@ -437,6 +555,7 @@ public class ExitDoorController : MonoBehaviour
         Debug.Log($"등록된 게이지 수: {registeredGauges.Count}");
         Debug.Log($"조건 만족 게이지 수: {satisfiedGaugeCount}/{requiredGaugeCount}");
         Debug.Log($"문 상태: {(_isOpen ? "열림" : "닫힘")}");
+        Debug.Log($"카메라 대기 중: {_isWaitingForCameraView}");
         Debug.Log($"탈출 완료 여부: {_hasPlayerEscaped}");
         
         Debug.Log("등록된 게이지 목록:");
