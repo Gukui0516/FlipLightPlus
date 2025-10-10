@@ -184,7 +184,7 @@ public abstract class BaseEnemy : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Flashlight"))
         {
             isInLight = true;
-            Debug.Log($"{gameObject.name} 손전등 진입!");
+//            Debug.Log($"{gameObject.name} 손전등 진입!");
 
             // 반전 상태에서 손전등 맞으면 모두 죽음
             if (isInverted)
@@ -202,7 +202,7 @@ public abstract class BaseEnemy : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Flashlight"))
         {
             isInLight = false;
-            Debug.Log($"{gameObject.name} 손전등 벗어남!");
+//            Debug.Log($"{gameObject.name} 손전등 벗어남!");
 
             OnExitLight();
 
