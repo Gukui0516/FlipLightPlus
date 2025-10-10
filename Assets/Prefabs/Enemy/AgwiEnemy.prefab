@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 8505478348503281568}
   - component: {fileID: 5101757877946332033}
   m_Layer: 7
-  m_Name: ArGueEnemy
+  m_Name: AgwiEnemy
   m_TagString: EnemyAgwi
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,7 +225,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -245,12 +245,12 @@ MonoBehaviour:
   speed: 15
   stoppingDistance: 1.5
   worldStateManager: {fileID: 0}
-  state: 0
   detectionRange: 8
   eyebrows: {fileID: 1739637055597289970}
+  wakeNotice: {fileID: 8557972979162626387}
   eyebrowMaxSize: 0
-  wakeCondition: 0
-  rushDelay: 1
+  wakeDelayMax: 1
+  rushDuration: 3
   wakeSpeed: 0.7
   sleepSpeed: 1.4
 --- !u!114 &5122035691410426771
@@ -763,5 +763,10 @@ PrefabInstance:
 --- !u!4 &5816789468164474995 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6367730071362866807, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
+  m_PrefabInstance: {fileID: 641723300023977476}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8557972979162626387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9089351352867651415, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
   m_PrefabInstance: {fileID: 641723300023977476}
   m_PrefabAsset: {fileID: 0}

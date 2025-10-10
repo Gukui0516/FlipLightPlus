@@ -348,7 +348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useOutline: 1
   eyesVisibleDistance: 10
-  lightSeekerVisibilityDistance: 10
+  lightSeekerVisibilityDistance: 5
   enemyOutline: {fileID: 5101757877946332033}
   eyesObject: {fileID: 793540923169711125}
 --- !u!114 &8505478348503281568

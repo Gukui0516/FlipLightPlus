@@ -49,14 +49,14 @@ public class EnemyDieAnimation : MonoBehaviour
         }
 
         // 죽음 애니메이션 재생
-        if (animator != null)
+        if (animator != null && animator.runtimeAnimatorController != null)
         {
             animator.SetTrigger(DeathTriggerHash);
         }
         else
         {
-            // Animator가 없으면 바로 완료 이벤트 호출
-            Debug.LogWarning($"{gameObject.name}: Animator가 없어 죽음 애니메이션을 재생할 수 없습니다!");
+            // Animator가 없거나 Controller가 없으면 바로 완료 이벤트 호출
+            Debug.LogWarning($"{gameObject.name}: Animator 또는 Controller가 없어 죽음 애니메이션을 재생할 수 없습니다!");
             OnDeathAnimationComplete();
         }
     }
@@ -73,20 +73,22 @@ public class EnemyDieAnimation : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
         }
 
-        // Animator 완전 초기화
-        if (animator != null)
+        // Animator가 없거나 Controller가 없으면 스킵
+        if (animator == null || animator.runtimeAnimatorController == null)
         {
-            // 트리거 리셋
-            animator.ResetTrigger(DeathTriggerHash);
-
-            // Animator 상태를 Entry(Idle)로 강제 이동
-            animator.Rebind();
-            animator.Update(0f);
-
-            // Animator 활성화
-            animator.enabled = true;
+            return;
         }
 
+        // Animator 완전 초기화
+        // 트리거 리셋
+        animator.ResetTrigger(DeathTriggerHash);
+
+        // Animator 상태를 Entry(Idle)로 강제 이동
+        animator.Rebind();
+        animator.Update(0f);
+
+        // Animator 활성화
+        animator.enabled = true;
     }
 
     /// <summary>
