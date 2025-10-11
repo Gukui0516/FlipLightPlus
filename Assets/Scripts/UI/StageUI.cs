@@ -15,6 +15,12 @@ public class StageUI : MonoBehaviour
     [SerializeField] private float secondDisplayDuration = 2f; // 2번째 문장 유지 시간
     [SerializeField] private float fadeInDuration = 0.4f;   // 2번째 문장 페이드 인 시간
 
+    [Header("UI Move (Optional)")]
+    [SerializeField] private RectTransform uiToMove;              // 이동시킬 UI (예: 배터리 아이콘)
+    [SerializeField] private Vector2 nearMessageAnchoredPos;      // 두 번째 문장 옆 임시 위치
+    [SerializeField] private Vector2 targetAnchoredPos;           // 원래 자리(오른쪽 위)
+    [SerializeField] private float moveDuration = 0.6f;           // 이동 시간
+
     // 1) 스테이지별 첫 문장 (기존 배열)
     private readonly string[] stageInfoMessages = new string[]
     {
@@ -63,10 +69,13 @@ public class StageUI : MonoBehaviour
         yield return new WaitForSeconds(displayDuration);
         yield return Fade(stageInfoText, 1f, 0f, fadeOutDuration);
 
-        // 2) 두 번째 문장이 있으면: 페이드인 → 유지 → 두 텍스트 동시 페이드아웃
+        // 2) 두 번째 문장이 있으면: 문장 옆으로 UI 배치 → 페이드인 → 유지 → 두 텍스트 동시 페이드아웃 → UI 원위치 이동
         if (!string.IsNullOrEmpty(part2))
         {
             if (stageInfoText) stageInfoText.text = part2;
+
+            // 두 번째 문장 옆으로 UI 즉시 배치(원하면 아래 한 줄 대신 MoveUI로 짧게 애니메이션 가능)
+            if (uiToMove) uiToMove.anchoredPosition = nearMessageAnchoredPos;
 
             SetTextAlpha(stageInfoText, 0f);
             yield return Fade(stageInfoText, 0f, 1f, fadeInDuration);
@@ -75,6 +84,9 @@ public class StageUI : MonoBehaviour
 
             // 두 번째 문장 사라질 때 Stage도 같이 사라지게
             yield return FadePair(stageInfoText, stageNumberText, 1f, 0f, fadeOutDuration);
+
+            // UI를 원래 자리(오른쪽 위)로 부드럽게 이동
+            if (uiToMove) yield return MoveUI(uiToMove, targetAnchoredPos, moveDuration);
         }
         else
         {
@@ -88,6 +100,21 @@ public class StageUI : MonoBehaviour
 
         // 선택: UI 비활성화
         // gameObject.SetActive(false);
+    }
+
+    private IEnumerator MoveUI(RectTransform rect, Vector2 targetPos, float duration)
+    {
+        if (!rect || duration <= 0f) { if (rect) rect.anchoredPosition = targetPos; yield break; }
+
+        Vector2 startPos = rect.anchoredPosition;
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            rect.anchoredPosition = Vector2.Lerp(startPos, targetPos, t / duration);
+            yield return null;
+        }
+        rect.anchoredPosition = targetPos;
     }
 
     private IEnumerator Fade(TextMeshProUGUI text, float from, float to, float duration)
