@@ -1128,6 +1128,10 @@ PrefabInstance:
       value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
+      propertyPath: generatorName
+      value: EG.SpawnPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
       propertyPath: mapHorizontal
       value: 200
       objectReference: {fileID: 0}
@@ -360482,6 +360486,10 @@ PrefabInstance:
       propertyPath: playerContact
       value: 
       objectReference: {fileID: 7602229007518542513}
+    - target: {fileID: 4076102999245697277, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
+      propertyPath: movementSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 90101755c79e41a42a3d67504f75b198, type: 2}
     - target: {fileID: 4076102999245697277, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       propertyPath: knockbackCurve.m_Curve.Array.data[1].inSlope
       value: -2.5142846
