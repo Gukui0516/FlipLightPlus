@@ -1,0 +1,144 @@
+// VisionConeRaycast.compute
+// Unity 6.0 DX11용 최적화 버전
+// CPU에서 검증된 각도 배열만 받아서 병렬 레이캐스트 처리
+// 실루엣 감지 + 도달성 검증은 CPU에서 완료된 상태
+
+#pragma kernel CSRaycast
+
+// 상수 버퍼
+cbuffer Params
+{
+    float2 conePosition;
+    float coneRotation;
+    float viewRadius;
+    float viewAngle;
+    int rayCount;
+    int obstacleCount;
+};
+
+// 장애물 데이터
+struct Obstacle
+{
+    float2 position;
+    float2 size;
+    float rotation;
+    int colliderType; // 0 = Circle, 1 = Box
+    float padding;
+};
+
+StructuredBuffer<Obstacle> obstacles;
+StructuredBuffer<float> angles; // CPU에서 검증된 각도 배열 (라디안)
+RWStructuredBuffer<float3> rayHitPoints; // x, y, hitDistance
+
+// ========== 유틸리티 함수 ==========
+
+float2 Rotate2D(float2 v, float angle)
+{
+    float s, c;
+    sincos(angle, s, c);
+    return float2(v.x * c - v.y * s, v.x * s + v.y * c);
+}
+
+// ========== Circle vs Ray 충돌 ==========
+bool RayCircleIntersect(float2 rayOrigin, float2 rayDir, float2 center, float radius, out float t)
+{
+    float2 oc = rayOrigin - center;
+    float a = dot(rayDir, rayDir);
+    float b = 2.0 * dot(oc, rayDir);
+    float c = dot(oc, oc) - radius * radius;
+    float discriminant = b * b - 4 * a * c;
+    
+    if (discriminant < 0)
+    {
+        t = viewRadius;
+        return false;
+    }
+    
+    float sqrtDisc = sqrt(discriminant);
+    float t1 = (-b - sqrtDisc) / (2.0 * a);
+    float t2 = (-b + sqrtDisc) / (2.0 * a);
+    
+    // 가장 가까운 양수 t 선택
+    t = (t1 > 0.001) ? t1 : t2;
+    return t > 0.001 && t < viewRadius;
+}
+
+// ========== Box vs Ray 충돌 (OBB) ==========
+bool RayBoxIntersect(float2 rayOrigin, float2 rayDir, float2 boxCenter, float2 halfSize, float boxRotation, out float t)
+{
+    // Ray를 Box 로컬 공간으로 변환
+    float2 localOrigin = rayOrigin - boxCenter;
+    localOrigin = Rotate2D(localOrigin, -boxRotation);
+    float2 localDir = Rotate2D(rayDir, -boxRotation);
+    
+    // AABB intersection (슬랩 방법)
+    float2 invDir = 1.0 / (localDir + float2(0.0001, 0.0001)); // 0으로 나누기 방지
+    float2 t0 = (-halfSize - localOrigin) * invDir;
+    float2 t1 = (halfSize - localOrigin) * invDir;
+    
+    float2 tmin = min(t0, t1);
+    float2 tmax = max(t0, t1);
+    
+    float tNear = max(tmin.x, tmin.y);
+    float tFar = min(tmax.x, tmax.y);
+    
+    t = tNear;
+    
+    // 충돌 검증: tNear <= tFar && tFar > 0 && tNear < viewRadius
+    // 추가: tNear가 음수면 광원이 박스 내부에 있으므로 tFar 사용
+    if (tNear < 0)
+    {
+        t = tFar;
+        return tFar > 0 && tFar < viewRadius;
+    }
+    
+    return tNear <= tFar && tFar > 0 && tNear < viewRadius;
+}
+
+// ========== 메인 커널 ==========
+[numthreads(64, 1, 1)]
+void CSRaycast(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= (uint)rayCount)
+        return;
+    
+    // CPU에서 검증된 각도 가져오기
+    float rayAngle = angles[id.x];
+    
+    // 레이 방향 벡터 (Unity 2D는 up이 forward)
+    float2 rayDir = normalize(float2(sin(rayAngle), cos(rayAngle)));
+    
+    // 가장 가까운 충돌 찾기 (다중 장애물 처리)
+    float minDistance = viewRadius;
+    bool hasHit = false;
+    
+    // 모든 장애물과 충돌 검사 (거리순 정렬은 CPU에서 완료)
+    for (int i = 0; i < obstacleCount; i++)
+    {
+        Obstacle obs = obstacles[i];
+        float hitDist;
+        bool hit = false;
+        
+        if (obs.colliderType == 0) // Circle
+        {
+            hit = RayCircleIntersect(conePosition, rayDir, obs.position, obs.size.x, hitDist);
+        }
+        else if (obs.colliderType == 1) // Box
+        {
+            hit = RayBoxIntersect(conePosition, rayDir, obs.position, obs.size, obs.rotation, hitDist);
+        }
+        
+        // 더 가까운 충돌로 업데이트
+        if (hit && hitDist < minDistance)
+        {
+            minDistance = hitDist;
+            hasHit = true;
+        }
+    }
+    
+    // 충돌 지점 계산
+    float2 hitPoint = conePosition + rayDir * minDistance;
+    
+    // 결과 저장 (x, y, distance)
+    rayHitPoints[id.x] = float3(hitPoint.x, hitPoint.y, minDistance);
+}

@@ -1,0 +1,34 @@
+﻿using UnityEngine;
+
+/// <summary>
+/// 적의 이동 로직을 담당하는 모듈
+/// </summary>
+public class EnemyMovement : MonoBehaviour
+{
+    private Rigidbody2D rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    /// <summary>
+    /// 플레이어를 향해 이동
+    /// </summary>
+    public void MoveTowardsPlayer(Transform player, float speed, float stoppingDistance)
+    {
+        if (player == null || rb == null) return;
+
+        float distance = Vector2.Distance(transform.position, player.position);
+
+        if (distance > stoppingDistance)
+        {
+            Vector2 direction = (transform.rotation) * Vector2.down.normalized;
+            rb.linearVelocity = direction * speed;
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+    }
+}
