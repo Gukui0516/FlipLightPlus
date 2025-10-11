@@ -117,11 +117,11 @@ GameObject:
   - component: {fileID: 64650702803858151}
   - component: {fileID: 481334043388382349}
   - component: {fileID: 1100138164244557713}
-  - component: {fileID: 2846537204087850183}
   - component: {fileID: 2790562953399974763}
   - component: {fileID: 4076102999245697277}
   - component: {fileID: 3654061613648408828}
   - component: {fileID: 3412208706143904603}
+  - component: {fileID: 2846537204087850183}
   m_Layer: 0
   m_Name: PlayerRB
   m_TagString: Player
@@ -240,28 +240,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &2846537204087850183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8887935938070739936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b24f4ceee448345439ecc72cdfe7932a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startLife: 3
-  maxLife: 3
-  currentLife: 0
-  lifeUI: {fileID: 0}
-  invincibilityTime: 2
-  blinkTime: 0.1
-  invincibile: 0
-  playerImage: {fileID: 481334043388382349}
-  outlineRenderer: {fileID: 2302435188818434497}
-  playerContact: {fileID: 3412208706143904603}
 --- !u!50 &2790562953399974763
 Rigidbody2D:
   serializedVersion: 5
@@ -301,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b1f9acc7143f84d8301ff5f37e27f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSettings: {fileID: 11400000, guid: 7c21b4e85e8f2a54e8e435436c518367, type: 2}
+  movementSettings: {fileID: 11400000, guid: 90101755c79e41a42a3d67504f75b198, type: 2}
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   knockbackCurve:
     serializedVersion: 2
@@ -366,6 +344,29 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &2846537204087850183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8887935938070739936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b24f4ceee448345439ecc72cdfe7932a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startLife: 3
+  maxLife: 3
+  currentLife: 0
+  lifeUI: {fileID: 0}
+  invincibilityTime: 2
+  blinkTime: 0.1
+  invincibile: 0
+  playerImage: {fileID: 481334043388382349}
+  circleCollider: {fileID: 1100138164244557713}
+  outlineRenderer: {fileID: 2302435188818434497}
+  playerContact: {fileID: 3412208706143904603}
 --- !u!1001 &4241213943732885808
 PrefabInstance:
   m_ObjectHideFlags: 0
