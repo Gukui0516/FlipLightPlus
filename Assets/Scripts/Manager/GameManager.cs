@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public enum GameState { Boot, Playing, Paused, GameOver }
@@ -32,13 +33,15 @@ public class GameManager : MonoBehaviour
 
     public bool IsPaused => current == GameState.Paused;
 
-    
+
 
     [Header("UI 참조")]
     //public GameOverUI gameOverUI;
 
     [SerializeField, Tooltip("엔딩 진입 스테이지 번호")]
     private int endingStage = 4;
+    
+    public Action OnGameOver;
 
 
     private void Awake()
@@ -165,6 +168,7 @@ public class GameManager : MonoBehaviour
 
         //gameOverUI.Show();
         UIManager.ShowUI("GameOverUI");
+        OnGameOver?.Invoke();
     }
 
     public void QuitGame()

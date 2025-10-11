@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a772a9f468d29404db221041cd095801, type: 3}
+  m_Name: FlashlightUpgradeData
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightUpgradeData
+  defaultViewAngle: 50
+  defaultViewRadius: 5
+  levels:
+  - level: 1
+    viewAngle: 50
+    viewRadius: 5
+  - level: 2
+    viewAngle: 55
+    viewRadius: 5.1
+  - level: 3
+    viewAngle: 60
+    viewRadius: 5.2
+  - level: 4
+    viewAngle: 62
+    viewRadius: 5.5
+  - level: 5
+    viewAngle: 64
+    viewRadius: 5.6
+  - level: 6
+    viewAngle: 66
+    viewRadius: 6
+  - level: 7
+    viewAngle: 68
+    viewRadius: 6.2
+  - level: 8
+    viewAngle: 70
+    viewRadius: 6.4
+  - level: 9
+    viewAngle: 71
+    viewRadius: 6.6
+  - level: 10
+    viewAngle: 72
+    viewRadius: 6.8
+  - level: 11
+    viewAngle: 75
+    viewRadius: 7
+  - level: 12
+    viewAngle: 76
+    viewRadius: 7.3
+  - level: 13
+    viewAngle: 77
+    viewRadius: 7.5
+  - level: 14
+    viewAngle: 78
+    viewRadius: 7.7
+  - level: 15
+    viewAngle: 79
+    viewRadius: 7.8
+  - level: 16
+    viewAngle: 80
+    viewRadius: 8
+  - level: 17
+    viewAngle: 82
+    viewRadius: 8.5
+  - level: 18
+    viewAngle: 84
+    viewRadius: 9
+  - level: 19
+    viewAngle: 86
+    viewRadius: 9.5
+  - level: 20
+    viewAngle: 90
+    viewRadius: 10
