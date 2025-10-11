@@ -81,7 +81,7 @@ ParticleSystemRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -4913,6 +4913,7 @@ GameObject:
   - component: {fileID: 782457349119262492}
   - component: {fileID: 5595022254970163509}
   - component: {fileID: 3868460695291239543}
+  - component: {fileID: 3321887829468712705}
   - component: {fileID: 4844173768882513995}
   m_Layer: 0
   m_Name: Item
@@ -4983,7 +4984,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 20
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5011,7 +5012,7 @@ MonoBehaviour:
   color: {r: 1, g: 1, b: 1, a: 1}
   invertedColor: {r: 0, g: 0, b: 0, a: 1}
   sortingLayerName: Default
-  orderInLayer: 1
+  orderInLayer: 20
   intervalSeconds: 0.5
   growDuration: 0.1
   holdDuration: 0
@@ -5063,6 +5064,19 @@ MonoBehaviour:
   autoFindComponents: 1
   additionalObjects:
   - {fileID: 7552620102583738000}
+--- !u!114 &3321887829468712705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9089351352867651415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0acf37bb83d69ef42a52475af5e67e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoldRotation
+  holdAngle: 0
 --- !u!60 &4844173768882513995
 PolygonCollider2D:
   m_ObjectHideFlags: 0

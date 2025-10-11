@@ -17,8 +17,8 @@ public class StageUI : MonoBehaviour
     private readonly string[] stageInfoMessages = new string[]
     {
         "빛을 보면 멈추는 괴물이 등장합니다.",              // 1스테이지
-        "빛을 보면 따라오는 괴물이 추가되었습니다.",         // 2스테이지
-        "흰색 괴물이 더 자주 등장합니다."                   // 3스테이지
+        "빛을 보면 따라오는 괴물이 등장합니다.",         // 2스테이지
+        "벽을 통과하며 돌진하는 괴물이 등장합니다."                   // 3스테이지
     };
 
     void Start()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 /// <summary>
 /// 2D XY 커브 가속/감속 컨트롤러 (이동 전용)
@@ -7,6 +8,8 @@ using UnityEngine.InputSystem;
 /// - AnimationCurve 기반 가속/감속
 /// - X/Y 최대속도가 다른 타원 한계 처리
 /// - InputAction 에셋 직접 사용
+/// - 넉백(Knockback) 지원
+/// - Inverted 상태에 따른 최대 속도 변경
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerControllerRB : MonoBehaviour
@@ -16,6 +19,9 @@ public class PlayerControllerRB : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionAsset inputActions;
+    
+    [Header("Knockback")]
+    [SerializeField] private AnimationCurve knockbackCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
     
     private Rigidbody2D _rb;
     private Vector2 _input;
@@ -34,14 +40,35 @@ public class PlayerControllerRB : MonoBehaviour
 
     private Vector2 _lastDirNorm = Vector2.right;
     
+    // 이동 제어
+    private bool _canMove = true;
+    
+    // 넉백 상태
+    private Coroutine _knockbackCoroutine;
+    
     // InputAction 참조
     private InputAction _moveAction;
     private InputActionMap _playerActionMap;
+    
+    // WorldStateManager 참조
+    private WorldStateManager _worldStateManager;
+    private bool _isInverted = false;
+    
+    // 최대 속도 전환 상태
+    private bool _isTransitioningSpeed = false;
+    private float _speedTransitionProgress = 0f;
+    private float _speedTransitionDuration = 0.3f; // 전환에 걸리는 시간
+    
+    // 현재 적용할 최대 속도 (Inverted 상태 고려)
+    private float CurrentMaxSpeedX => _isInverted ? movementSettings.invertedMaxSpeedX : movementSettings.maxSpeedX;
+    private float CurrentMaxSpeedY => _isInverted ? movementSettings.invertedMaxSpeedY : movementSettings.maxSpeedY;
     
     private void Awake()
     {
         InitializeInputManager();
         InitializeRb();
+        FindWorldStateManager();
+        
         if (_playerActionMap != null)
         {
             _playerActionMap.Enable();
@@ -56,9 +83,10 @@ public class PlayerControllerRB : MonoBehaviour
     {
         InitializeInputManager();
         InitializeRb();
+        FindWorldStateManager();
         SetVelocityAndSync(_rb.linearVelocity);
         
-        // ✅ ActionMap 전체 활성화
+        // ActionMap 전체 활성화
         if (_playerActionMap != null)
         {
             _playerActionMap.Enable();
@@ -69,12 +97,22 @@ public class PlayerControllerRB : MonoBehaviour
         {
             _moveAction.performed += OnMove;
             _moveAction.canceled += OnMove;
-            Debug.Log("Move Action subscribed.");
         }
+        
+        // WorldStateManager 이벤트 구독
+        SubscribeWorldStateManager();
     }
 
     private void OnDisable()
     {
+        // 넉백 코루틴 정리
+        if (_knockbackCoroutine != null)
+        {
+            StopCoroutine(_knockbackCoroutine);
+            _knockbackCoroutine = null;
+            _canMove = true;
+        }
+        
         // InputAction 이벤트 구독 해제
         if (_moveAction != null)
         {
@@ -82,17 +120,125 @@ public class PlayerControllerRB : MonoBehaviour
             _moveAction.canceled -= OnMove;
         }
         
-        // ✅ ActionMap 전체 비활성화
+        // ActionMap 전체 비활성화
         if (_playerActionMap != null)
         {
             _playerActionMap.Disable();
         }
+        
+        // WorldStateManager 이벤트 구독 해제
+        UnsubscribeWorldStateManager();
+    }
+
+    private void Update()
+    {
+        
     }
 
     private void FixedUpdate()
     {
-        ApplyMovement();
+        // 이동 가능할 때만 이동 처리
+        if (_canMove)
+        {
+            ApplyMovement();
+        }
     }
+
+    #region WorldStateManager Integration
+    
+    /// <summary>
+    /// WorldStateManager 찾기
+    /// </summary>
+    private void FindWorldStateManager()
+    {
+        if (_worldStateManager == null)
+        {
+            _worldStateManager = FindAnyObjectByType<WorldStateManager>();
+            
+            if (_worldStateManager == null)
+            {
+                Debug.LogWarning("WorldStateManager를 찾을 수 없습니다!");
+            }
+            else
+            {
+                _isInverted = _worldStateManager.IsInverted;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// WorldStateManager 이벤트 구독
+    /// </summary>
+    private void SubscribeWorldStateManager()
+    {
+        if (_worldStateManager != null)
+        {
+            _worldStateManager.onIsInvertedChanged.AddListener(OnInvertedStateChanged);
+        }
+    }
+    
+    /// <summary>
+    /// WorldStateManager 이벤트 구독 해제
+    /// </summary>
+    private void UnsubscribeWorldStateManager()
+    {
+        if (_worldStateManager != null)
+        {
+            _worldStateManager.onIsInvertedChanged.RemoveListener(OnInvertedStateChanged);
+        }
+    }
+    
+    /// <summary>
+    /// Inverted 상태 변경 콜백
+    /// </summary>
+    private void OnInvertedStateChanged(bool isInverted)
+    {
+        bool wasInverted = _isInverted;
+        _isInverted = isInverted;
+        
+        if (wasInverted != isInverted)
+        {
+            HandleMaxSpeedChange();
+        }
+    }
+    
+    /// <summary>
+    /// 최대 속도 변경 처리
+    /// </summary>
+    private void HandleMaxSpeedChange()
+    {
+        Vector2 currentVelocity = _rb.linearVelocity;
+        float currentSpeed = currentVelocity.magnitude;
+        
+        if (_isInverted)
+        {
+            // Inverted 시작: 더 높은 maxSpeed로 변경
+            // 현재 속도를 유지하고 새로운 maxSpeed로 가속 가능
+            // 특별한 처리 없이 자연스럽게 가속됨
+        }
+        else
+        {
+            // Inverted 종료: 더 낮은 maxSpeed로 변경
+            // 현재 속도가 새로운 maxSpeed를 초과하면 감속 필요
+            float newMaxSpeed = Mathf.Sqrt(
+                Mathf.Pow(CurrentMaxSpeedX, 2) + 
+                Mathf.Pow(CurrentMaxSpeedY, 2)
+            );
+            
+            if (currentSpeed > newMaxSpeed)
+            {
+                // 감속이 필요한 경우 감속 상태로 전환
+                if (!_decelerating)
+                {
+                    _decelerating = true;
+                    _uDecel = 0f;
+                    _decelStartSpeed = ToNormalizedSpace(currentVelocity).magnitude;
+                }
+            }
+        }
+    }
+    
+    #endregion
 
     #region InputAction Handling
     
@@ -101,16 +247,21 @@ public class PlayerControllerRB : MonoBehaviour
     /// </summary>
     private void OnMove(InputAction.CallbackContext context)
     {
+        // 이동 불가능 시 입력 무시 및 입력값 초기화
+        if (!_canMove)
+        {
+            _input = Vector2.zero;
+            return;
+        }
+        
         Vector2 moveInput = context.ReadValue<Vector2>();
         
-        // ✅ 수정: moveInput을 먼저 체크
         if (moveInput.sqrMagnitude > 0.01f)
         {
             _lastDirNorm = moveInput.normalized;
         }
 
         _input = moveInput;
-        Debug.Log($"Move Input: {_input}, LastDirNorm: {_lastDirNorm}");
     }
 
     #endregion
@@ -164,6 +315,111 @@ public class PlayerControllerRB : MonoBehaviour
     
     #endregion
 
+    #region Knockback Methods
+    
+    /// <summary>
+    /// 넉백 적용
+    /// </summary>
+    /// <param name="direction">넉백 방향 (정규화된 벡터)</param>
+    /// <param name="force">넉백 힘 (월드 유닛/초)</param>
+    /// <param name="duration">넉백 지속 시간 (초)</param>
+    public void ApplyKnockback(Vector2 direction, float force, float duration)
+    {
+        // 이전 넉백이 진행 중이면 중단
+        if (_knockbackCoroutine != null)
+        {
+            StopCoroutine(_knockbackCoroutine);
+        }
+        
+        // 기존 이동 상태 초기화
+        ResetMovementState();
+        
+        // 넉백 시작
+        _knockbackCoroutine = StartCoroutine(KnockbackCoroutine(direction.normalized, force, duration));
+    }
+    
+    /// <summary>
+    /// 넉백 코루틴
+    /// </summary>
+    private IEnumerator KnockbackCoroutine(Vector2 direction, float force, float duration)
+    {
+        _canMove = false;
+        float elapsed = 0f;
+        
+        Vector2 initialVelocity = direction * force;
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            
+            // 커브를 적용한 넉백 감쇠
+            float curveValue = knockbackCurve.Evaluate(t);
+            _rb.linearVelocity = initialVelocity * curveValue;
+            
+            yield return null;
+        }
+        
+        // 넉백 종료 처리
+        EndKnockback();
+    }
+    
+    /// <summary>
+    /// 넉백 종료 처리
+    /// </summary>
+    private void EndKnockback()
+    {
+        _canMove = true;
+        _knockbackCoroutine = null;
+        
+        // 넉백 종료 시 속도를 0으로 설정하거나, 
+        // 현재 속도를 유지하려면 아래 줄을 주석 처리
+        _rb.linearVelocity = Vector2.zero;
+        
+        // 이동 상태 초기화 (선택사항)
+        ResetMovementState();
+    }
+    
+    /// <summary>
+    /// 이동 상태 초기화 (관성 제거)
+    /// </summary>
+    private void ResetMovementState()
+    {
+        _input = Vector2.zero;
+        _rb.linearVelocity = Vector2.zero;
+        
+        // 가속/감속 상태 초기화
+        _uAccel = 0f;
+        _decelerating = false;
+        _uDecel = 0f;
+        _decelStartSpeed = 0f;
+        
+        // 턴 상태 초기화
+        _turning = false;
+        _uTurn = 0f;
+        _turnStartSpeed = 0f;
+        _turnLossLerp = 0f;
+    }
+    
+    /// <summary>
+    /// 이동 가능 여부 확인 및 설정
+    /// </summary>
+    public bool CanMove 
+    { 
+        get => _canMove;
+        set
+        {
+            _canMove = value;
+            // 이동 불가능 상태로 전환 시 입력값 초기화
+            if (!_canMove)
+            {
+                _input = Vector2.zero;
+            }
+        }
+    }
+    
+    #endregion
+
     #region Movement Methods
 
     /// <summary>
@@ -203,8 +459,8 @@ public class PlayerControllerRB : MonoBehaviour
     {
         // 입력 방향을 정규화 공간으로 변환
         Vector2 inputDirNorm = new Vector2(
-            _input.x / Mathf.Max(movementSettings.maxSpeedX, 1e-6f),
-            _input.y / Mathf.Max(movementSettings.maxSpeedY, 1e-6f)
+            _input.x / Mathf.Max(CurrentMaxSpeedX, 1e-6f),
+            _input.y / Mathf.Max(CurrentMaxSpeedY, 1e-6f)
         );
         
         if (inputDirNorm.sqrMagnitude > 1e-8f)
@@ -238,7 +494,7 @@ public class PlayerControllerRB : MonoBehaviour
     {
         if (angle <= movementSettings.noLossTurnAngle)
         {
-            // ✅ 수정: 손실 없는 회전이지만 목표 속도는 준수
+            // 손실 없는 회전이지만 목표 속도는 준수
             _turning = false;
             _uTurn = 0f;
             
@@ -261,7 +517,7 @@ public class PlayerControllerRB : MonoBehaviour
         }
         else
         {
-            // ✅ 수정: 중간 구간도 목표 속도 준수
+            // 중간 구간도 목표 속도 준수
             _turning = false;
             _uTurn = 0f;
             
@@ -294,7 +550,7 @@ public class PlayerControllerRB : MonoBehaviour
             _turnLossLerp = lossLerp;
         }
 
-        // ✅ 수정: 목표 속도도 고려하여 최종 타겟 계산
+        // 목표 속도도 고려하여 최종 타겟 계산
         float turnTargetSpeed = _turnStartSpeed * retainRatio;
         float targetSpeed = Mathf.Min(goalSpeed, turnTargetSpeed);
 
@@ -366,8 +622,8 @@ public class PlayerControllerRB : MonoBehaviour
     private Vector2 ToNormalizedSpace(Vector2 worldVelocity)
     {
         return new Vector2(
-            worldVelocity.x / Mathf.Max(movementSettings.maxSpeedX, 1e-6f),
-            worldVelocity.y / Mathf.Max(movementSettings.maxSpeedY, 1e-6f)
+            worldVelocity.x / Mathf.Max(CurrentMaxSpeedX, 1e-6f),
+            worldVelocity.y / Mathf.Max(CurrentMaxSpeedY, 1e-6f)
         );
     }
 
@@ -377,8 +633,8 @@ public class PlayerControllerRB : MonoBehaviour
     private Vector2 ToWorldSpace(Vector2 normalizedVelocity)
     {
         return new Vector2(
-            normalizedVelocity.x * Mathf.Max(movementSettings.maxSpeedX, 1e-6f),
-            normalizedVelocity.y * Mathf.Max(movementSettings.maxSpeedY, 1e-6f)
+            normalizedVelocity.x * Mathf.Max(CurrentMaxSpeedX, 1e-6f),
+            normalizedVelocity.y * Mathf.Max(CurrentMaxSpeedY, 1e-6f)
         );
     }
 

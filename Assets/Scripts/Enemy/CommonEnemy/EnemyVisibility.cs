@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 적 타입 열거형
@@ -6,7 +6,8 @@ using UnityEngine;
 public enum EnemyType
 {
     Normal,
-    LightSeeker
+    LightSeeker,
+    Agwi
 }
 
 /// <summary>

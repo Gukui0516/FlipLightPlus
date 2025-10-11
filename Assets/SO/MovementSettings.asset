@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4647d063cd0f28f45a6f49ff2a2aa996, type: 3}
   m_Name: MovementSettings
   m_EditorClassIdentifier: 
-  maxSpeedX: 0.1
-  maxSpeedY: 0.1
+  maxSpeedX: 7
+  maxSpeedY: 7
+  invertedMaxSpeedX: 12
+  invertedMaxSpeedY: 12
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.85
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -38,8 +40,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  accelerationTime: 0.6
-  decelerationTime: 0.25
+  accelerationTime: 0.1
+  decelerationTime: 0.1
   noLossTurnAngle: 91
   decelStartTurnAngle: 134
   hardFlipAngle: 170

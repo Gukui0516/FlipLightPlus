@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1115120527589726550
 Transform:
   m_ObjectHideFlags: 0
@@ -119,7 +119,9 @@ GameObject:
   - component: {fileID: 1991662785569421368}
   - component: {fileID: 8476635208328151834}
   - component: {fileID: 1752575988443889638}
+  - component: {fileID: 5110930383069968436}
   - component: {fileID: 8342198941621022990}
+  - component: {fileID: 5874288128565525641}
   m_Layer: 7
   m_Name: NomalEnemy
   m_TagString: Enemy
@@ -277,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf472638747879744a36231888bdd98d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 7
   stoppingDistance: 0
   worldStateManager: {fileID: 0}
 --- !u!114 &5965394269043838820
@@ -320,7 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useOutline: 0
-  eyesVisibleDistance: 5
+  eyesVisibleDistance: 8
   lightSeekerVisibilityDistance: 10
   enemyOutline: {fileID: 8342198941621022990}
   eyesObject: {fileID: 7569755935291372203}
@@ -338,6 +340,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawnDistance: 25
   despawnCheckInterval: 1
+--- !u!114 &5110930383069968436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072718245553805920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05ed9b7c70d147840b4ea3982a99e629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDieAnimation
+  animator: {fileID: 0}
 --- !u!114 &8342198941621022990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,6 +373,28 @@ MonoBehaviour:
   manualRadius: 0.5
   circleSegments: 64
   showOutline: 1
+--- !u!95 &5874288128565525641
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072718245553805920}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4841b1eb5a38050409ed85bf0a1bb334, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2054188078758849138
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,12 +17,14 @@ public abstract class BaseEnemy : MonoBehaviour
     protected Transform player;
     protected bool isInLight = false;
     protected bool isInverted = false;
+    protected bool isDead = false;
 
     // 컴포넌트 모듈들
     protected EnemyMovement movementModule;
     protected EnemyRotation rotationModule;
     protected EnemyVisibility visibilityModule;
     protected EnemyDespawn despawnModule;
+    protected EnemyDieAnimation dieAnimationModule;
     protected Rigidbody2D rb;
 
     #endregion
@@ -42,12 +44,31 @@ public abstract class BaseEnemy : MonoBehaviour
         rotationModule = GetComponent<EnemyRotation>();
         visibilityModule = GetComponent<EnemyVisibility>();
         despawnModule = GetComponent<EnemyDespawn>();
+        dieAnimationModule = GetComponent<EnemyDieAnimation>();
         rb = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void OnEnable()
     {
+        isDead = false;
         InitializeEnemy();
+
+        // 죽음 애니메이션 모듈 초기화
+        if (dieAnimationModule != null)
+        {
+            dieAnimationModule.ResetAnimation();
+            dieAnimationModule.onDeathAnimationComplete -= OnDeathComplete; // 중복 방지
+            dieAnimationModule.onDeathAnimationComplete += OnDeathComplete;
+        }
+    }
+
+    protected virtual void OnDisable()
+    {
+        // 이벤트 구독 해제
+        if (dieAnimationModule != null)
+        {
+            dieAnimationModule.onDeathAnimationComplete -= OnDeathComplete;
+        }
     }
 
     protected virtual void Start()
@@ -69,10 +90,17 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             worldStateManager.onIsInvertedChanged.RemoveListener(OnInversionChanged);
         }
+
+        if (dieAnimationModule != null)
+        {
+            dieAnimationModule.onDeathAnimationComplete -= OnDeathComplete;
+        }
     }
 
     protected virtual void Update()
     {
+        if (isDead) return;
+
         // Despawn 체크
         if (despawnModule != null)
         {
@@ -95,6 +123,16 @@ public abstract class BaseEnemy : MonoBehaviour
     // 물리 기반 이동은 FixedUpdate로 분리
     protected virtual void FixedUpdate()
     {
+        if (isDead)
+        {
+            // 죽었으면 정지
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+            return;
+        }
+
         // 반전시 정지 여부 확인
         if (IsStoppedByInversion())
         {
@@ -181,10 +219,12 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
+        if (isDead) return;
+
         if (other.gameObject.layer == LayerMask.NameToLayer("Flashlight"))
         {
             isInLight = true;
-            Debug.Log($"{gameObject.name} 손전등 진입!");
+            //            Debug.Log($"{gameObject.name} 손전등 진입!");
 
             // 반전 상태에서 손전등 맞으면 모두 죽음
             if (isInverted)
@@ -199,10 +239,12 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected virtual void OnTriggerExit2D(Collider2D other)
     {
+        if (isDead) return;
+
         if (other.gameObject.layer == LayerMask.NameToLayer("Flashlight"))
         {
             isInLight = false;
-            Debug.Log($"{gameObject.name} 손전등 벗어남!");
+            //            Debug.Log($"{gameObject.name} 손전등 벗어남!");
 
             OnExitLight();
 
@@ -226,16 +268,32 @@ public abstract class BaseEnemy : MonoBehaviour
 
     #endregion
 
-    #region Public Methods
+    #region Death Methods
 
     public virtual void Die()
     {
-        if (visibilityModule != null)
-        {
-            visibilityModule.HideAll();
-        }
+        if (isDead) return;
+        isDead = true;
 
-        //풀에 반환
+        // 죽음 애니메이션 모듈을 통해 애니메이션 재생
+        if (dieAnimationModule != null)
+        {
+            dieAnimationModule.PlayDeathAnimation();
+        }
+        else
+        {
+            // 모듈이 없으면 바로 풀에 반환
+            Debug.LogWarning($"{gameObject.name}: EnemyDieAnimation 모듈이 없습니다!");
+            OnDeathComplete();
+        }
+    }
+
+    /// <summary>
+    /// 죽음 애니메이션 완료 후 호출됨
+    /// </summary>
+    private void OnDeathComplete()
+    {
+        // 풀에 반환
         EnemySpawner.Instance?.ReturnEnemy(gameObject);
     }
 
