@@ -46,13 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemSpawner
   itemPrefab: {fileID: 9089351352867651415, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
   spawnInterval: 0.1
-  maxItems: 50
+  maxItems: 5
   spawnDistance: 21
   mapMin: {x: -100, y: -100}
   mapMax: {x: 100, y: 100}
   enableMapBoundary: 1
-  defaultPoolCapacity: 50
-  maxPoolSize: 50
+  defaultPoolCapacity: 10
+  maxPoolSize: 20
   despawnDistance: 25
   optionalMaxLifetime: -1
   world: {fileID: 0}
