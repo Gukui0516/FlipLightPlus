@@ -12,7 +12,7 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private float spawnInterval = 2f;
     [SerializeField] private int maxItems = 10;
-    [SerializeField] private float spawnDistance = 15f;
+    [SerializeField] private float spawnDistance = 15f;//플레이어와 생성 간격인듯?
 
     [Header("Map Boundaries")]
     [SerializeField] private Vector2 mapMin = new Vector2(-50f, -50f);
@@ -32,6 +32,9 @@ public class ItemSpawner : MonoBehaviour
 
     [Header("WallCollider")]
     [SerializeField] private LayerMask wallLayer;
+
+    [Header("ItemsDistance")]
+    [SerializeField] float itemDistance=10f;//아이템간의 간격
 
     private Camera mainCamera;
     private Transform player;
@@ -189,10 +192,23 @@ public class ItemSpawner : MonoBehaviour
             float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
             float x = center.x + Mathf.Cos(randomAngle) * spawnDistance;
             float y = center.y + Mathf.Sin(randomAngle) * spawnDistance;
-            if (Physics2D.OverlapBox(new Vector2(x, y), new Vector2(1, 1), 0f, wallLayer) == null)
+            Collider2D[] hits = Physics2D.OverlapCircleAll(new Vector2(x, y), itemDistance);//아이템 거리 안 체크
+            bool hasItem=false;
+            foreach (var h in hits)
             {
+                if (h != null && h.CompareTag("Item"))//그중에 아이템이 있으면
+                {
+                    hasItem=true;
+                    break;
+                }
+            }            
+            if (!hasItem && Physics2D.OverlapBox(new Vector2(x, y), new Vector2(1, 1), 0f, wallLayer) == null)//아이템이 있고 벽에 안닿으면
+            {
+                Debug.Log("랜덤위치 반환");
                 return new Vector2(x, y);
             }
+            
+                
         }
         Debug.Log("횟수 초과");
         return new Vector2(0, 0);
