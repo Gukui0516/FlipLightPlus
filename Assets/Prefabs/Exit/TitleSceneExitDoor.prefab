@@ -151,7 +151,7 @@ MonoBehaviour:
   autoSetRequiredCount: 1
   autoMode: 0
   manualRequiredGaugeCount: 1
-  openEffectGameObject: {fileID: 418640948554206113}
+  openEffectGameObject: {fileID: 6260644347143209681}
   onGeneratorComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -301,7 +301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2106053724695535374
 Transform:
   m_ObjectHideFlags: 0
