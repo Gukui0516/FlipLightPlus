@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b1f9acc7143f84d8301ff5f37e27f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSettings: {fileID: 11400000, guid: 90101755c79e41a42a3d67504f75b198, type: 2}
+  movementSettings: {fileID: 11400000, guid: 7c21b4e85e8f2a54e8e435436c518367, type: 2}
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   knockbackCurve:
     serializedVersion: 2
