@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4167394994580402309}
   - component: {fileID: 1570162665025389006}
   - component: {fileID: 2104609643461425483}
+  - component: {fileID: 1216469884676681370}
   m_Layer: 0
   m_Name: Exit
   m_TagString: Exit
@@ -162,6 +163,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GeneratorManager
   initializeDelay: 0.6
+--- !u!114 &1216469884676681370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548326965764086693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b1fe9e76c88b1c4688338700ec9a002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorLightIndicator
+  doorTransform: {fileID: 8352103014440275892}
+  basicRayCount: 6
+  basicRayLength: 150
+  basicStartWidth: 0.3
+  minDistanceForWidth: 60
+  maxDistanceForWidth: 400
+  minEndWidth: 6
+  maxEndWidth: 30
+  extraFlashRayCount: 3
+  extraRayLength: 150
+  rotationSpeed: 20
+  pulseSpeed: 2
+  flickerSpeed: 5
+  minIntensity: 0.3
+  maxIntensity: 0.9
+  minFlashInterval: 6
+  maxFlashInterval: 10
+  minFlashCount: 0
+  maxFlashCount: 0
+  fadeInDuration: 0.3
+  flashDuration: 0.8
+  fadeOutDuration: 0.5
+  lightColor: {r: 1, g: 1, b: 1, a: 0.7}
 --- !u!1 &2534656072328783082
 GameObject:
   m_ObjectHideFlags: 0

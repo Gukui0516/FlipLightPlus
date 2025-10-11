@@ -88,6 +88,7 @@ public class ExitDoorController : MonoBehaviour
     private int satisfiedGaugeCount = 0;
     private bool _isOpening = false;
     private bool _isOpen = false;
+    public bool IsOpen => _isOpen;
     public bool _hasPlayerEscaped = false;
     private bool _isRegistrationFinalized = false;
     private bool _isWaitingForCameraView = false;
