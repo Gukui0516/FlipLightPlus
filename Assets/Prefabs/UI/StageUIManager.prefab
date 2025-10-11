@@ -259,6 +259,10 @@ MonoBehaviour:
   fadeOutDuration: 1
   secondDisplayDuration: 2
   fadeInDuration: 0.4
+  uiToMove: {fileID: 0}
+  nearMessageAnchoredPos: {x: -510, y: -700}
+  targetAnchoredPos: {x: -100, y: -50}
+  moveDuration: 0.6
 --- !u!1 &1906998077252350333
 GameObject:
   m_ObjectHideFlags: 0
