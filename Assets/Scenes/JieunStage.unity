@@ -1148,6 +1148,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8051945463643320430, guid: 1edb9204235490740b45fae7bddae89e, type: 3}
+      propertyPath: uiToMove
+      value: 
+      objectReference: {fileID: 752481317}
+    - target: {fileID: 8051945463643320430, guid: 1edb9204235490740b45fae7bddae89e, type: 3}
+      propertyPath: targetAnchoredPos.x
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8051945463643320430, guid: 1edb9204235490740b45fae7bddae89e, type: 3}
+      propertyPath: targetAnchoredPos.y
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8051945463643320430, guid: 1edb9204235490740b45fae7bddae89e, type: 3}
+      propertyPath: nearMessageAnchoredPos.x
+      value: -630
+      objectReference: {fileID: 0}
+    - target: {fileID: 8051945463643320430, guid: 1edb9204235490740b45fae7bddae89e, type: 3}
+      propertyPath: nearMessageAnchoredPos.y
+      value: -667
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -360581,12 +360601,8 @@ MonoBehaviour:
     sceneAsset: {fileID: 102900000, guid: 03d025b569c40124a8936bb2858fccae, type: 3}
     sceneName: EndScene
   stageScenes:
-  - sceneAsset: {fileID: 102900000, guid: 3f4d6458e97aa4a4485dafc214d80840, type: 3}
-    sceneName: StageScene1010
-  - sceneAsset: {fileID: 102900000, guid: 549aa18ba85300b4eae03fb07751c6df, type: 3}
-    sceneName: StageScene1010 1
-  - sceneAsset: {fileID: 102900000, guid: 7c361301de3fde64391769d6e1fd1387, type: 3}
-    sceneName: StageScene1010 2
+  - sceneAsset: {fileID: 102900000, guid: a32bb906392075d49852a47854dac1b0, type: 3}
+    sceneName: JieunStage
   useSingleStageScene: 1
 --- !u!114 &1674293236
 MonoBehaviour:
