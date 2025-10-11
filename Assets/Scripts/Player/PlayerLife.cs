@@ -12,6 +12,7 @@ public class PlayerLife : MonoBehaviour
     [SerializeField] float blinkTime = 0.1f;//깜박이는 시간
     [SerializeField] bool invincibile;//무적중
     [SerializeField] SpriteRenderer playerImage;//플레이어 이미지
+    [SerializeField] CircleCollider2D circleCollider;//무적시 적 충돌 안함 위해서
 
     //[SerializeField] Flashlight2D flashlight;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,7 +31,7 @@ public class PlayerLife : MonoBehaviour
     {
         currentLife=startLife;
         lifeUI.LifeUIUpdate(currentLife);
-
+        
         anim = GetComponent<Animator>();
         playerContact = GetComponent<PlayerContact>();
     }
@@ -97,6 +98,7 @@ public class PlayerLife : MonoBehaviour
     private IEnumerator invincibilityTimes()
     {
         invincibile = true;//무적 온
+        circleCollider.excludeLayers = LayerMask.GetMask("Enemy");
         float timer = 0f;
         while (timer < invincibilityTime) //무적 시간중이면
         {
@@ -104,9 +106,10 @@ public class PlayerLife : MonoBehaviour
             yield return new WaitForSeconds(blinkTime);//깜박임 시간동안 대기
             timer += blinkTime;
         }//반복 끝나면
+
         playerImage.color = Color.white;//흰색으로
         invincibile = false;//무적 오프
-        
+        circleCollider.excludeLayers = 0;
         //무적 시간이 끝났을 때 isContact를 false로 리셋
         if (playerContact != null)
         {
