@@ -1,34 +1,98 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
-/// <summary>
-/// 적의 이동 로직을 담당하는 모듈
-/// </summary>
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private NavMeshAgent agent;
 
-    private void Awake()
+    [Header("Steering")]
+    [SerializeField] private float arriveEpsilon = 0.1f;
+
+    // ✅ 정지거리 감속을 위한 설정
+    [Header("Stopping Behavior")]
+    [SerializeField] private float decelerationDistance = 0.5f; // 감속 시작 거리
+
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        agent = GetComponent<NavMeshAgent>();
+
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        agent.updatePosition = false;
     }
 
-    /// <summary>
-    /// 플레이어를 향해 이동
-    /// </summary>
+    private void SyncAgentToRB()
+    {
+        if (agent != null && rb != null)
+        {
+            agent.nextPosition = rb.position;
+        }
+    }
+
     public void MoveTowardsPlayer(Transform player, float speed, float stoppingDistance)
     {
-        if (player == null || rb == null) return;
+        if (!player || rb == null || agent == null) return;
 
-        float distance = Vector2.Distance(transform.position, player.position);
+        if (agent.isStopped) agent.isStopped = false;
 
-        if (distance > stoppingDistance)
+        agent.speed = speed;
+        agent.stoppingDistance = stoppingDistance;
+        agent.SetDestination(player.position);
+
+        SyncAgentToRB();
+
+        Vector2 from = rb.position;
+        Vector2 to = (Vector2)agent.steeringTarget;
+
+        if (Vector2.Distance(from, to) < arriveEpsilon)
+            to = player.position;
+
+        float distanceToTarget = Vector2.Distance(from, to);
+
+        // ✅ 정지거리 내에서 감속 처리
+        float actualSpeed = speed;
+
+        if (distanceToTarget <= stoppingDistance + decelerationDistance)
         {
-            Vector2 direction = (transform.rotation) * Vector2.down.normalized;
-            rb.linearVelocity = direction * speed;
+            if (distanceToTarget <= stoppingDistance)
+            {
+                // 정지거리 내: 완전 정지
+                rb.linearVelocity = Vector2.zero;
+                return;
+            }
+            else
+            {
+                // 감속 구간: 거리에 비례해서 속도 감소
+                float decelerationRatio = (distanceToTarget - stoppingDistance) / decelerationDistance;
+                actualSpeed = speed * decelerationRatio;
+            }
         }
-        else
+
+        Vector2 dir = (to - from).normalized;
+        rb.linearVelocity = dir * actualSpeed;
+    }
+
+    public void StopImmediate()
+    {
+        if (agent != null)
         {
+            agent.isStopped = true;
+            agent.ResetPath();
+            SyncAgentToRB();
+        }
+
+        if (rb != null)
             rb.linearVelocity = Vector2.zero;
-        }
+    }
+
+    public void MoveForwardRB(float speed)
+    {
+        if (rb == null) return;
+        Vector2 forward = (transform.rotation) * Vector2.down;
+        rb.linearVelocity = forward.normalized * speed;
     }
 }

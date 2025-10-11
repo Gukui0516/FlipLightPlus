@@ -257,6 +257,12 @@ MonoBehaviour:
   currentStage: 1
   displayDuration: 1
   fadeOutDuration: 1
+  secondDisplayDuration: 2
+  fadeInDuration: 0.4
+  uiToMove: {fileID: 0}
+  nearMessageAnchoredPos: {x: -510, y: -700}
+  targetAnchoredPos: {x: -100, y: -50}
+  moveDuration: 0.6
 --- !u!1 &1906998077252350333
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +275,7 @@ GameObject:
   - component: {fileID: 7120918333296451840}
   - component: {fileID: 4941216506227254305}
   m_Layer: 5
-  m_Name: DescriptionText
+  m_Name: DescText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -291,7 +297,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -168}
+  m_AnchoredPosition: {x: 0, y: -154}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7120918333296451840
@@ -324,8 +330,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 48c887f8d4420de4d835acb74e3245f1, type: 2}
-  m_sharedMaterial: {fileID: 4906737786915171878, guid: 48c887f8d4420de4d835acb74e3245f1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c3e0f4fa8c094eb4195c3fdd01d253f6, type: 2}
+  m_sharedMaterial: {fileID: 4906737786915171878, guid: c3e0f4fa8c094eb4195c3fdd01d253f6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b1f9acc7143f84d8301ff5f37e27f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSettings: {fileID: 11400000, guid: 90101755c79e41a42a3d67504f75b198, type: 2}
+  movementSettings: {fileID: 11400000, guid: 7c21b4e85e8f2a54e8e435436c518367, type: 2}
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   knockbackCurve:
     serializedVersion: 2
@@ -446,10 +446,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5886815308704194425, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2413107154882303897}
   m_SourcePrefab: {fileID: 100100000, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
 --- !u!4 &3576681516255151700 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 826759626425491300, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
   m_PrefabInstance: {fileID: 4241213943732885808}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7739993175825368649 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5886815308704194425, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
+  m_PrefabInstance: {fileID: 4241213943732885808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2413107154882303897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7739993175825368649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0c0e6703027044896ae4019440dbc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightUpgradeManager
+  upgradeData: {fileID: 11400000, guid: db93fc5f509c8114b996e56f3e038a02, type: 2}
+  currentLevel: 1
+  currentUpgradeType: 2
+  temporaryUpgradeDuration: 10

@@ -1,7 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.Events;
+
+/// <summary>
+/// 발전기 완료 정보를 담는 클래스
+/// </summary>
+[System.Serializable]
+public class GeneratorCompleteInfo
+{
+    public LightGaugeSystem completedGauge;    // 완료된 발전기
+    public int satisfiedCount;                  // 현재까지 만족한 개수
+    public int requiredCount;                   // 필요한 전체 개수
+    public bool allConditionsMet;               // 모든 조건 만족 여부
+    
+    public GeneratorCompleteInfo(LightGaugeSystem gauge, int satisfied, int required, bool allMet)
+    {
+        completedGauge = gauge;
+        satisfiedCount = satisfied;
+        requiredCount = required;
+        allConditionsMet = allMet;
+    }
+}
+
+/// <summary>
+/// 발전기 완료 이벤트
+/// </summary>
+[System.Serializable]
+public class GeneratorCompleteEvent : UnityEvent<GeneratorCompleteInfo> { }
 
 public class ExitDoorController : MonoBehaviour
 {
@@ -34,8 +60,12 @@ public class ExitDoorController : MonoBehaviour
     [Tooltip("문이 열릴 조건이 만족되었을 때 활성화할 이펙트 게임오브젝트")]
     [SerializeField] private GameObject openEffectGameObject;
     
+    [Header("이벤트")]
+    [Tooltip("발전기가 완료될 때마다 발행되는 이벤트")]
+    public GeneratorCompleteEvent onGeneratorComplete = new GeneratorCompleteEvent();
+    [Tooltip("플레이어가 탈출할 때 발행되는 이벤트 (비어있으면 기본 동작 실행)")]
+    public UnityEvent onPlayerEscape = new UnityEvent();
     private int requiredGaugeCount = 1;
-    
     
     public enum AutoSetMode
     {
@@ -57,7 +87,8 @@ public class ExitDoorController : MonoBehaviour
     private int satisfiedGaugeCount = 0;
     private bool _isOpening = false;
     private bool _isOpen = false;
-    private bool _hasPlayerEscaped = false;
+    public bool IsOpen => _isOpen;
+    public bool _hasPlayerEscaped = false;
     private bool _isRegistrationFinalized = false;
     private bool _isWaitingForCameraView = false;
 
@@ -65,6 +96,7 @@ public class ExitDoorController : MonoBehaviour
     public int RegisteredGaugeCount => registeredGauges.Count;
     public int SatisfiedGaugeCount => satisfiedGaugeCount;
     public bool IsRegistrationFinalized => _isRegistrationFinalized;
+    public bool AreAllConditionsMet => _isRegistrationFinalized && satisfiedGaugeCount >= requiredGaugeCount;
 
     void Start()
     {
@@ -284,6 +316,19 @@ public class ExitDoorController : MonoBehaviour
     {
         satisfiedGaugeCount++;
         Debug.Log($"ExitDoorController: 게이지 조건 만족! ({satisfiedGaugeCount}/{requiredGaugeCount})");
+        
+        // 발전기 완료 이벤트 발행
+        bool allMet = satisfiedGaugeCount >= requiredGaugeCount;
+        GeneratorCompleteInfo info = new GeneratorCompleteInfo(
+            gauge, 
+            satisfiedGaugeCount, 
+            requiredGaugeCount, 
+            allMet
+        );
+        onGeneratorComplete.Invoke(info);
+        
+        Debug.Log($"ExitDoorController: 발전기 완료 이벤트 발행 - {gauge.gameObject.name} ({satisfiedGaugeCount}/{requiredGaugeCount}), 모든 조건 만족: {allMet}");
+        
         CheckAndOpenDoor();
     }
     
@@ -559,7 +604,7 @@ public class ExitDoorController : MonoBehaviour
         }
     }
     
-    private void OnPlayerEscape()
+    protected virtual void OnPlayerEscape()  // private -> protected virtual 로 변경
     {
         if (_hasPlayerEscaped)
             return;
