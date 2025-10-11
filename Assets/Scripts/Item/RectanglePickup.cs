@@ -6,7 +6,7 @@ public class RectanglePickup : MonoBehaviour, Item
 {
     [Header("Settings")]
     [SerializeField] private string playerTag = "Player";
-
+    
     private bool consumed = false;
 
     /// <summary>스포너/팩토리에서 주입</summary>
@@ -33,7 +33,17 @@ public class RectanglePickup : MonoBehaviour, Item
 
         // 핵심 기능
         Debug.Log("사각형 아이템 먹음");
-
+        //플래시라이트 업그레이드타입 가져와서 1레벨업
+        var flashlightUpgrade = FindFirstObjectByType<FlashlightUpgradeManager>();
+        if (flashlightUpgrade != null)
+        {
+            var defaultUpgradeType = flashlightUpgrade.CurrentUpgradeType;
+            flashlightUpgrade.LevelUp(1, defaultUpgradeType);
+        }
+        else
+        {
+            Debug.LogWarning("[RectanglePickup] FlashlightUpgradeManager를 찾을 수 없음");
+        }
         // PooledItem이 있으면 그것만 사용
         var pooled = GetComponent<PooledItem>();
         if (pooled != null)

@@ -10,6 +10,7 @@ TagManager:
   - Exit
   - EnemyAgwi
   - ElectricGenerator
+  - UpgradeItem
   layers:
   - Default
   - TransparentFX
