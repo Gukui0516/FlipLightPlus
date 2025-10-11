@@ -59,4 +59,7 @@ MonoBehaviour:
     poolCapacity: 5
     poolMaxSize: 10
     currentCount: 0
-  spawnDistance: 15
+  spawnDistance: 21
+  mapMin: {x: -50, y: -50}
+  mapMax: {x: 50, y: 50}
+  enableMapBoundary: 1
