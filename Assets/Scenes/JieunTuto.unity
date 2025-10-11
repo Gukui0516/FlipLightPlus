@@ -5439,10 +5439,10 @@ MonoBehaviour:
   stageScenes:
   - sceneAsset: {fileID: 102900000, guid: 3f4d6458e97aa4a4485dafc214d80840, type: 3}
     sceneName: StageScene1010
-  - sceneAsset: {fileID: 102900000, guid: 549aa18ba85300b4eae03fb07751c6df, type: 3}
-    sceneName: StageScene1010 1
-  - sceneAsset: {fileID: 102900000, guid: 7c361301de3fde64391769d6e1fd1387, type: 3}
-    sceneName: StageScene1010 2
+  - sceneAsset: {fileID: 102900000, guid: 681f987bdc6c5fd4f9a776d2519257ea, type: 3}
+    sceneName: StageScene1010 3
+  - sceneAsset: {fileID: 102900000, guid: ac3b5d860dbeacb4780a81e976db213d, type: 3}
+    sceneName: StageScene1010 4
   useSingleStageScene: 0
 --- !u!114 &1674293236
 MonoBehaviour:
