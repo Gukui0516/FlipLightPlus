@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 193208385590458606}
   - component: {fileID: 1099367698007672524}
   - component: {fileID: 1580301154169845225}
+  - component: {fileID: 8336617071572634731}
   m_Layer: 0
   m_Name: ElectricGenerator
   m_TagString: ElectricGenerator
@@ -159,10 +160,22 @@ MonoBehaviour:
   arrowImage: {fileID: 9158167715999842626}
   arrowImageChild: {fileID: 2715806891085312957}
   autoFindImage: 0
-  arrowOffset: {x: 0, y: 0, z: 0}
   rotationOffset: 0
   showDistance: 0
   distanceText: {fileID: 0}
+--- !u!114 &8336617071572634731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612252277312533543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0acf37bb83d69ef42a52475af5e67e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoldRotation
+  holdAngle: 0
 --- !u!1 &2719521534923071026
 GameObject:
   m_ObjectHideFlags: 0

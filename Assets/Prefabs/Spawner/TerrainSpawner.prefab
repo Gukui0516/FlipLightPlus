@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 158168834131612347}
+  - component: {fileID: 3781168845795697989}
   m_Layer: 0
   m_Name: TerrainSpawner
   m_TagString: Untagged
@@ -31,3 +32,44 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3781168845795697989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8787830186533157106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160f856e74f1c204c9e93a5d63adab26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TerrainSpawner
+  mapHorizontal: 200
+  mapVertical: 200
+  terrainHorizontal: 20
+  terrainVertical: 20
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 64
+  clearCircle: 20
+  terrains:
+  - terrain: {fileID: 7650040795020686179, guid: e62d8403da19b654692a8af954d58cf5, type: 3}
+    weight: 5
+  - terrain: {fileID: 3355904155802564442, guid: 6ef5317fe1e8b774e802dfa8de70e335, type: 3}
+    weight: 1
+  - terrain: {fileID: 8674744197215775423, guid: ff66a8fd8c7557d44953c49db569b3e1, type: 3}
+    weight: 1
+  - terrain: {fileID: 7892213755666081654, guid: 61427aa7518ca8e4597750c3fa605034, type: 3}
+    weight: 1
+  - terrain: {fileID: 418162146680270475, guid: c27449521e07fd74a982dda81758ce27, type: 3}
+    weight: 1
+  - terrain: {fileID: 703903773434251484, guid: 487785150e078e1499734f4c123b4888, type: 3}
+    weight: 1
+  - terrain: {fileID: 5707028068113462321, guid: 981bde25d01e8d5448ed7e7985bc6e1c, type: 3}
+    weight: 1
+  - terrain: {fileID: 3174951305101455042, guid: d4183fd1b6f51bd41a7a418553b5db14, type: 3}
+    weight: 1
+  - terrain: {fileID: 1714427131907334482, guid: 8ad628f40797ca442ab28d5973976f86, type: 3}
+    weight: 1
+  - terrain: {fileID: 500338914748388705, guid: dc43a49b6f95a8a41bb88c24a761fd9a, type: 3}
+    weight: 1
