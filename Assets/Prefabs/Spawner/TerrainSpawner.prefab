@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160f856e74f1c204c9e93a5d63adab26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainSpawner
+  generatorSpots: []
+  generatorObject: {fileID: 612252277312533543, guid: f1049a24c5799b8478842f2aab1ecc23, type: 3}
+  generatorName: EG.SpawnPoint
   mapHorizontal: 200
   mapVertical: 200
   terrainHorizontal: 20
@@ -51,7 +54,8 @@ MonoBehaviour:
   wallMask:
     serializedVersion: 2
     m_Bits: 64
-  clearCircle: 20
+  clearWall: 10
+  clearGenerator: 20
   terrains:
   - terrain: {fileID: 7650040795020686179, guid: e62d8403da19b654692a8af954d58cf5, type: 3}
     weight: 5

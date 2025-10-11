@@ -10,6 +10,10 @@ public class TerrainData
 
 public class TerrainSpawner : MonoBehaviour
 {
+    public List<Vector2> generatorSpots;//발전기 생성 위치
+    [SerializeField] GameObject generatorObject;
+    [SerializeField] int generatorNum=3;//생성할 발전기 개수
+    [SerializeField] string generatorName= "EG.SpawnPoint";//발전기 생성 위치
     [SerializeField] float mapHorizontal;//맵 최대길이
     [SerializeField] float mapVertical;
     float startHorizontal;//맵 초기위치(-,-)
@@ -17,7 +21,8 @@ public class TerrainSpawner : MonoBehaviour
     [SerializeField] float terrainHorizontal;//지형 간격
     [SerializeField] float terrainVertical;
     [SerializeField] LayerMask wallMask;
-    [SerializeField] float clearCircle = 10f;//중앙지점에서 벽 제거
+    [SerializeField] float clearWall = 10f;//중앙지점에서 벽 제거
+    [SerializeField] float clearGenerator = 20f;//중앙지점에서 발전기 제거
     [SerializeField] TerrainData[] terrains;
 
 
@@ -32,9 +37,10 @@ public class TerrainSpawner : MonoBehaviour
     }
     private void LateUpdate()
     {        
-        ClearWalls();//중앙으로부터 벽 제거
+        ClearCircles();//중앙으로부터 벽과 발전기 제거
+        SpawnGenerate();
         //생성 후 x축 반전 시 컬리이더는 기존걸로 남아있는 이슈가 있어서 여기서 처리함
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     void GeneratePositions()
     {
@@ -88,19 +94,43 @@ public class TerrainSpawner : MonoBehaviour
             float zRotation = (90 * Random.Range(0, 3));
             GameObject ter = Instantiate(terrain.terrain, new Vector2(spawnPos.x, spawnPos.y), Quaternion.Euler(0, 0, zRotation));
             if (Random.Range(0, 2) == 0) ter.transform.localScale = new Vector2(-1, 1);//반전 실행
-            
-            
-            Debug.Log("XLoc"+spawnPos.x+" YLoc"+spawnPos.y+" Name"+terrain.ToString());
+            foreach (Transform child in ter.transform)
+            {
+                if (child.name == generatorName)
+                {
+                    // 자식이 자기 위치를 TerrainSpawner 리스트에 추가
+                    generatorSpots.Add(child.position);
+                    Debug.Log($"GeneratorSpots 위치 등록: {child.position}");
+                }
+            }            
             positionsCopy.RemoveAt(index); // 이미 사용한 위치 제거
         }
     }
-    void ClearWalls()
+    void ClearCircles()
     {
-        Collider2D[] walls = (Physics2D.OverlapCircleAll(Vector2.zero, clearCircle, wallMask));
-        foreach (Collider2D wall in walls) 
+        Collider2D[] walls = (Physics2D.OverlapCircleAll(Vector2.zero, clearWall, wallMask));//범위 안 벽 제거
+        foreach (Collider2D hit in walls) 
         {
-            Destroy(wall.gameObject);
-        }            
+            Destroy(hit.gameObject);
+        }
+
+        Collider2D[] generators = (Physics2D.OverlapCircleAll(Vector2.zero, clearGenerator));//범위 안 발전기 제거
+        foreach (Collider2D hit in generators)
+        {
+            if (hit.gameObject.name == generatorName)
+            Destroy(hit.gameObject);
+        }
+        generatorSpots.RemoveAll(p => Vector2.Distance(p, Vector2.zero) <= clearGenerator);//리스트의 발전기 위치 제거
+    }
+    void SpawnGenerate()
+    {
+        while (generatorSpots.Count > 0&& generatorNum > 0)
+        {
+            int random=Random.Range(0, generatorSpots.Count);
+            Instantiate(generatorObject, generatorSpots[random],Quaternion.identity);
+            generatorNum--;
+            generatorSpots.RemoveAt(random);
+        }
     }
 }
 
