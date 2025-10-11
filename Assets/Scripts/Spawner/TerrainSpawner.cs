@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections.Generic;
 
 [System.Serializable]
@@ -25,7 +26,9 @@ public class TerrainSpawner : MonoBehaviour
     [SerializeField] float clearGenerator = 20f;//중앙지점에서 발전기 제거
     [SerializeField] TerrainData[] terrains;
 
-
+    // 스폰 완료 이벤트
+    [Header("Events")]
+    public UnityEvent OnSpawnComplete;
     private List<Vector2> availablePositions = new List<Vector2>();//지형 생성 가능 좌표
 
 
@@ -34,12 +37,23 @@ public class TerrainSpawner : MonoBehaviour
         GeneratePositions();//최대 맵 길이에서 생성 가능 좌표 계산
         SpawnTerrains();//지형 생성
 
+        //LateUpdate에서 옮김
+        ClearCircles(); //중앙으로부터 벽과 발전기 제거
+        SpawnGenerate();
+
+        //생성 후 x축 반전 시 컬리이더는 기존걸로 남아있는 이슈가 있어서 여기서 처리함
+        //gameObject.SetActive(false);
+
+    }
+    private void Start()
+    {
+        OnSpawnComplete?.Invoke();
     }
     private void LateUpdate()
     {        
-        ClearCircles();//중앙으로부터 벽과 발전기 제거
-        SpawnGenerate();
-        //생성 후 x축 반전 시 컬리이더는 기존걸로 남아있는 이슈가 있어서 여기서 처리함
+        // ClearCircles();//중앙으로부터 벽과 발전기 제거
+        // SpawnGenerate();
+        // //생성 후 x축 반전 시 컬리이더는 기존걸로 남아있는 이슈가 있어서 여기서 처리함
         gameObject.SetActive(false);
     }
     void GeneratePositions()
@@ -93,7 +107,7 @@ public class TerrainSpawner : MonoBehaviour
             TerrainData terrain = GetRandomTerrain();
             float zRotation = (90 * Random.Range(0, 3));
             GameObject ter = Instantiate(terrain.terrain, new Vector2(spawnPos.x, spawnPos.y), Quaternion.Euler(0, 0, zRotation));
-            if (Random.Range(0, 2) == 0) ter.transform.localScale = new Vector2(-1, 1);//반전 실행
+            //if (Random.Range(0, 2) == 0) ter.transform.localScale = new Vector2(-1, 1);//반전 실행
             foreach (Transform child in ter.transform)
             {
                 if (child.name == generatorName)

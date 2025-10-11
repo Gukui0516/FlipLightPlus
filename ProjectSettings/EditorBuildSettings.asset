@@ -18,17 +18,26 @@ EditorBuildSettings:
     path: Assets/Scenes/Juyoung.unity
     guid: 8023b9c59f075bb4c9b97c255a64a2cb
   - enabled: 1
+    path: Assets/Scenes/JieunTuto.unity
+    guid: 967691f68f4029346aadb2fd9037f4cb
+  - enabled: 0
     path: Assets/Scenes/BuildScene/StartScene 1010.unity
     guid: f04477d0022cb6142a6fe7bc4262f5e9
   - enabled: 1
     path: Assets/Scenes/BuildScene/StageScene1010.unity
     guid: 3f4d6458e97aa4a4485dafc214d80840
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BuildScene/StageScene1010 1.unity
     guid: 549aa18ba85300b4eae03fb07751c6df
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BuildScene/StageScene1010 2.unity
     guid: 7c361301de3fde64391769d6e1fd1387
+  - enabled: 1
+    path: Assets/Scenes/BuildScene/StageScene1010 3.unity
+    guid: 681f987bdc6c5fd4f9a776d2519257ea
+  - enabled: 1
+    path: Assets/Scenes/BuildScene/StageScene1010 4.unity
+    guid: ac3b5d860dbeacb4780a81e976db213d
   - enabled: 1
     path: Assets/Scenes/BuildScene/EndScene.unity
     guid: 03d025b569c40124a8936bb2858fccae
