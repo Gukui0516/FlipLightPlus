@@ -10,12 +10,20 @@ public class GeneratorManager : MonoBehaviour
 {
     private List<LightGaugeSystem> allGauges = new List<LightGaugeSystem>();
     private bool isInitialized = false;
+    private ExitDoorController exitDoorController;
     
     [Header("초기화 설정")]
     [SerializeField] private float initializeDelay = 0.6f;
     
     void Start()
     {
+        // ExitDoorController 참조 가져오기
+        exitDoorController = GetComponent<ExitDoorController>();
+        if (exitDoorController == null)
+        {
+            Debug.LogWarning("GeneratorManager: 같은 오브젝트에 ExitDoorController가 없습니다. 일부 기능이 제한될 수 있습니다.");
+        }
+        
         Invoke(nameof(Initialize), initializeDelay);
     }
     
@@ -72,6 +80,17 @@ public class GeneratorManager : MonoBehaviour
         }
         
         return nearest;
+    }
+    
+    /// <summary>
+    /// ExitDoorController의 조건을 기준으로 모든 조건이 만족되었는지 확인
+    /// </summary>
+    public bool AreAllConditionsMet()
+    {
+        if (exitDoorController == null)
+            return false;
+        
+        return exitDoorController.AreAllConditionsMet;
     }
     
     public bool IsInitialized => isInitialized;

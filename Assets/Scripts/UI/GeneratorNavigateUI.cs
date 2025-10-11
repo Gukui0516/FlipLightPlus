@@ -124,6 +124,17 @@ public class GeneratorNavigateUI : MonoBehaviour
     
     void Update()
     {
+        // 모든 조건이 만족되었으면 화살표 비활성화
+        if (generatorManager != null && generatorManager.AreAllConditionsMet())
+        {
+            if (arrowImage != null && arrowImage.enabled)
+            {
+                SetArrowActive(false);
+                Debug.Log($"GeneratorNavigate ({gameObject.name}): 모든 조건 만족! 화살표 숨김");
+            }
+            return;
+        }
+        
         // 자신의 게이지가 100%이고 타겟이 있을 때만 화살표 표시
         if (isMyGaugeComplete && targetGauge != null)
         {
@@ -158,6 +169,15 @@ public class GeneratorNavigateUI : MonoBehaviour
         {
             targetGauge = null;
             SetArrowActive(false);
+            return;
+        }
+        
+        // 모든 조건이 만족되었으면 타겟을 찾지 않고 화살표 비활성화
+        if (generatorManager.AreAllConditionsMet())
+        {
+            targetGauge = null;
+            SetArrowActive(false);
+            Debug.Log($"GeneratorNavigate ({gameObject.name}): 모든 조건 만족! 화살표 비활성화");
             return;
         }
         

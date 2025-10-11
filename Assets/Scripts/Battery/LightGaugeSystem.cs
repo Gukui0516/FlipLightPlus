@@ -168,7 +168,7 @@ public class LightGaugeSystem : MonoBehaviour
             GaugeThreshold threshold = thresholds[i];
             
             // 이전엔 방지턱 이상이었고, 지금은 방지턱 아래로 떨어진 경우
-            if (previousPercent >= threshold.thresholdPercent && newPercent < threshold.thresholdPercent)  // 여기 수정!
+            if (previousPercent >= threshold.thresholdPercent && newPercent < threshold.thresholdPercent)
             {
                 // 방지턱에 정확히 고정
                 currentGauge = (threshold.thresholdPercent / 100f) * maxGauge;
@@ -188,7 +188,7 @@ public class LightGaugeSystem : MonoBehaviour
         // 조건: 설정한 퍼센트 이상 도달
         isConditionMet = currentPercent >= conditionThreshold;
         
-        // 처음으로 조건을 만족했을 때 이벤트 발생
+        // 처음으로 조건를 만족했을 때 이벤트 발생
         if (!wasMet && isConditionMet)
         {
             onConditionMet.Invoke();

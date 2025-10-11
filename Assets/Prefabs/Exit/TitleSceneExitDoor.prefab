@@ -40,11 +40,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2265378896982494078}
-  - component: {fileID: 4167394994580402309}
   - component: {fileID: 1570162665025389006}
   - component: {fileID: 2104609643461425483}
+  - component: {fileID: 7825876547793591867}
   m_Layer: 0
-  m_Name: Exit
+  m_Name: TitleSceneExitDoor
   m_TagString: Exit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,39 +70,6 @@ Transform:
   - {fileID: 8352103014440275892}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4167394994580402309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1548326965764086693}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02f816434917bdd45b046cceed3d2b7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExitDoorController
-  _leftDoorRotatePoint: {fileID: 4031588161089166606}
-  _rightDoorRotatePoint: {fileID: 8720539080839440877}
-  _openAngle: 180
-  _openTime: 1.5
-  mainCamera: {fileID: 0}
-  doorCheckPoint: {fileID: 8352103014440275892}
-  viewportCheckInterval: 0.2
-  autoSetRequiredCount: 1
-  autoMode: 1
-  manualRequiredGaugeCount: 1
-  openEffectGameObject: {fileID: 6260644347143209681}
-  onGeneratorComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlayerEscape:
-    m_PersistentCalls:
-      m_Calls: []
-  exitTriggerCollider: {fileID: 1570162665025389006}
-  playerTag: Player
-  autoFinalizeDelay: 0.5
-  _hasPlayerEscaped: 0
 --- !u!61 &1570162665025389006
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -162,6 +129,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GeneratorManager
   initializeDelay: 0.6
+--- !u!114 &7825876547793591867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548326965764086693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ce502d146688a4ba51e9530323a00e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TitleSceneExitDoor
+  _leftDoorRotatePoint: {fileID: 4031588161089166606}
+  _rightDoorRotatePoint: {fileID: 8720539080839440877}
+  _openAngle: 90
+  _openTime: 1.5
+  mainCamera: {fileID: 0}
+  doorCheckPoint: {fileID: 8352103014440275892}
+  viewportCheckInterval: 0.2
+  autoSetRequiredCount: 1
+  autoMode: 0
+  manualRequiredGaugeCount: 1
+  openEffectGameObject: {fileID: 418640948554206113}
+  onGeneratorComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerEscape:
+    m_PersistentCalls:
+      m_Calls: []
+  exitTriggerCollider: {fileID: 1570162665025389006}
+  playerTag: Player
+  autoFinalizeDelay: 0.5
+  _hasPlayerEscaped: 0
+  showDebugLogs: 1
 --- !u!1 &2534656072328783082
 GameObject:
   m_ObjectHideFlags: 0
