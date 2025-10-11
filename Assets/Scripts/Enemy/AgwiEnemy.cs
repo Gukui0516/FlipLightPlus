@@ -1,13 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 
-/// <summary>
-/// Agwi 타입 적 - 플레이어 감지 시 깨어나서 돌진 후 죽음
-/// </summary>
-enum state
-{
-    Sleep, Wake, Rush
-}
+enum state { Sleep, Wake, Rush }
+
 public class AgwiEnemy : BaseEnemy
 {
     private state currentState = state.Sleep;
@@ -17,14 +12,17 @@ public class AgwiEnemy : BaseEnemy
     [SerializeField] private Transform eyebrows;
     [SerializeField] private GameObject wakeNotice;
     [SerializeField] private float eyebrowMaxSize;
-    [SerializeField] private float wakeDelayMax = 1f; //돌진 전 대기 시간
-    [SerializeField] private float rushDuration = 3f; //돌진 지속 시간 (이 시간 후 죽음)
+    [SerializeField] private float wakeDelayMax = 1f;   // 돌진 전 대기
+    [SerializeField] private float rushDuration = 3f;   // 돌진 지속 후 사망
     [SerializeField] private float wakeSpeed = 0.4f;
     [SerializeField] private float sleepSpeed = 0.2f;
 
     private float wakeDelay = 0f;
     private float rushTimer = 0f;
     private float timeInLight = 0f;
+
+    // ★ 아귀는 NavMesh 이동을 사용하지 않는다. (BaseEnemy.FixedUpdate 분기 제어)
+    protected override bool UseNavMeshMovement => false;
 
     protected override void Awake()
     {
@@ -34,7 +32,7 @@ public class AgwiEnemy : BaseEnemy
 
     protected override void InitializeEnemy()
     {
-        // Visibility 모듈 초기화
+        // Visibility 초기화
         if (visibilityModule != null)
         {
             visibilityModule.Initialize(EnemyType.Agwi);
@@ -47,16 +45,23 @@ public class AgwiEnemy : BaseEnemy
         timeInLight = 0f;
         isInLight = false;
 
-        // 눈썹 초기화
+        // 눈썹/알림 초기화
         if (eyebrows != null)
         {
             eyebrows.localScale = new Vector2(eyebrowMaxSize, eyebrows.localScale.y);
         }
-
-        // 알림 오브젝트 초기화
         if (wakeNotice != null)
         {
             wakeNotice.SetActive(true);
+        }
+
+        // ★ NavMeshAgent는 “달고만” 있고, 실제 이동엔 관여하지 않도록 완전 정지
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            // 굳이 비활성까지는 필요 없지만, 확실하게 차단하고 싶다면 주석 해제
+            // agent.enabled = false;
         }
     }
 
@@ -64,7 +69,6 @@ public class AgwiEnemy : BaseEnemy
     {
         base.Update();
 
-        // 죽었거나 플레이어가 없으면 실행 안 함
         if (isDead || player == null) return;
 
         switch (currentState)
@@ -72,11 +76,9 @@ public class AgwiEnemy : BaseEnemy
             case state.Sleep:
                 HandleSleepState();
                 break;
-
             case state.Wake:
                 HandleWakeState();
                 break;
-
             case state.Rush:
                 HandleRushState();
                 break;
@@ -85,10 +87,9 @@ public class AgwiEnemy : BaseEnemy
 
     private void HandleSleepState()
     {
-        // 감지거리 안이거나 손전등에 비춰지면
+        // 감지거리 안이거나 손전등에 비춰지면 눈 뜨기
         if (Vector2.Distance(transform.position, player.transform.position) <= detectionRange || isInLight)
         {
-            // 눈 뜨기
             eyebrows.localScale = new Vector2(
                 eyebrows.localScale.x - wakeSpeed * Time.deltaTime,
                 eyebrows.localScale.y
@@ -96,13 +97,13 @@ public class AgwiEnemy : BaseEnemy
 
             if (eyebrows.localScale.x <= 0)
             {
-                wakeNotice.SetActive(false);
+                if (wakeNotice) wakeNotice.SetActive(false);
                 currentState = state.Wake;
             }
         }
         else
         {
-            // 눈 감기
+            // 다시 감기
             eyebrows.localScale = new Vector2(
                 eyebrows.localScale.x + sleepSpeed * Time.deltaTime,
                 eyebrows.localScale.y
@@ -121,8 +122,19 @@ public class AgwiEnemy : BaseEnemy
 
         if (wakeDelay >= wakeDelayMax)
         {
+            // 돌진 시작: 이 시점의 바라보는 방향을 ‘고정’하고 전진만 한다.
             currentState = state.Rush;
             rushTimer = 0f;
+
+            // 회전 고정
+            rb.freezeRotation = true;
+
+            // 혹시 NavMeshAgent가 켜져 있다면 다시 한번 확실히 정지
+            if (agent != null)
+            {
+                agent.isStopped = true;
+                agent.ResetPath();
+            }
         }
     }
 
@@ -130,7 +142,6 @@ public class AgwiEnemy : BaseEnemy
     {
         rushTimer += Time.deltaTime;
 
-        // 돌진 시간이 끝나면 죽음 (한 번만 실행)
         if (rushTimer >= rushDuration && !isDead)
         {
             base.Die();
@@ -139,9 +150,9 @@ public class AgwiEnemy : BaseEnemy
 
     protected override bool ShouldMove()
     {
+        // 돌진 중에만 이동
         if (currentState == state.Rush)
         {
-            rb.freezeRotation = true;
             return true;
         }
         return false;
@@ -149,15 +160,13 @@ public class AgwiEnemy : BaseEnemy
 
     protected override bool ShouldRotate()
     {
-        if (currentState == state.Rush)
-        {
-            return false;
-        }
-        return true;
+        // 돌진 시작 이후에는 더 이상 회전하지 않음 → 방향 고정
+        return currentState != state.Rush;
     }
 
     protected override bool IsStoppedByInversion()
     {
+        // 아귀는 반전에도 멈추지 않음
         return false;
     }
 
@@ -165,5 +174,4 @@ public class AgwiEnemy : BaseEnemy
     {
         return speed;
     }
-
 }

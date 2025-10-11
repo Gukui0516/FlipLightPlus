@@ -83,6 +83,7 @@ GameObject:
   - component: {fileID: 2530673690263635235}
   - component: {fileID: 8505478348503281568}
   - component: {fileID: 5101757877946332033}
+  - component: {fileID: 2258201335847887755}
   m_Layer: 7
   m_Name: AgwiEnemy
   m_TagString: EnemyAgwi
@@ -265,6 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e2a205903535445869ecf25fccc7c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arriveEpsilon: 0.1
 --- !u!114 &2653086107433009462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,6 +333,28 @@ MonoBehaviour:
   manualRadius: 0.5
   circleSegments: 64
   showOutline: 1
+--- !u!195 &2258201335847887755
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3217619446867333131}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &4058312700368719732
 GameObject:
   m_ObjectHideFlags: 0
