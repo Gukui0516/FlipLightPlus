@@ -321,6 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arriveEpsilon: 0.1
+  decelerationDistance: 0.5
 --- !u!114 &2653086107433009462
 MonoBehaviour:
   m_ObjectHideFlags: 0
