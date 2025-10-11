@@ -360572,8 +360572,52 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: enableMapBoundary
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: defaultPoolCapacity
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].itemName
+      value: InvertItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].maxCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].itemPrefab
+      value: 
+      objectReference: {fileID: 9089351352867651415, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].poolMaxSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].poolCapacity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].spawnInterval
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].despawnDistance
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].initialSpawnDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[0].optionalMaxLifetime
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7253639895416209845, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: m_LocalPosition.x
