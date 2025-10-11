@@ -446,10 +446,57 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5886815308704194425, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2413107154882303897}
+    - targetCorrespondingSourceObject: {fileID: 5886815308704194425, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6215951281303254063}
   m_SourcePrefab: {fileID: 100100000, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
 --- !u!4 &3576681516255151700 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 826759626425491300, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
   m_PrefabInstance: {fileID: 4241213943732885808}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7739993175825368649 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5886815308704194425, guid: 60c248266f1463d47a151ac60694c1e4, type: 3}
+  m_PrefabInstance: {fileID: 4241213943732885808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2413107154882303897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7739993175825368649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0c0e6703027044896ae4019440dbc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightUpgradeManager
+  upgradeData: {fileID: 11400000, guid: db93fc5f509c8114b996e56f3e038a02, type: 2}
+  currentLevel: 1
+  currentUpgradeType: 2
+  temporaryUpgradeDuration: 10
+--- !u!114 &6215951281303254063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7739993175825368649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1863e5b92f9f974b8eea736298b7cfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightUpgradeTest
+  enableTest: 1
+  levelUpKey: 49
+  bigLevelUpKey: 50
+  resetKey: 51
+  temporaryUpgradeKey: 116
+  resetPermanentKey: 112
+  defaultUpgradeType: 1
+  temporaryDuration: 5

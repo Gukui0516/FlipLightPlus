@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7552620102583738000}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4909,14 +4909,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6367730071362866807}
   - component: {fileID: 4723214170803366882}
-  - component: {fileID: 3307405310638730214}
-  - component: {fileID: 782457349119262492}
-  - component: {fileID: 5595022254970163509}
+  - component: {fileID: 7322372237701283458}
+  - component: {fileID: 8014425471958398561}
   - component: {fileID: 3868460695291239543}
   - component: {fileID: 3321887829468712705}
   - component: {fileID: 4844173768882513995}
   m_Layer: 0
-  m_Name: Item
+  m_Name: SquareItem
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4931,7 +4930,7 @@ Transform:
   m_GameObject: {fileID: 9089351352867651415}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.1078444, y: 1.9510294, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4985,7 +4984,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 20
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 600386f8ddca88d43b5baf8fb6d93fcd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4996,7 +4995,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3307405310638730214
+--- !u!114 &7322372237701283458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5005,38 +5004,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 9089351352867651415}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab09cc0854551547b87ce01ed830ded, type: 3}
+  m_Script: {fileID: 11500000, guid: 3773298831730a649b05862d11c12fb0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  lineSprite: {fileID: 0}
-  color: {r: 1, g: 1, b: 1, a: 1}
-  invertedColor: {r: 0, g: 0, b: 0, a: 1}
-  sortingLayerName: Default
-  orderInLayer: 20
-  intervalSeconds: 0.5
-  growDuration: 0.1
-  holdDuration: 0
-  fadeDuration: 0.1
-  travelDuration: 2
-  travelSpeed: 10
-  lengthRange: {x: 3, y: 5}
-  thickness: 0.01
---- !u!114 &782457349119262492
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9089351352867651415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ec362d3c1c6c0e499d4b4ff4edb3ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InvertPickup
-  invertDuration: 5
+  m_EditorClassIdentifier: Assembly-CSharp::RectanglePickup
   playerTag: Player
-  world: {fileID: 0}
---- !u!114 &5595022254970163509
+--- !u!114 &8014425471958398561
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5114,7 +5086,7 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.28866667}
+    pivot: {x: 0, y: 0.5}
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5

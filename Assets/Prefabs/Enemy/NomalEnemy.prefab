@@ -280,7 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf472638747879744a36231888bdd98d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
+  speed: 6
   stoppingDistance: 0
   worldStateManager: {fileID: 0}
 --- !u!114 &5965394269043838820

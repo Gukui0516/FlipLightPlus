@@ -15,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
         public GameObject enemyPrefab;
 
         [Header("Spawn Settings")]
+        public float initialSpawnDelay = 2f;  // ⭐ 첫 스폰 대기 시간
         public float spawnInterval = 2f;
         public int maxCount = 5;
 
@@ -154,7 +155,9 @@ public class EnemySpawner : MonoBehaviour
             if (enemyData.maxCount > 0 && enemyData.spawnCoroutine == null)
             {
                 enemyData.spawnCoroutine = StartCoroutine(SpawnCoroutine(enemyData));
-                Debug.Log($"[EnemySpawner] Started spawner for {enemyData.enemyName} (maxCount: {enemyData.maxCount}, interval: {enemyData.spawnInterval}s)");
+                Debug.Log($"[EnemySpawner] Started spawner for {enemyData.enemyName} " +
+                         $"(initial delay: {enemyData.initialSpawnDelay}s, " +
+                         $"interval: {enemyData.spawnInterval}s, maxCount: {enemyData.maxCount})");
             }
         }
 
@@ -175,6 +178,21 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnCoroutine(EnemySpawnData data)
     {
+        // ⭐ 첫 스폰은 초기 대기 시간 후
+        yield return new WaitForSeconds(data.initialSpawnDelay);
+
+        // 첫 스폰 시도
+        if (data.currentCount < data.maxCount)
+        {
+            Vector2 spawnPosition = GetRandomSpawnPosition();
+
+            if (IsOutsideCameraView(spawnPosition) && IsInsideMapBoundary(spawnPosition))
+            {
+                SpawnEnemy(data, spawnPosition);
+            }
+        }
+
+        // ⭐ 이후부터는 인터벌마다 스폰
         while (true)
         {
             yield return new WaitForSeconds(data.spawnInterval);
@@ -269,7 +287,8 @@ public class EnemySpawner : MonoBehaviour
         foreach (var data in enemyTypes)
         {
             Debug.Log($"{data.enemyName}: {data.currentCount}/{data.maxCount} active " +
-                      $"(Interval: {data.spawnInterval}s, Pool: {data.poolCapacity}/{data.poolMaxSize})");
+                      $"(Initial Delay: {data.initialSpawnDelay}s, Interval: {data.spawnInterval}s, " +
+                      $"Pool: {data.poolCapacity}/{data.poolMaxSize})");
         }
         Debug.Log($"Total Active: {totalEnemyCount}");
     }
