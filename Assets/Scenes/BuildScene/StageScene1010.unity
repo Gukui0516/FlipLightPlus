@@ -1180,6 +1180,10 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 8051945463643320430, guid: 1edb9204235490740b45fae7bddae89e, type: 3}
+      propertyPath: uiToMove
+      value: 
+      objectReference: {fileID: 752481317}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
