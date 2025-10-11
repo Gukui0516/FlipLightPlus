@@ -359856,42 +359856,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7739993175825368649, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
   m_PrefabInstance: {fileID: 425118329815727502}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1167160294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1167160287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc0c0e6703027044896ae4019440dbc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlashlightUpgradeManager
-  upgradeData: {fileID: 11400000, guid: db93fc5f509c8114b996e56f3e038a02, type: 2}
-  currentLevel: 1
-  currentUpgradeType: 2
-  temporaryUpgradeDuration: 10
---- !u!114 &1167160295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1167160287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1863e5b92f9f974b8eea736298b7cfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlashlightUpgradeTest
-  enableTest: 1
-  levelUpKey: 49
-  bigLevelUpKey: 50
-  resetKey: 51
-  temporaryUpgradeKey: 116
-  resetPermanentKey: 112
-  defaultUpgradeType: 1
-  temporaryDuration: 5
 --- !u!1 &1168156463
 GameObject:
   m_ObjectHideFlags: 0
@@ -360519,16 +360483,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerRB
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6215951281303254063, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7739993175825368649, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1167160294}
-    - targetCorrespondingSourceObject: {fileID: 7739993175825368649, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1167160295}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
 --- !u!1001 &1604060067232421077
 PrefabInstance:
