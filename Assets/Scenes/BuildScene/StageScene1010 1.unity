@@ -777,6 +777,7 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
+  itemDistance: 10
 --- !u!4 &410148639
 Transform:
   m_ObjectHideFlags: 0
@@ -1239,6 +1240,10 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 8051945463643320430, guid: 1edb9204235490740b45fae7bddae89e, type: 3}
+      propertyPath: uiToMove
+      value: 
+      objectReference: {fileID: 1010742258}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
