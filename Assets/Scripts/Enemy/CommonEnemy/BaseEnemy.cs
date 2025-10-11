@@ -1,8 +1,12 @@
+// C:/Users/jungle/Documents/GitHub/W5PlusTeam1/Assets/Scripts\Enemy\CommonEnemy\BaseEnemy.cs
+
 using UnityEngine;
+using UnityEngine.AI; // NavMeshAgent를 사용하기 위해 추가
 
 /// <summary>
 /// 모든 적의 기본 클래스 - 공통 기능 제공
 /// </summary>
+[RequireComponent(typeof(Rigidbody2D))] // NavMeshAgent를 사용하더라도 Rigidbody는 있는 것이 좋음
 public abstract class BaseEnemy : MonoBehaviour
 {
     #region Protected Variables
@@ -26,6 +30,7 @@ public abstract class BaseEnemy : MonoBehaviour
     protected EnemyDespawn despawnModule;
     protected EnemyDieAnimation dieAnimationModule;
     protected Rigidbody2D rb;
+    protected NavMeshAgent agent; // NavMeshAgent 참조 추가
 
     #endregion
 
@@ -46,6 +51,14 @@ public abstract class BaseEnemy : MonoBehaviour
         despawnModule = GetComponent<EnemyDespawn>();
         dieAnimationModule = GetComponent<EnemyDieAnimation>();
         rb = GetComponent<Rigidbody2D>();
+
+        // NavMeshAgent 컴포넌트 가져오기 및 2D 환경 설정
+        agent = GetComponent<NavMeshAgent>();
+        if (agent != null)
+        {
+            agent.updateRotation = false; // 회전은 EnemyRotation.cs에서 처리
+            agent.updateUpAxis = false;   // 2D 환경에서는 Z축 사용 안 함
+        }
     }
 
     protected virtual void OnEnable()
@@ -53,29 +66,47 @@ public abstract class BaseEnemy : MonoBehaviour
         isDead = false;
         InitializeEnemy();
 
-        // 죽음 애니메이션 모듈 초기화
         if (dieAnimationModule != null)
         {
             dieAnimationModule.ResetAnimation();
-            dieAnimationModule.onDeathAnimationComplete -= OnDeathComplete; // 중복 방지
+            dieAnimationModule.onDeathAnimationComplete -= OnDeathComplete;
             dieAnimationModule.onDeathAnimationComplete += OnDeathComplete;
+        }
+
+        // NavMeshAgent 활성화 시 위치 동기화
+        if (agent != null && !agent.isOnNavMesh)
+        {
+            // 위치가 유효한지 확인 후 워프
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
+            {
+                agent.Warp(hit.position);
+                agent.enabled = true;
+            }
+        }
+        else if(agent != null)
+        {
+            agent.enabled = true;
         }
     }
 
     protected virtual void OnDisable()
     {
-        // 이벤트 구독 해제
         if (dieAnimationModule != null)
         {
             dieAnimationModule.onDeathAnimationComplete -= OnDeathComplete;
+        }
+        // NavMeshAgent 비활성화
+        if (agent != null && agent.isActiveAndEnabled)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            agent.enabled = false;
         }
     }
 
     protected virtual void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        // 이벤트 구독
         if (worldStateManager != null)
         {
             worldStateManager.onIsInvertedChanged.AddListener(OnInversionChanged);
@@ -85,12 +116,10 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        // 이벤트 구독 해제
         if (worldStateManager != null)
         {
             worldStateManager.onIsInvertedChanged.RemoveListener(OnInversionChanged);
         }
-
         if (dieAnimationModule != null)
         {
             dieAnimationModule.onDeathAnimationComplete -= OnDeathComplete;
@@ -101,50 +130,88 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         if (isDead) return;
 
-        // Despawn 체크
         if (despawnModule != null)
         {
             despawnModule.CheckDespawn(player);
         }
-
-        // Visibility 업데이트
         if (visibilityModule != null)
         {
             visibilityModule.UpdateVisibility(player, isInLight, isInverted);
         }
-
-        // 회전
         if (rotationModule != null && player != null && ShouldRotate())
         {
             rotationModule.RotateTowardsPlayer(player);
         }
     }
 
-    // 물리 기반 이동은 FixedUpdate로 분리
+    protected virtual bool UseNavMeshMovement => true;
+
     protected virtual void FixedUpdate()
     {
         if (isDead)
         {
-            // 죽었으면 정지
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector2.zero;
-            }
+            movementModule?.StopImmediate();
             return;
         }
 
-        // 반전시 정지 여부 확인
+        // 월드 인버전 등으로 정지해야 한다면 즉시 제동
         if (IsStoppedByInversion())
         {
-            // 반전 시 멈춤
+            movementModule?.StopImmediate();
+            return;
+        }
+
+        if (ShouldMove())
+        {
+            if (movementModule != null)
+            {
+                if (UseNavMeshMovement)
+                    movementModule.MoveTowardsPlayer(player, GetCurrentSpeed(), stoppingDistance);
+                else
+                    movementModule.MoveForwardRB(GetCurrentSpeed());
+            }
+        }
+        else
+        {
+            // 손전등 조건 등으로 '멈춤' 판정일 때도 관성 없이 즉시 정지
+            movementModule?.StopImmediate();
+        }
+    }
+
+    /// <summary>
+    /// NavMeshAgent를 사용한 이동 처리
+    /// </summary>
+    private void HandleNavMeshMovement()
+    {
+        if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
+
+        if (ShouldMove() && player != null)
+        {
+            agent.isStopped = false;
+            agent.speed = GetCurrentSpeed();
+            agent.stoppingDistance = stoppingDistance;
+            agent.SetDestination(player.position);
+        }
+        else
+        {
+            agent.isStopped = true;
+            // 멈출 때 관성을 없애기 위해 속도를 직접 0으로 설정
+            if (agent.hasPath)
+            {
+                agent.ResetPath();
+            }
             if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
             }
-            return;
         }
+    }
 
-        // 이동
+    /// <summary>
+    /// 기존 Rigidbody를 사용한 이동 처리 (AgwiEnemy 등)
+    /// </summary>
+    private void HandleRigidbodyMovement()
+    {
         if (ShouldMove())
         {
             if (movementModule != null)
@@ -154,7 +221,6 @@ public abstract class BaseEnemy : MonoBehaviour
         }
         else
         {
-            // 이동하지 않을 때 멈춤
             if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
@@ -164,49 +230,27 @@ public abstract class BaseEnemy : MonoBehaviour
 
     #endregion
 
-    #region Abstract Methods
+    #region Abstract & Virtual Methods
 
-    /// <summary>
-    /// 적이 움직여야 하는지 판단 (각 타입마다 다른 로직)
-    /// </summary>
     protected abstract bool ShouldMove();
-
-    /// <summary>
-    /// 적이 회전해야 하는지 판단 (각 타입마다 다른 로직)
-    /// </summary>
     protected abstract bool ShouldRotate();
-
-    /// <summary>
-    /// 현재 속도 반환 (LightSeeker는 가변 속도)
-    /// </summary>
     protected abstract float GetCurrentSpeed();
-
-    /// <summary>
-    /// 적 초기화 (타입별 초기화 로직)
-    /// </summary>
     protected abstract void InitializeEnemy();
 
-    #endregion
-
-    #region Virtual Methods
-
     /// <summary>
-    /// 반전 상태일 때 멈춰야 하는지 (LightSeeker는 override)
+    /// 이 적이 NavMeshAgent를 사용하는지 여부를 반환. (AgwiEnemy처럼 사용하지 않는 경우 false를 반환하도록 오버라이드)
     /// </summary>
+    protected virtual bool UsesNavMesh() => true;
+
     protected virtual bool IsStoppedByInversion()
     {
         return worldStateManager != null && worldStateManager.IsInverted;
     }
 
-    /// <summary>
-    /// 반전 상태 변경 이벤트 처리
-    /// </summary>
     protected virtual void OnInversionChanged(bool inverted)
     {
         isInverted = inverted;
         Debug.Log($"{gameObject.name} 반전 상태: {inverted}");
-
-        // Visibility 즉시 업데이트
         if (visibilityModule != null && player != null)
         {
             visibilityModule.UpdateVisibility(player, isInLight, isInverted);
@@ -216,7 +260,8 @@ public abstract class BaseEnemy : MonoBehaviour
     #endregion
 
     #region Flashlight Events
-
+    
+    // ... (OnTriggerEnter2D, OnTriggerExit2D, OnEnterLight, OnExitLight) 기존 코드 유지 ...
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (isDead) return;
@@ -224,15 +269,11 @@ public abstract class BaseEnemy : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Flashlight"))
         {
             isInLight = true;
-            //            Debug.Log($"{gameObject.name} 손전등 진입!");
-
-            // 반전 상태에서 손전등 맞으면 모두 죽음
             if (isInverted)
             {
                 Die();
                 return;
             }
-
             OnEnterLight();
         }
     }
@@ -244,11 +285,7 @@ public abstract class BaseEnemy : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Flashlight"))
         {
             isInLight = false;
-            //            Debug.Log($"{gameObject.name} 손전등 벗어남!");
-
             OnExitLight();
-
-            // Visibility 업데이트
             if (visibilityModule != null)
             {
                 visibilityModule.UpdateVisibility(player, isInLight, isInverted);
@@ -256,14 +293,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 손전등 진입 시 추가 처리 (타입별로 override)
-    /// </summary>
     protected virtual void OnEnterLight() { }
-
-    /// <summary>
-    /// 손전등 벗어남 시 추가 처리 (타입별로 override)
-    /// </summary>
     protected virtual void OnExitLight() { }
 
     #endregion
@@ -275,25 +305,19 @@ public abstract class BaseEnemy : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        // 죽음 애니메이션 모듈을 통해 애니메이션 재생
         if (dieAnimationModule != null)
         {
             dieAnimationModule.PlayDeathAnimation();
         }
         else
         {
-            // 모듈이 없으면 바로 풀에 반환
             Debug.LogWarning($"{gameObject.name}: EnemyDieAnimation 모듈이 없습니다!");
             OnDeathComplete();
         }
     }
 
-    /// <summary>
-    /// 죽음 애니메이션 완료 후 호출됨
-    /// </summary>
     private void OnDeathComplete()
     {
-        // 풀에 반환
         EnemySpawner.Instance?.ReturnEnemy(gameObject);
     }
 
