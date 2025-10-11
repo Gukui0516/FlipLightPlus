@@ -360405,7 +360405,7 @@ PrefabInstance:
     - target: {fileID: 4076102999245697277, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       propertyPath: movementSettings
       value: 
-      objectReference: {fileID: 11400000, guid: 90101755c79e41a42a3d67504f75b198, type: 2}
+      objectReference: {fileID: 11400000, guid: 7c21b4e85e8f2a54e8e435436c518367, type: 2}
     - target: {fileID: 4076102999245697277, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       propertyPath: knockbackCurve.m_Curve.Array.data[1].inSlope
       value: -2.5142846
@@ -360556,32 +360556,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
-      propertyPath: maxItems
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
-      propertyPath: maxPoolSize
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
-      propertyPath: spawnDistance
-      value: 21
-      objectReference: {fileID: 0}
-    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
-      propertyPath: spawnInterval
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
-      propertyPath: enableMapBoundary
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
-      propertyPath: defaultPoolCapacity
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].itemName
@@ -360592,11 +360568,27 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].itemName
+      value: UpgradeItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].maxCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].itemPrefab
       value: 
       objectReference: {fileID: 9089351352867651415, guid: 4f4f8e5122e138246afe0bfaea87f39d, type: 3}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].itemPrefab
+      value: 
+      objectReference: {fileID: 9089351352867651415, guid: 3b457a83d3ec8124595a4b2a1a0cf597, type: 3}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].poolMaxSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].poolMaxSize
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
@@ -360604,19 +360596,39 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].poolCapacity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].spawnInterval
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].spawnInterval
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].despawnDistance
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].despawnDistance
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].initialSpawnDelay
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].initialSpawnDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].optionalMaxLifetime
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
+      propertyPath: itemTypes.Array.data[1].optionalMaxLifetime
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7253639895416209845, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}

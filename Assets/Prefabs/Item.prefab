@@ -4890,7 +4890,7 @@ MonoBehaviour:
   sortingLayerName: Default
   orderInLayer: 1
   particleMaterial: {fileID: 2100000, guid: 510f0a7586f70884dbb852267536cd9a, type: 2}
-  growDuration: 2
+  growDuration: 1
   holdDuration: 0.05
   fadeDuration: 0.25
   travelDuration: 0

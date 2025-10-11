@@ -32,6 +32,7 @@ public class FlashlightUpgradeManager : MonoBehaviour
     [Header("현재 상태")]
     [SerializeField] private int currentLevel = 1;
     [SerializeField] private UpgradeType currentUpgradeType = UpgradeType.ScenePersistent;
+    public UpgradeType CurrentUpgradeType => currentUpgradeType;
     
     [Header("임시 업그레이드 설정")]
     [Tooltip("임시 업그레이드 지속 시간 (초)")]
@@ -363,7 +364,7 @@ public class FlashlightUpgradeManager : MonoBehaviour
     public UpgradeType GetCurrentUpgradeType() => currentUpgradeType;
     public bool IsTemporaryUpgradeActive() => isTemporaryUpgradeActive;
     public FlashlightLevel GetCurrentLevelData() => upgradeData.GetLevel(currentLevel);
-    
+
     /// <summary>
     /// 레벨업 가능 여부
     /// </summary>
@@ -371,4 +372,6 @@ public class FlashlightUpgradeManager : MonoBehaviour
     {
         return currentLevel < upgradeData.GetMaxLevel();
     }
+
+    
 }
