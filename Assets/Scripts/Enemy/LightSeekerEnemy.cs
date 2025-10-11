@@ -22,56 +22,54 @@ public class LightSeekerEnemy : BaseEnemy
 
     protected override void InitializeEnemy()
     {
-        // 색상 초기화 (죽을 때 흰색으로 변경되므로)
         ResetColor();
 
-        // Visibility 모듈 초기화
         if (visibilityModule != null)
         {
             visibilityModule.Initialize(EnemyType.LightSeeker);
         }
 
-        // 속도 초기화
-        currentSpeed = lightSeekerBaseSpeed;
-        timeInLight = 0f;
+        // ✅ 초기화 시 속도 리셋 보장
+        ResetSpeed();
         isInLight = false;
     }
 
     protected override void Update()
     {
         base.Update();
+        // ⚠️ Update 대신 FixedUpdate로 이동 제안
+    }
 
-        // 속도 증가 로직
-        UpdateSpeed();
+    // ✅ 속도 계산을 FixedUpdate로 이동하여 이동과 동기화
+    protected override void FixedUpdate()
+    {
+        if (!isDead)
+        {
+            UpdateSpeed();
+        }
+        base.FixedUpdate();
     }
 
     protected override bool ShouldMove()
     {
-        // 반전 상태: 손전등 밖에서 움직임 (Normal처럼)
         if (isInverted)
         {
             return !isInLight;
         }
-
-        // 평소: 손전등 비춰질 때만 움직임
         return isInLight;
     }
 
     protected override bool ShouldRotate()
     {
-        // 반전 상태: Normal처럼 손전등 밖에서만 회전
         if (isInverted)
         {
             return !isInLight;
         }
-
-        // 평소: 항상 회전
         return true;
     }
 
     protected override bool IsStoppedByInversion()
     {
-        // LightSeeker는 반전 상태에서도 계속 움직임 (패턴만 변경)
         return false;
     }
 
@@ -81,31 +79,36 @@ public class LightSeekerEnemy : BaseEnemy
     }
 
     /// <summary>
-    /// 속도 증가 로직 - 조건에 맞을 때만 증가
+    /// ✅ 속도 증가 로직 - FixedUpdate 주기로 변경
     /// </summary>
     private void UpdateSpeed()
     {
-        // 반전 상태: 손전등 밖에서 움직이므로 손전등 밖에서 속도 증가
-        // 평소: 손전등 안에서 움직이므로 손전등 안에서 속도 증가
         bool shouldIncreaseSpeed = isInverted ? !isInLight : isInLight;
 
         if (shouldIncreaseSpeed)
         {
-            timeInLight += Time.deltaTime;
+            // ✅ FixedUpdate 주기 사용
+            timeInLight += Time.fixedDeltaTime;
 
-            // 지수적 증가
             int intervals = Mathf.FloorToInt(timeInLight / speedIncreaseInterval);
             float speedMultiplier = Mathf.Pow(speedIncreaseRate, intervals);
 
             currentSpeed = Mathf.Min(lightSeekerBaseSpeed * speedMultiplier, maxSpeed);
         }
+        else
+        {
+            // ✅ 조건에 맞지 않으면 즉시 속도 초기화
+            // 이렇게 하면 손전등 벗어났을 때 바로 리셋됨
+            if (currentSpeed != lightSeekerBaseSpeed)
+            {
+                ResetSpeed();
+            }
+        }
     }
-
-
 
     protected override void OnEnterLight()
     {
-        // 반전 상태에서 손전등 들어가면 속도 초기화 (멈추므로)
+        // 반전 상태에서 손전등 들어가면 속도 초기화
         if (isInverted)
         {
             ResetSpeed();
@@ -114,16 +117,10 @@ public class LightSeekerEnemy : BaseEnemy
 
     protected override void OnExitLight()
     {
-        // 평소: 손전등 나가면 속도 초기화 (손전등 안에서 움직이다가 나감)
-        if (!isInverted)
-        {
-            ResetSpeed();
-        }
+        // ✅ 평소/반전 관계없이 손전등 벗어나면 무조건 초기화
+        ResetSpeed();
     }
 
-    /// <summary>
-    /// 죽을 때 강제로 보이게 함
-    /// </summary>
     private void ForceVisible()
     {
         SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
@@ -136,7 +133,6 @@ public class LightSeekerEnemy : BaseEnemy
             }
         }
     }
-
 
     private void ResetSpeed()
     {
@@ -152,7 +148,6 @@ public class LightSeekerEnemy : BaseEnemy
         {
             if (sr != null)
             {
-                // 투명하게 초기화 (알파 0)
                 Color color = sr.color;
                 color.a = 0f;
                 sr.color = color;
@@ -160,12 +155,10 @@ public class LightSeekerEnemy : BaseEnemy
         }
     }
 
-
-
     public override void Die()
     {
-        ForceVisible(); // 죽을 때는 무조건 보이게
+        ForceVisible();
+        ResetSpeed();  // ✅ 죽을 때도 속도 리셋
         base.Die();
-        ResetSpeed();
     }
 }

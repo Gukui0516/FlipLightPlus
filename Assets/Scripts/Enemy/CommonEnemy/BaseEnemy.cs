@@ -83,7 +83,7 @@ public abstract class BaseEnemy : MonoBehaviour
                 agent.enabled = true;
             }
         }
-        else if(agent != null)
+        else if (agent != null)
         {
             agent.enabled = true;
         }
@@ -260,7 +260,7 @@ public abstract class BaseEnemy : MonoBehaviour
     #endregion
 
     #region Flashlight Events
-    
+
     // ... (OnTriggerEnter2D, OnTriggerExit2D, OnEnterLight, OnExitLight) 기존 코드 유지 ...
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {

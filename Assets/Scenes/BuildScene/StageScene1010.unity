@@ -360466,7 +360466,7 @@ PrefabInstance:
     - target: {fileID: 4076102999245697277, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       propertyPath: movementSettings
       value: 
-      objectReference: {fileID: 11400000, guid: 7c21b4e85e8f2a54e8e435436c518367, type: 2}
+      objectReference: {fileID: 11400000, guid: 90101755c79e41a42a3d67504f75b198, type: 2}
     - target: {fileID: 4076102999245697277, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       propertyPath: knockbackCurve.m_Curve.Array.data[1].inSlope
       value: -2.5142846
