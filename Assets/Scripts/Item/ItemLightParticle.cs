@@ -229,6 +229,8 @@ public class ItemLightParticles : MonoBehaviour, IInvertibleColor
         main.playOnAwake = true;
         main.prewarm = false;
 
+        //main.cullingMode = ParticleSystemCullingMode.AlwaysSimulate;
+
         shape.enabled = true;
         shape.shapeType = ParticleSystemShapeType.Circle;
         shape.radius = 0f;

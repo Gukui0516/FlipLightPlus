@@ -192,11 +192,7 @@ public class ExitDoorController : MonoBehaviour
 
     void Update()
     {
-        // 테스트용: 스페이스바로 문 열기
-        if (Input.GetKeyDown(KeyCode.Space) && !_isOpen && !_isOpening)
-        {
-            OpenDoorImmediately();
-        }
+        
     }
     
     public void RegisterGauge(LightGaugeSystem gauge)
