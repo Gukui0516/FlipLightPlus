@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance != null)
             GameManager.Instance.RegisterUIManager(this);
     }
+    
     private void Start()
     {
         if (GameManager.Instance != null)
@@ -50,9 +51,6 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
-        
-
-        
     }
 
     // UI 활성화
@@ -113,5 +111,71 @@ public class UIManager : MonoBehaviour
         {
             ui.SetActive(false);
         }
+    }
+
+    // ========== 업그레이드 UI 전용 메서드 ==========
+    
+    /// <summary>
+    /// 플래시라이트 업그레이드 UI 표시
+    /// </summary>
+    public void ShowFlashlightUpgrade(string key, int newLevel, float oldAngle, float newAngle, float oldRadius, float newRadius)
+    {
+        if (uiDictionary.ContainsKey(key))
+        {
+            GameObject uiObject = uiDictionary[key];
+            FlashlightUpgradeUI upgradeUI = uiObject.GetComponent<FlashlightUpgradeUI>();
+            
+            if (upgradeUI != null)
+            {
+                // UI 활성화
+                if (!uiObject.activeSelf)
+                {
+                    uiObject.SetActive(true);
+                }
+                
+                // 업그레이드 정보 전달 및 애니메이션 시작
+                upgradeUI.ShowUpgrade(newLevel, oldAngle, newAngle, oldRadius, newRadius);
+                
+                Debug.Log($"[UIManager] 플래시라이트 업그레이드 UI 표시: 레벨 {newLevel}");
+            }
+            else
+            {
+                Debug.LogWarning($"[UIManager] {key}에 FlashlightUpgradeUI 컴포넌트가 없습니다!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[UIManager] UI를 찾을 수 없음: {key}");
+        }
+    }
+
+    // ========== 제네릭 컴포넌트 접근 메서드 ==========
+    
+    /// <summary>
+    /// 특정 UI의 컴포넌트 가져오기
+    /// </summary>
+    public T GetUIComponent<T>(string key) where T : Component
+    {
+        if (uiDictionary.ContainsKey(key))
+        {
+            return uiDictionary[key].GetComponent<T>();
+        }
+        
+        Debug.LogWarning($"[UIManager] UI를 찾을 수 없음: {key}");
+        return null;
+    }
+
+    /// <summary>
+    /// 특정 UI GameObject 가져오기
+    /// </summary>
+    public GameObject GetUIObject(string key)
+    {
+        if (uiDictionary.ContainsKey(key))
+        {
+            return uiDictionary[key];
+        }
+        
+        Debug.LogWarning($"[UIManager] UI를 찾을 수 없음: {key}");
+        return null;
     }
 }

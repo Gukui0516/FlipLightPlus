@@ -30,6 +30,15 @@ public class PlayerLife : MonoBehaviour
     
     void Start()
     {
+        if (lifeUI == null)
+        {
+            lifeUI = FindFirstObjectByType<LifeUI>();
+            if(lifeUI == null)
+            {
+                Debug.LogError("PlayerLife: LifeUI를 찾을 수 없음");
+                return;
+            }
+        }
         currentLife=startLife;
         if(lifeUI!=null)
         lifeUI.LifeUIUpdate(currentLife);
