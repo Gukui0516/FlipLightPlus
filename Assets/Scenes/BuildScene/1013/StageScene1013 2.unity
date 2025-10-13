@@ -1327,7 +1327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[1].maxCount
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].maxCount
@@ -1343,7 +1343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[1].poolMaxSize
-      value: 18
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].enemyPrefab
@@ -1359,7 +1359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[1].poolCapacity
-      value: 12
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].poolCapacity
@@ -360546,7 +360546,7 @@ PrefabInstance:
     - target: {fileID: 4076102999245697277, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       propertyPath: movementSettings
       value: 
-      objectReference: {fileID: 11400000, guid: 7c21b4e85e8f2a54e8e435436c518367, type: 2}
+      objectReference: {fileID: 11400000, guid: 90101755c79e41a42a3d67504f75b198, type: 2}
     - target: {fileID: 8887935938070739936, guid: 0d2e177184bfd804da81d3a4747eba00, type: 3}
       propertyPath: m_Name
       value: PlayerRB
