@@ -142,13 +142,13 @@ MonoBehaviour:
   gaugeFillImage: {fileID: 140152559601746623}
   autoFindFillImage: 0
   thunderFillImage: {fileID: 6137250984930323223}
-  thunderInterval: 0.5
-  thunderFillDuration: 0.2
+  thunderInterval: 0.55
+  thunderFillDuration: 0.55
   gaugeAnimator: {fileID: 8465485298319573117}
   fullChargeTrigger: FullCharge
   gaugeText: {fileID: 3121722935884676824}
   textFormat: '{0:F0}%'
-  showTextOnlyAt100: 1
+  showTextOnlyAt100: 0
   enableOutline: 1
   outlineWidth: 0.04
   outlineColor: {r: 0, g: 0, b: 0, a: 1}
@@ -1035,7 +1035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1972918101101838363, guid: f3312606c4984f843a126c745c88274b, type: 3}
       propertyPath: m_Pivot.y
-      value: -2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 1972918101101838363, guid: f3312606c4984f843a126c745c88274b, type: 3}
       propertyPath: m_AnchorMax.x
