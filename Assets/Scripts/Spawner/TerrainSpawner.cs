@@ -125,15 +125,9 @@ public class TerrainSpawner : MonoBehaviour
         Collider2D[] walls = (Physics2D.OverlapCircleAll(Vector2.zero, clearWall, wallMask));//범위 안 벽 제거
         foreach (Collider2D hit in walls) 
         {
-            Destroy(hit.gameObject);
+            hit.gameObject.SetActive(false);
         }
 
-        Collider2D[] generators = (Physics2D.OverlapCircleAll(Vector2.zero, clearGenerator));//범위 안 발전기 제거
-        foreach (Collider2D hit in generators)
-        {
-            if (hit.gameObject.name == generatorName)
-            Destroy(hit.gameObject);
-        }
         generatorSpots.RemoveAll(p => Vector2.Distance(p, Vector2.zero) <= clearGenerator);//리스트의 발전기 위치 제거
     }
     void SpawnGenerate()
