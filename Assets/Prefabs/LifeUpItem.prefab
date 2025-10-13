@@ -4909,14 +4909,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6367730071362866807}
   - component: {fileID: 4723214170803366882}
-  - component: {fileID: 7322372237701283458}
   - component: {fileID: 8014425471958398561}
   - component: {fileID: 3868460695291239543}
   - component: {fileID: 3321887829468712705}
   - component: {fileID: 7704854062469057073}
   - component: {fileID: 5961563361623093577}
+  - component: {fileID: -4430094025311811068}
   m_Layer: 0
-  m_Name: SquareItem
+  m_Name: LifeUpItem
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4996,19 +4996,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7322372237701283458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9089351352867651415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3773298831730a649b05862d11c12fb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RectanglePickup
-  playerTag: Player
 --- !u!114 &8014425471958398561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5121,3 +5108,16 @@ MonoBehaviour:
   travelSpeed: 10
   lengthRange: {x: 3, y: 5}
   thickness: 0.01
+--- !u!114 &-4430094025311811068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9089351352867651415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0210fad8c3e52de44a0b561b0a3bfc14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LifeupPickup
+  playerTag: Player
