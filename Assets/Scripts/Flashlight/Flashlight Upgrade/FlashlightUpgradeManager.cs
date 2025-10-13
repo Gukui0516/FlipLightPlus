@@ -7,6 +7,7 @@ using System.Collections;
 /// - 임시/씬/영구 업그레이드 타입 지원
 /// - ImprovedVisionCone과 연동
 /// - 정적 변수로 씬 전환에도 데이터 유지 (GameManager 독립적)
+/// - UI 표시 기능 추가
 /// </summary>
 [RequireComponent(typeof(ImprovedVisionCone))]
 public class FlashlightUpgradeManager : MonoBehaviour
@@ -29,6 +30,10 @@ public class FlashlightUpgradeManager : MonoBehaviour
     [Header("참조")]
     [SerializeField] private FlashlightUpgradeData upgradeData;
     
+    [Header("UI 설정")]
+    [Tooltip("UIManager에 등록된 UI 키")]
+    [SerializeField] private string upgradeUIKey = "FlashlightUpgradeUI";
+    
     [Header("현재 상태")]
     [SerializeField] private int currentLevel = 1;
     [SerializeField] private UpgradeType currentUpgradeType = UpgradeType.ScenePersistent;
@@ -40,11 +45,16 @@ public class FlashlightUpgradeManager : MonoBehaviour
     
     // 컴포넌트
     private ImprovedVisionCone visionCone;
+    private UIManager uiManager;
     
     // 내부 변수
     private FlashlightLevel baseLevel; // 기본 레벨 (복귀용)
     private Coroutine temporaryUpgradeCoroutine;
     private bool isTemporaryUpgradeActive = false;
+    
+    // 이전 레벨 정보 (UI 표시용)
+    private float previousAngle;
+    private float previousRadius;
     
     // 이벤트
     public System.Action<int> OnLevelChanged;
@@ -74,18 +84,29 @@ public class FlashlightUpgradeManager : MonoBehaviour
         
         // 기본 레벨 저장
         baseLevel = upgradeData.GetDefaultLevel();
+        
+        // 이전 각도/반지름 초기화
+        previousAngle = baseLevel.viewAngle;
+        previousRadius = baseLevel.viewRadius;
     }
     
     void Start()
     {
+        // UIManager 찾기
+        uiManager = FindObjectOfType<UIManager>();
+        if (uiManager == null)
+        {
+            Debug.LogWarning("[FlashlightUpgradeManager] UIManager를 찾을 수 없습니다. UI 표시가 비활성화됩니다.");
+        }
+        
         // 정적 변수로부터 레벨 복원
         currentLevel = savedLevel;
         currentUpgradeType = savedUpgradeType;
         
         Debug.Log($"[FlashlightUpgradeManager] 레벨 복원: {currentLevel} (타입: {currentUpgradeType})");
         
-        // 현재 레벨 적용
-        ApplyLevel(currentLevel);
+        // 현재 레벨 적용 (UI 표시 없이)
+        ApplyLevel(currentLevel, false);
         
         Debug.Log($"[FlashlightUpgradeManager] 초기화 완료 - 현재 레벨: {currentLevel}/{upgradeData.GetMaxLevel()}");
     }
@@ -151,7 +172,7 @@ public class FlashlightUpgradeManager : MonoBehaviour
         currentLevel = targetLevel;
         currentUpgradeType = upgradeType;
         
-        ApplyLevel(currentLevel);
+        ApplyLevel(currentLevel, true); // UI 표시 포함
         
         // 정적 변수에 저장
         SaveToStaticData();
@@ -184,7 +205,7 @@ public class FlashlightUpgradeManager : MonoBehaviour
         currentLevel = level;
         currentUpgradeType = upgradeType;
         
-        ApplyLevel(currentLevel);
+        ApplyLevel(currentLevel, level > oldLevel); // 레벨이 올라갔을 때만 UI 표시
         
         // 정적 변수에 저장
         SaveToStaticData();
@@ -210,7 +231,7 @@ public class FlashlightUpgradeManager : MonoBehaviour
         }
         
         currentLevel = 1;
-        ApplyLevel(currentLevel);
+        ApplyLevel(currentLevel, false); // UI 표시 없이
         
         // 정적 변수에 저장
         SaveToStaticData();
@@ -221,7 +242,7 @@ public class FlashlightUpgradeManager : MonoBehaviour
     /// <summary>
     /// 특정 레벨의 설정을 손전등에 적용
     /// </summary>
-    private void ApplyLevel(int level)
+    private void ApplyLevel(int level, bool showUI = false)
     {
         FlashlightLevel levelData = upgradeData.GetLevel(level);
         
@@ -230,6 +251,24 @@ public class FlashlightUpgradeManager : MonoBehaviour
             Debug.LogError($"[FlashlightUpgradeManager] 레벨 {level} 데이터를 찾을 수 없습니다!");
             return;
         }
+        
+        // UI 표시 (레벨업 시)
+        if (showUI && uiManager != null)
+        {
+            // UIManager를 통해 업그레이드 정보 전달
+            uiManager.ShowFlashlightUpgrade(
+                upgradeUIKey,
+                level,
+                previousAngle,
+                levelData.viewAngle,
+                previousRadius,
+                levelData.viewRadius
+            );
+        }
+        
+        // 이전 값 저장
+        previousAngle = levelData.viewAngle;
+        previousRadius = levelData.viewRadius;
         
         visionCone.SetViewAngle(levelData.viewAngle);
         visionCone.SetViewRadius(levelData.viewRadius);
@@ -274,13 +313,14 @@ public class FlashlightUpgradeManager : MonoBehaviour
     private IEnumerator TemporaryUpgradeCoroutine(int targetLevel, float duration)
     {
         int originalLevel = currentLevel;
+        FlashlightLevel originalLevelData = upgradeData.GetLevel(originalLevel);
         isTemporaryUpgradeActive = true;
         
         Debug.Log($"[FlashlightUpgradeManager] 임시 업그레이드 시작: {originalLevel} → {targetLevel} ({duration}초)");
         
         // 레벨업 (정적 변수에는 저장하지 않음)
         currentLevel = targetLevel;
-        ApplyLevel(currentLevel);
+        ApplyLevel(currentLevel, true); // UI 표시 포함
         OnLevelChanged?.Invoke(currentLevel);
         
         // 대기
@@ -288,7 +328,15 @@ public class FlashlightUpgradeManager : MonoBehaviour
         
         // 복귀
         currentLevel = originalLevel;
-        ApplyLevel(currentLevel);
+        
+        // 이전 값을 원래 레벨의 값으로 복원
+        if (originalLevelData != null)
+        {
+            previousAngle = originalLevelData.viewAngle;
+            previousRadius = originalLevelData.viewRadius;
+        }
+        
+        ApplyLevel(currentLevel, false); // UI 표시 없이 복귀
         OnLevelChanged?.Invoke(currentLevel);
         
         isTemporaryUpgradeActive = false;
@@ -341,7 +389,7 @@ public class FlashlightUpgradeManager : MonoBehaviour
         savedUpgradeType = UpgradeType.ScenePersistent;
         currentLevel = 1;
         
-        ApplyLevel(currentLevel);
+        ApplyLevel(currentLevel, false);
         Debug.Log("[FlashlightUpgradeManager] 영구 레벨 초기화 완료");
     }
     
@@ -372,6 +420,4 @@ public class FlashlightUpgradeManager : MonoBehaviour
     {
         return currentLevel < upgradeData.GetMaxLevel();
     }
-
-    
 }
