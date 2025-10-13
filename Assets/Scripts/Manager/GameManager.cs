@@ -167,7 +167,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         //gameOverUI.Show();
-        UIManager.ShowUI("GameOverUI");
+        
         OnGameOver?.Invoke();
     }
 
@@ -214,5 +214,8 @@ public class GameManager : MonoBehaviour
     }
 
 #endregion
-    
+    public void GameOverUIActive()
+    {
+        UIManager.ShowUI("GameOverUI");
+    }
 }
