@@ -309,6 +309,7 @@ MonoBehaviour:
   speedIncreaseRate: 1.2
   speedIncreaseInterval: 0.1
   maxSpeed: 12
+  collisionStunDuration: 0.5
 --- !u!114 &5122035691410426771
 MonoBehaviour:
   m_ObjectHideFlags: 0
