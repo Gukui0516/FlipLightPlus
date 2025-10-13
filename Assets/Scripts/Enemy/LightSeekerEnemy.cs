@@ -13,11 +13,13 @@ public class LightSeekerEnemy : BaseEnemy
 
     private float currentSpeed;
     private float timeInLight = 0f;
+    private Camera mainCamera;
 
     protected override void Awake()
     {
         base.Awake();
         currentSpeed = lightSeekerBaseSpeed;
+        mainCamera = Camera.main;
     }
 
     protected override void InitializeEnemy()
@@ -29,7 +31,6 @@ public class LightSeekerEnemy : BaseEnemy
             visibilityModule.Initialize(EnemyType.LightSeeker);
         }
 
-        // ✅ 초기화 시 속도 리셋 보장
         ResetSpeed();
         isInLight = false;
     }
@@ -37,10 +38,8 @@ public class LightSeekerEnemy : BaseEnemy
     protected override void Update()
     {
         base.Update();
-        // ⚠️ Update 대신 FixedUpdate로 이동 제안
     }
 
-    // ✅ 속도 계산을 FixedUpdate로 이동하여 이동과 동기화
     protected override void FixedUpdate()
     {
         if (!isDead)
@@ -54,8 +53,10 @@ public class LightSeekerEnemy : BaseEnemy
     {
         if (isInverted)
         {
-            return !isInLight;
+            // ✅ 반전 상태: 카메라 범위 안 + 손전등 밖에 있을 때만 움직임
+            return IsInCameraView() && !isInLight;
         }
+        // 평소 상태: 손전등 안에 있을 때만 움직임
         return isInLight;
     }
 
@@ -63,7 +64,8 @@ public class LightSeekerEnemy : BaseEnemy
     {
         if (isInverted)
         {
-            return !isInLight;
+            // ✅ 반전 상태: 카메라 범위 안 + 손전등 밖에 있을 때 회전
+            return IsInCameraView() && !isInLight;
         }
         return true;
     }
@@ -79,15 +81,43 @@ public class LightSeekerEnemy : BaseEnemy
     }
 
     /// <summary>
-    /// ✅ 속도 증가 로직 - FixedUpdate 주기로 변경
+    /// ✅ 카메라 뷰포트 범위 내에 있는지 체크
     /// </summary>
+    private bool IsInCameraView()
+    {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+            if (mainCamera == null) return false;
+        }
+
+        // 오브젝트의 월드 좌표를 뷰포트 좌표로 변환 (0~1 범위)
+        Vector3 viewportPoint = mainCamera.WorldToViewportPoint(transform.position);
+
+        // 뷰포트 범위 내에 있고, 카메라 앞쪽에 있는지 체크
+        // x, y가 0~1 사이, z가 양수(카메라 앞)
+        return viewportPoint.x >= 0 && viewportPoint.x <= 1 &&
+               viewportPoint.y >= 0 && viewportPoint.y <= 1 &&
+               viewportPoint.z > 0;
+    }
+
     private void UpdateSpeed()
     {
-        bool shouldIncreaseSpeed = isInverted ? !isInLight : isInLight;
+        bool shouldIncreaseSpeed;
+
+        if (isInverted)
+        {
+            // ✅ 반전 상태: 카메라 범위 안 + 손전등 밖
+            shouldIncreaseSpeed = IsInCameraView() && !isInLight;
+        }
+        else
+        {
+            // 평소 상태: 손전등 안
+            shouldIncreaseSpeed = isInLight;
+        }
 
         if (shouldIncreaseSpeed)
         {
-            // ✅ FixedUpdate 주기 사용
             timeInLight += Time.fixedDeltaTime;
 
             int intervals = Mathf.FloorToInt(timeInLight / speedIncreaseInterval);
@@ -97,8 +127,6 @@ public class LightSeekerEnemy : BaseEnemy
         }
         else
         {
-            // ✅ 조건에 맞지 않으면 즉시 속도 초기화
-            // 이렇게 하면 손전등 벗어났을 때 바로 리셋됨
             if (currentSpeed != lightSeekerBaseSpeed)
             {
                 ResetSpeed();
@@ -108,7 +136,6 @@ public class LightSeekerEnemy : BaseEnemy
 
     protected override void OnEnterLight()
     {
-        // 반전 상태에서 손전등 들어가면 속도 초기화
         if (isInverted)
         {
             ResetSpeed();
@@ -117,7 +144,6 @@ public class LightSeekerEnemy : BaseEnemy
 
     protected override void OnExitLight()
     {
-        // ✅ 평소/반전 관계없이 손전등 벗어나면 무조건 초기화
         ResetSpeed();
     }
 
@@ -158,7 +184,7 @@ public class LightSeekerEnemy : BaseEnemy
     public override void Die()
     {
         ForceVisible();
-        ResetSpeed();  // ✅ 죽을 때도 속도 리셋
+        ResetSpeed();
         base.Die();
     }
 }

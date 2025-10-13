@@ -53,8 +53,8 @@ public class ExitDoorController : MonoBehaviour
     [Tooltip("자동 설정 모드 선택")]
     [SerializeField] private AutoSetMode autoMode = AutoSetMode.MatchRegisteredCount;
 
-    [Tooltip("수동 설정 시: 문이 열리기 위해 필요한 최소 게이지 만족 개수")]
-    [SerializeField] private int manualRequiredGaugeCount = 1;
+    [Tooltip("수동 설정 시: 스테이지별 요구 게이지 개수 리스트 (1스테이지, 2스테이지, ...)")]
+    [SerializeField] private List<int> stageRequiredCounts = new List<int> { 1, 2, 3 };
     
     [Header("이펙트 설정")]
     [Tooltip("문이 열릴 조건이 만족되었을 때 활성화할 이펙트 게임오브젝트")]
@@ -97,6 +97,7 @@ public class ExitDoorController : MonoBehaviour
     public int SatisfiedGaugeCount => satisfiedGaugeCount;
     public bool IsRegistrationFinalized => _isRegistrationFinalized;
     public bool AreAllConditionsMet => _isRegistrationFinalized && satisfiedGaugeCount >= requiredGaugeCount;
+    public List<int> StageRequiredCounts => stageRequiredCounts;
 
     void Start()
     {
@@ -145,13 +146,6 @@ public class ExitDoorController : MonoBehaviour
         
         satisfiedGaugeCount = 0;
         
-        // 수동 모드면 바로 설정
-        if (!autoSetRequiredCount)
-        {
-            requiredGaugeCount = manualRequiredGaugeCount;
-            Debug.Log($"ExitDoorController: 수동 모드 - 필요 게이지 개수: {requiredGaugeCount}");
-        }
-        
         // 탈출 트리거는 초기에 비활성화
         if (exitTriggerCollider != null)
         {
@@ -192,11 +186,7 @@ public class ExitDoorController : MonoBehaviour
 
     void Update()
     {
-        // 테스트용: 스페이스바로 문 열기
-        if (Input.GetKeyDown(KeyCode.Space) && !_isOpen && !_isOpening)
-        {
-            OpenDoorImmediately();
-        }
+        
     }
     
     public void RegisterGauge(LightGaugeSystem gauge)
@@ -252,8 +242,60 @@ public class ExitDoorController : MonoBehaviour
                     break;
             }
         }
+        else
+        {
+            // 수동 모드 - 스테이지별 리스트 사용
+            if (GameManager.Instance != null)
+            {
+                int currentStage = GameManager.Instance.CurrentStage;
+                requiredGaugeCount = GetRequiredCountForStage(currentStage);
+                Debug.Log($"ExitDoorController: 수동 모드 - 스테이지 {currentStage}, 필요 게이지 개수: {requiredGaugeCount}개");
+            }
+            else
+            {
+                // GameManager가 없으면 첫 번째 값 사용
+                requiredGaugeCount = stageRequiredCounts.Count > 0 ? stageRequiredCounts[0] : 1;
+                Debug.LogWarning($"ExitDoorController: GameManager를 찾을 수 없어 첫 번째 리스트 값 사용: {requiredGaugeCount}개");
+            }
+        }
         
         CheckAndOpenDoor();
+    }
+    
+    /// <summary>
+    /// 스테이지에 따른 요구 게이지 개수 반환
+    /// 리스트 범위를 벗어나면 마지막 값의 1.5배를 반올림하여 반환
+    /// </summary>
+    private int GetRequiredCountForStage(int stage)
+    {
+        if (stageRequiredCounts == null || stageRequiredCounts.Count == 0)
+        {
+            Debug.LogWarning("ExitDoorController: 스테이지 요구 개수 리스트가 비어있습니다. 기본값 1 사용");
+            return 1;
+        }
+        
+        // 스테이지는 1부터 시작하므로 인덱스는 stage - 1
+        int index = stage - 1;
+        
+        if (index < 0)
+        {
+            Debug.LogWarning($"ExitDoorController: 잘못된 스테이지 번호 {stage}. 첫 번째 리스트 값 사용");
+            return stageRequiredCounts[0];
+        }
+        
+        if (index < stageRequiredCounts.Count)
+        {
+            // 리스트 범위 내
+            return stageRequiredCounts[index];
+        }
+        else
+        {
+            // 리스트 범위를 벗어남 - 마지막 값의 1.5배 반올림
+            int lastValue = stageRequiredCounts[stageRequiredCounts.Count - 1];
+            int calculatedValue = Mathf.RoundToInt(lastValue * 1.5f);
+            Debug.Log($"ExitDoorController: 스테이지 {stage}가 리스트 범위를 벗어남. 마지막 값({lastValue}) * 1.5 = {calculatedValue}");
+            return calculatedValue;
+        }
     }
     
     public void SetRequiredGaugeCount(int count)
@@ -604,7 +646,7 @@ public class ExitDoorController : MonoBehaviour
         }
     }
     
-    protected virtual void OnPlayerEscape()  // private -> protected virtual 로 변경
+    protected virtual void OnPlayerEscape()
     {
         if (_hasPlayerEscaped)
             return;
@@ -634,6 +676,15 @@ public class ExitDoorController : MonoBehaviour
         Debug.Log($"카메라 대기 중: {_isWaitingForCameraView}");
         Debug.Log($"탈출 완료 여부: {_hasPlayerEscaped}");
         Debug.Log($"이펙트 활성화 여부: {(openEffectGameObject != null ? openEffectGameObject.activeSelf.ToString() : "할당되지 않음")}");
+        
+        if (!autoSetRequiredCount)
+        {
+            Debug.Log($"스테이지별 요구 개수 리스트: [{string.Join(", ", stageRequiredCounts)}]");
+            if (GameManager.Instance != null)
+            {
+                Debug.Log($"현재 스테이지: {GameManager.Instance.CurrentStage}");
+            }
+        }
         
         Debug.Log("등록된 게이지 목록:");
         foreach (var gauge in registeredGauges)

@@ -8,6 +8,10 @@ public class StageUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI stageNumberText;
     [SerializeField] private TextMeshProUGUI stageInfoText;
 
+    [Header("Controller Reference")]
+    [SerializeField] private ExitDoorController exitDoorController;
+    [SerializeField] private bool autoFindController = true;
+
     [Header("Settings")]
     [SerializeField] private int currentStage = 1;
     [SerializeField] private float displayDuration = 2f;    // 1번째 문장 유지 시간
@@ -29,16 +33,19 @@ public class StageUI : MonoBehaviour
         "벽을 통과하며 돌진하는 큰 괴물이 등장합니다."      // 3스테이지
     };
 
-    // 2) 스테이지별 두 번째 문장 (새 배열: 필요 없으면 빈 문자열)
-    private readonly string[] stageSecondaryMessages = new string[]
-    {
-        "한 개의 발전기를 찾아 빛을 모으세요.", // 1스테이지 - 두 번째 문장
-        "두 개의 발전기를 찾아 빛을 모으세요.", // 2스테이지
-        "세 개의 발전기를 찾아 빛을 모으세요." // 3스테이지
-    };
-
     void Start()
     {
+        // ExitDoorController 자동으로 찾기
+        if (autoFindController && exitDoorController == null)
+        {
+            exitDoorController = FindFirstObjectByType<ExitDoorController>();
+            
+            if (exitDoorController == null)
+            {
+                Debug.LogWarning("StageUI: ExitDoorController를 찾을 수 없습니다. 기본 메시지를 사용합니다.");
+            }
+        }
+
         // 초기 알파값을 1로 설정
         SetTextAlpha(stageNumberText, 1f);
         SetTextAlpha(stageInfoText, 1f);
@@ -58,7 +65,9 @@ public class StageUI : MonoBehaviour
         // 인덱스 계산
         int idx = Mathf.Clamp(currentStage - 1, 0, stageInfoMessages.Length - 1);
         string part1 = stageInfoMessages[idx];
-        string part2 = (idx < stageSecondaryMessages.Length) ? stageSecondaryMessages[idx] : "";
+        
+        // 두 번째 문장: ExitDoorController에서 필요 개수를 가져와서 동적으로 생성
+        string part2 = GetSecondaryMessage();
 
         // 1) 첫 문장 표시 → 유지 → 첫 문장만 페이드아웃
         if (stageInfoText)
@@ -74,7 +83,7 @@ public class StageUI : MonoBehaviour
         {
             if (stageInfoText) stageInfoText.text = part2;
 
-            // 두 번째 문장 옆으로 UI 즉시 배치(원하면 아래 한 줄 대신 MoveUI로 짧게 애니메이션 가능)
+            // 두 번째 문장 옆으로 UI 즉시 배치
             if (uiToMove) uiToMove.anchoredPosition = nearMessageAnchoredPos;
 
             SetTextAlpha(stageInfoText, 0f);
@@ -100,6 +109,92 @@ public class StageUI : MonoBehaviour
 
         // 선택: UI 비활성화
         // gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// ExitDoorController의 설정을 기반으로 두 번째 메시지를 동적으로 생성
+    /// </summary>
+    private string GetSecondaryMessage()
+    {
+        int requiredCount = 1; // 기본값
+
+        if (exitDoorController != null)
+        {
+            // ExitDoorController가 자동 모드인지 수동 모드인지 확인하고 필요 개수 가져오기
+            if (exitDoorController.IsRegistrationFinalized)
+            {
+                // 이미 등록이 완료되어 RequiredGaugeCount가 설정된 경우
+                requiredCount = exitDoorController.RequiredGaugeCount;
+            }
+            else
+            {
+                // 등록이 아직 완료되지 않은 경우 미리 계산
+                requiredCount = GetPredictedRequiredCount();
+            }
+        }
+        else
+        {
+            // ExitDoorController가 없으면 스테이지 번호를 기본값으로 사용
+            requiredCount = currentStage;
+        }
+
+        // 한국어 숫자 변환 (선택사항)
+        string countText = ConvertNumberToKorean(requiredCount);
+        
+        return $"{countText}의 발전기를 찾아 빛으로 충전시키세요.";
+    }
+
+    /// <summary>
+    /// 등록 완료 전에 필요 개수를 미리 예측
+    /// </summary>
+    private int GetPredictedRequiredCount()
+    {
+        if (exitDoorController == null)
+            return currentStage;
+
+        // ExitDoorController의 SerializedField를 통해 설정을 확인할 수 없으므로
+        // StageRequiredCounts 리스트를 직접 사용
+        var stageRequiredCounts = exitDoorController.StageRequiredCounts;
+        
+        if (stageRequiredCounts == null || stageRequiredCounts.Count == 0)
+            return currentStage;
+
+        int index = currentStage - 1;
+        
+        if (index < 0)
+            return 1;
+        
+        if (index < stageRequiredCounts.Count)
+        {
+            return stageRequiredCounts[index];
+        }
+        else
+        {
+            // 리스트 범위를 벗어나면 마지막 값의 1.5배 반올림
+            int lastValue = stageRequiredCounts[stageRequiredCounts.Count - 1];
+            return Mathf.RoundToInt(lastValue * 1.5f);
+        }
+    }
+
+    /// <summary>
+    /// 숫자를 한국어로 변환 (1~10까지만 지원, 그 이상은 숫자 그대로)
+    /// </summary>
+    private string ConvertNumberToKorean(int number)
+    {
+        switch (number)
+        {
+            case 1: return "한 개";
+            case 2: return "두 개";
+            case 3: return "세 개";
+            case 4: return "네 개";
+            case 5: return "다섯 개";
+            case 6: return "여섯 개";
+            case 7: return "일곱 개";
+            case 8: return "여덟 개";
+            case 9: return "아홉 개";
+            case 10: return "열 개";
+            default: return $"{number}개";
+        }
     }
 
     private IEnumerator MoveUI(RectTransform rect, Vector2 targetPos, float duration)
@@ -160,6 +255,13 @@ public class StageUI : MonoBehaviour
         var c = text.color; c.a = alpha; text.color = c;
     }
 
-    // 외부에서 스테이지 번호를 설정할 수 있는 메서드
+    /// <summary>
+    /// 외부에서 스테이지 번호를 설정할 수 있는 메서드
+    /// </summary>
     public void SetStage(int stage) => currentStage = stage;
+
+    /// <summary>
+    /// 외부에서 ExitDoorController를 설정할 수 있는 메서드
+    /// </summary>
+    public void SetExitDoorController(ExitDoorController controller) => exitDoorController = controller;
 }
