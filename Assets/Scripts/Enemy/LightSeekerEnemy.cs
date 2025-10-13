@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -11,9 +12,14 @@ public class LightSeekerEnemy : BaseEnemy
     [SerializeField] private float speedIncreaseInterval = 2f;
     [SerializeField] private float maxSpeed = 8f;
 
+    [Header("Collision Settings")]
+    [SerializeField] private float collisionStunDuration = 0.5f;
+
     private float currentSpeed;
     private float timeInLight = 0f;
     private Camera mainCamera;
+    private bool isStunnedByCollision = false;
+    private Coroutine stunCoroutine;
 
     protected override void Awake()
     {
@@ -33,6 +39,7 @@ public class LightSeekerEnemy : BaseEnemy
 
         ResetSpeed();
         isInLight = false;
+        isStunnedByCollision = false;
     }
 
     protected override void Update()
@@ -51,12 +58,12 @@ public class LightSeekerEnemy : BaseEnemy
 
     protected override bool ShouldMove()
     {
+        if (isStunnedByCollision) return false;
+
         if (isInverted)
         {
-            // ✅ 반전 상태: 카메라 범위 안 + 손전등 밖에 있을 때만 움직임
             return IsInCameraView() && !isInLight;
         }
-        // 평소 상태: 손전등 안에 있을 때만 움직임
         return isInLight;
     }
 
@@ -64,7 +71,6 @@ public class LightSeekerEnemy : BaseEnemy
     {
         if (isInverted)
         {
-            // ✅ 반전 상태: 카메라 범위 안 + 손전등 밖에 있을 때 회전
             return IsInCameraView() && !isInLight;
         }
         return true;
@@ -81,8 +87,37 @@ public class LightSeekerEnemy : BaseEnemy
     }
 
     /// <summary>
-    /// ✅ 카메라 뷰포트 범위 내에 있는지 체크
+    /// ✅ 외부에서 호출 가능한 스턴 메서드 (PlayerContact에서 호출)
     /// </summary>
+    public void TriggerCollisionStun()
+    {
+        if (isDead) return;
+        if (isStunnedByCollision) return; // 이미 스턴 중이면 무시
+
+        // 이미 스턴 중이면 기존 코루틴 정지
+        if (stunCoroutine != null)
+        {
+            StopCoroutine(stunCoroutine);
+        }
+
+        // 즉시 속도 0으로 초기화
+        ResetSpeed();
+        movementModule?.StopImmediate();
+
+        // 스턴 코루틴 시작
+        stunCoroutine = StartCoroutine(StunFromCollision());
+    }
+
+    private IEnumerator StunFromCollision()
+    {
+        isStunnedByCollision = true;
+
+        yield return new WaitForSeconds(collisionStunDuration);
+
+        isStunnedByCollision = false;
+        stunCoroutine = null;
+    }
+
     private bool IsInCameraView()
     {
         if (mainCamera == null)
@@ -91,11 +126,8 @@ public class LightSeekerEnemy : BaseEnemy
             if (mainCamera == null) return false;
         }
 
-        // 오브젝트의 월드 좌표를 뷰포트 좌표로 변환 (0~1 범위)
         Vector3 viewportPoint = mainCamera.WorldToViewportPoint(transform.position);
 
-        // 뷰포트 범위 내에 있고, 카메라 앞쪽에 있는지 체크
-        // x, y가 0~1 사이, z가 양수(카메라 앞)
         return viewportPoint.x >= 0 && viewportPoint.x <= 1 &&
                viewportPoint.y >= 0 && viewportPoint.y <= 1 &&
                viewportPoint.z > 0;
@@ -103,16 +135,16 @@ public class LightSeekerEnemy : BaseEnemy
 
     private void UpdateSpeed()
     {
+        if (isStunnedByCollision) return;
+
         bool shouldIncreaseSpeed;
 
         if (isInverted)
         {
-            // ✅ 반전 상태: 카메라 범위 안 + 손전등 밖
             shouldIncreaseSpeed = IsInCameraView() && !isInLight;
         }
         else
         {
-            // 평소 상태: 손전등 안
             shouldIncreaseSpeed = isInLight;
         }
 
@@ -183,6 +215,13 @@ public class LightSeekerEnemy : BaseEnemy
 
     public override void Die()
     {
+        if (stunCoroutine != null)
+        {
+            StopCoroutine(stunCoroutine);
+            stunCoroutine = null;
+        }
+        isStunnedByCollision = false;
+
         ForceVisible();
         ResetSpeed();
         base.Die();
