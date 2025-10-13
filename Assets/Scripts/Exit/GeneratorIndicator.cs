@@ -34,6 +34,16 @@ public class GeneratorIndicator : MonoBehaviour
     [SerializeField] private string sortingLayerName = "Default";
     [SerializeField] private int orderInLayer = 100;
     
+    [Header("아웃라인 설정")]
+    [SerializeField] private bool enableOutline = true;
+    [Tooltip("아웃라인 색상")]
+    [SerializeField] private Color outlineColor = Color.black;
+    [Tooltip("아웃라인 굵기 (0.01 ~ 0.2 권장)")]
+    [Range(0.01f, 0.5f)]
+    [SerializeField] private float outlineThickness = 0.05f;
+    [Tooltip("아웃라인 방향 개수 (4 또는 8)")]
+    [SerializeField] private int outlineDirections = 8;
+    
     [Header("텍스트 설정")]
     [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private float textDisplayDuration = 2f;
@@ -57,7 +67,7 @@ public class GeneratorIndicator : MonoBehaviour
     private GeneratorManager generatorManager;
     private LightGaugeSystem targetGenerator;
     private bool isIndicating = false;
-    private bool hasCompletedOnce = false; // 한 번 완료된 후 다시 시작 방지
+    private bool hasCompletedOnce = false;
     private Sprite whiteSprite;
     private Transform playerTransform;
     private Coroutine indicateCoroutine;
@@ -79,11 +89,9 @@ public class GeneratorIndicator : MonoBehaviour
     
     void Start()
     {
-        // 컴포넌트 자동 찾기
         if (lightGaugeSystem == null)
             lightGaugeSystem = GetComponent<LightGaugeSystem>();
         
-        // Exit 태그로 GeneratorManager 찾기
         GameObject exitObject = GameObject.FindGameObjectWithTag("Exit");
         if (exitObject != null)
         {
@@ -98,16 +106,13 @@ public class GeneratorIndicator : MonoBehaviour
             Debug.LogWarning($"GeneratorIndicator ({name}): Exit 태그를 가진 오브젝트를 찾을 수 없습니다!");
         }
         
-        // TMP 텍스트 체크
         if (pingText == null)
         {
             Debug.LogWarning($"GeneratorIndicator ({name}): Ping Text (TMP)가 할당되지 않았습니다. 인스펙터에서 수동으로 할당해주세요.");
         }
         
-        // 화이트 스프라이트 생성
         CreateWhiteSprite();
         
-        // 플레이어 찾기
         if (requirePlayerNearby)
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -115,7 +120,6 @@ public class GeneratorIndicator : MonoBehaviour
                 playerTransform = player.transform;
         }
         
-        // 이벤트 등록
         if (lightGaugeSystem != null && startWhenCompleted)
         {
             lightGaugeSystem.onConditionMet.AddListener(OnGeneratorCompleted);
@@ -124,11 +128,9 @@ public class GeneratorIndicator : MonoBehaviour
     
     void Update()
     {
-        // 이미 한 번 완료되었으면 다시 시작하지 않음
         if (hasCompletedOnce)
             return;
         
-        // exitDoor 조건이 모두 만족되면 인디케이터 중단
         if (generatorManager != null && generatorManager.AreAllConditionsMet())
         {
             if (isIndicating)
@@ -139,11 +141,9 @@ public class GeneratorIndicator : MonoBehaviour
             return;
         }
         
-        // 플레이어 근접 체크가 활성화된 경우
         if (requirePlayerNearby && !IsPlayerNearby())
             return;
         
-        // 자동 시작 로직
         if (!isIndicating && lightGaugeSystem != null && lightGaugeSystem.IsConditionMet)
         {
             CheckAndStartIndicating();
@@ -174,7 +174,6 @@ public class GeneratorIndicator : MonoBehaviour
     
     private void CheckAndStartIndicating()
     {
-        // 이미 한 번 완료되었으면 시작하지 않음
         if (hasCompletedOnce)
         {
             Debug.Log($"GeneratorIndicator ({name}): 이미 완료되어 다시 시작하지 않습니다.");
@@ -184,21 +183,18 @@ public class GeneratorIndicator : MonoBehaviour
         if (isIndicating || generatorManager == null)
             return;
         
-        // exitDoor 조건이 모두 만족되면 시작하지 않음
         if (generatorManager.AreAllConditionsMet())
         {
             Debug.Log($"GeneratorIndicator ({name}): 모든 조건 만족으로 인디케이터 시작 안 함");
             return;
         }
         
-        // GeneratorManager 초기화 대기
         if (!generatorManager.IsInitialized)
         {
             Invoke(nameof(CheckAndStartIndicating), 0.5f);
             return;
         }
         
-        // 다음 미완료 발전기 찾기
         targetGenerator = generatorManager.FindNearestIncompleteGauge(transform, lightGaugeSystem);
         
         if (targetGenerator != null)
@@ -212,70 +208,55 @@ public class GeneratorIndicator : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 반복이 포함된 전체 인디케이션 시퀀스
-    /// </summary>
     private IEnumerator IndicateSequenceWithRepeat()
     {
         isIndicating = true;
         
-        // 1. 터미널 스타일 텍스트 표시 (최초 1회만)
         yield return StartCoroutine(ShowPingText());
         
-        // 2. 모스 부호 반복 전송
-        int sendCount = 0; // 실제 전송 횟수
-        int maxSendCount = repeatCount == 0 ? int.MaxValue : repeatCount; // 0이면 무한
+        int sendCount = 0;
+        int maxSendCount = repeatCount == 0 ? int.MaxValue : repeatCount;
         
         while (sendCount < maxSendCount)
         {
-            // exitDoor 조건 체크
             if (generatorManager != null && generatorManager.AreAllConditionsMet())
             {
                 Debug.Log($"GeneratorIndicator ({name}): 반복 중 조건 만족 감지, 중단");
                 break;
             }
             
-            // 타겟이 완료되었는지 체크 - 완료되면 그냥 종료
             if (targetGenerator != null && targetGenerator.IsConditionMet)
             {
                 Debug.Log($"GeneratorIndicator ({name}): 타겟 발전기 완료됨, 인디케이터 종료");
                 break;
             }
             
-            // 모스 부호 1회 전송
             yield return StartCoroutine(SendMorseSignals());
             sendCount++;
             currentRepeatCount = sendCount;
             
             Debug.Log($"GeneratorIndicator ({name}): 모스 부호 전송 완료 ({sendCount}/{(repeatCount == 0 ? "∞" : repeatCount.ToString())}회)");
             
-            // 설정된 횟수만큼 전송 완료했으면 종료
             if (sendCount >= maxSendCount)
             {
                 Debug.Log($"GeneratorIndicator ({name}): {sendCount}회 전송 완료, 종료");
                 break;
             }
             
-            // 다음 반복 전 대기 (마지막 전송 후에는 대기 안 함)
             yield return new WaitForSeconds(repeatInterval);
         }
         
-        // 3. 텍스트 페이드 아웃
         yield return StartCoroutine(FadeOutText());
         
         isIndicating = false;
-        hasCompletedOnce = true; // 한 번 완료되면 다시 시작하지 않음
+        hasCompletedOnce = true;
         indicateCoroutine = null;
     }
     
-    /// <summary>
-    /// 터미널 스타일 텍스트 타이핑 효과
-    /// </summary>
     private IEnumerator ShowPingText()
     {
         if (pingText == null || targetGenerator == null)
             yield break;
-        
         
         string fullText = $"ping NextGenerator...";
         
@@ -294,9 +275,6 @@ public class GeneratorIndicator : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 모스 부호 시퀀스 전송
-    /// </summary>
     private IEnumerator SendMorseSignals()
     {
         if (targetGenerator == null)
@@ -306,10 +284,8 @@ public class GeneratorIndicator : MonoBehaviour
         {
             string letter = morseSequence[i];
             
-            // 각 글자의 모스 부호 전송
             for (int j = 0; j < letter.Length; j++)
             {
-                // 중간에 조건 만족 체크
                 if (generatorManager != null && generatorManager.AreAllConditionsMet())
                     yield break;
                 
@@ -317,24 +293,20 @@ public class GeneratorIndicator : MonoBehaviour
                 
                 if (symbol == '.')
                 {
-                    SpawnMorseSignal(true); // 점
+                    SpawnMorseSignal(true);
                     yield return new WaitForSeconds(dotDuration + symbolGap);
                 }
                 else if (symbol == '-')
                 {
-                    SpawnMorseSignal(false); // 선
+                    SpawnMorseSignal(false);
                     yield return new WaitForSeconds(dashDuration + symbolGap);
                 }
             }
             
-            // 글자 간 간격
             yield return new WaitForSeconds(letterGap);
         }
     }
     
-    /// <summary>
-    /// 텍스트 페이드 아웃
-    /// </summary>
     private IEnumerator FadeOutText()
     {
         if (pingText == null)
@@ -358,91 +330,165 @@ public class GeneratorIndicator : MonoBehaviour
     }
     
     /// <summary>
-    /// 모스 부호 신호(점 또는 선) 생성 및 발사
+    /// 모스 부호 신호(점 또는 선) 생성 및 발사 (아웃라인 포함)
     /// </summary>
     private void SpawnMorseSignal(bool isDot)
     {
         if (targetGenerator == null)
             return;
         
-        GameObject signalObj = new GameObject(isDot ? "Dot" : "Dash");
-        SpriteRenderer sr = signalObj.AddComponent<SpriteRenderer>();
-        sr.sprite = whiteSprite;
-        sr.color = signalColor;
-        sr.sortingLayerName = sortingLayerName;
-        sr.sortingOrder = orderInLayer;
-        
-        // 시작 위치
-        signalObj.transform.position = transform.position;
+        // 부모 오브젝트 생성
+        GameObject signalParent = new GameObject(isDot ? "Dot" : "Dash");
+        signalParent.transform.position = transform.position;
         
         // 목표 방향 계산
         Vector3 direction = (targetGenerator.transform.position - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        signalObj.transform.rotation = Quaternion.Euler(0, 0, angle);
+        signalParent.transform.rotation = Quaternion.Euler(0, 0, angle);
         
-        // 크기 설정 - 더 촘촘하게
-        float length = isDot ? 0.2f : 0.6f; // 점은 짧게, 선은 점의 3배
-        Vector2 spriteSize = sr.sprite.bounds.size;
-        float scaleX = length / Mathf.Max(0.0001f, spriteSize.x);
-        float scaleY = signalThickness / Mathf.Max(0.0001f, spriteSize.y);
-        signalObj.transform.localScale = new Vector3(scaleX, scaleY, 1f);
+        // 크기 설정
+        float length = isDot ? 0.2f : 0.6f;
+        
+        // 아웃라인 생성 (활성화 시)
+        List<SpriteRenderer> outlineRenderers = new List<SpriteRenderer>();
+        if (enableOutline)
+        {
+            Vector2[] offsets = GetOutlineOffsets();
+            
+            foreach (Vector2 offset in offsets)
+            {
+                GameObject outlineObj = new GameObject("Outline");
+                outlineObj.transform.SetParent(signalParent.transform);
+                outlineObj.transform.localPosition = offset * outlineThickness;
+                outlineObj.transform.localRotation = Quaternion.identity;
+                
+                SpriteRenderer outlineSR = outlineObj.AddComponent<SpriteRenderer>();
+                outlineSR.sprite = whiteSprite;
+                outlineSR.color = outlineColor;
+                outlineSR.sortingLayerName = sortingLayerName;
+                outlineSR.sortingOrder = orderInLayer - 1;
+                
+                Vector2 spriteSize = outlineSR.sprite.bounds.size;
+                float scaleX = length / Mathf.Max(0.0001f, spriteSize.x);
+                float scaleY = signalThickness / Mathf.Max(0.0001f, spriteSize.y);
+                outlineObj.transform.localScale = new Vector3(scaleX, scaleY, 1f);
+                
+                outlineRenderers.Add(outlineSR);
+            }
+        }
+        
+        // 메인 신호 생성
+        GameObject mainSignalObj = new GameObject("Main");
+        mainSignalObj.transform.SetParent(signalParent.transform);
+        mainSignalObj.transform.localPosition = Vector3.zero;
+        mainSignalObj.transform.localRotation = Quaternion.identity;
+        
+        SpriteRenderer mainSR = mainSignalObj.AddComponent<SpriteRenderer>();
+        mainSR.sprite = whiteSprite;
+        mainSR.color = signalColor;
+        mainSR.sortingLayerName = sortingLayerName;
+        mainSR.sortingOrder = orderInLayer;
+        
+        Vector2 mainSpriteSize = mainSR.sprite.bounds.size;
+        float mainScaleX = length / Mathf.Max(0.0001f, mainSpriteSize.x);
+        float mainScaleY = signalThickness / Mathf.Max(0.0001f, mainSpriteSize.y);
+        mainSignalObj.transform.localScale = new Vector3(mainScaleX, mainScaleY, 1f);
         
         // 이동 코루틴 시작
-        StartCoroutine(MoveSignalToTarget(signalObj, sr, direction, length));
+        StartCoroutine(MoveSignalToTarget(signalParent, mainSR, outlineRenderers, direction, length));
+    }
+    
+    /// <summary>
+    /// 아웃라인 오프셋 방향 계산
+    /// </summary>
+    private Vector2[] GetOutlineOffsets()
+    {
+        if (outlineDirections == 4)
+        {
+            // 4방향 (상하좌우)
+            return new Vector2[]
+            {
+                new Vector2(0, 1),   // 위
+                new Vector2(0, -1),  // 아래
+                new Vector2(-1, 0),  // 왼쪽
+                new Vector2(1, 0)    // 오른쪽
+            };
+        }
+        else // 8방향
+        {
+            return new Vector2[]
+            {
+                new Vector2(0, 1),      // 위
+                new Vector2(1, 1),      // 오른쪽 위
+                new Vector2(1, 0),      // 오른쪽
+                new Vector2(1, -1),     // 오른쪽 아래
+                new Vector2(0, -1),     // 아래
+                new Vector2(-1, -1),    // 왼쪽 아래
+                new Vector2(-1, 0),     // 왼쪽
+                new Vector2(-1, 1)      // 왼쪽 위
+            };
+        }
     }
     
     /// <summary>
     /// 신호를 목표 지점으로 이동시키고 도달 시 페이드 아웃
     /// </summary>
-    private IEnumerator MoveSignalToTarget(GameObject signalObj, SpriteRenderer sr, Vector3 direction, float signalLength)
+    private IEnumerator MoveSignalToTarget(GameObject signalParent, SpriteRenderer mainSR, 
+        List<SpriteRenderer> outlineRenderers, Vector3 direction, float signalLength)
     {
         if (targetGenerator == null)
         {
-            Destroy(signalObj);
+            Destroy(signalParent);
             yield break;
         }
         
         Vector3 targetPos = targetGenerator.transform.position;
-        float journeyLength = Vector3.Distance(signalObj.transform.position, targetPos);
+        float journeyLength = Vector3.Distance(signalParent.transform.position, targetPos);
         float distanceTraveled = 0f;
         
-        // 이동 단계
         while (distanceTraveled < journeyLength)
         {
-            if (signalObj == null)
+            if (signalParent == null)
                 yield break;
             
             float step = signalSpeed * Time.deltaTime;
-            signalObj.transform.position += direction * step;
+            signalParent.transform.position += direction * step;
             distanceTraveled += step;
             
-            // 목표에 가까워지면 페이드 시작 (거리를 줄여서 빠르게 사라지도록)
-            float distanceToTarget = Vector3.Distance(signalObj.transform.position, targetPos);
+            float distanceToTarget = Vector3.Distance(signalParent.transform.position, targetPos);
             float fadeStartDistance = 0.6f;
             
             if (distanceToTarget < fadeStartDistance)
             {
                 float alpha = distanceToTarget / fadeStartDistance;
-                Color color = sr.color;
-                color.a = alpha;
-                sr.color = color;
+                
+                // 메인 신호 페이드
+                Color mainColor = mainSR.color;
+                mainColor.a = alpha;
+                mainSR.color = mainColor;
+                
+                // 아웃라인 페이드
+                foreach (var outlineSR in outlineRenderers)
+                {
+                    if (outlineSR != null)
+                    {
+                        Color outlineCol = outlineSR.color;
+                        outlineCol.a = alpha;
+                        outlineSR.color = outlineCol;
+                    }
+                }
             }
             
-            // 목표 도달 체크
             if (distanceToTarget < 0.05f)
                 break;
             
             yield return null;
         }
         
-        // 신호 제거
-        if (signalObj != null)
-            Destroy(signalObj);
+        if (signalParent != null)
+            Destroy(signalParent);
     }
     
-    /// <summary>
-    /// 인디케이터 강제 중단
-    /// </summary>
     public void StopIndicating()
     {
         if (indicateCoroutine != null)
@@ -452,26 +498,21 @@ public class GeneratorIndicator : MonoBehaviour
         }
         
         isIndicating = false;
-        hasCompletedOnce = true; // 중단해도 다시 시작하지 않음
+        hasCompletedOnce = true;
         currentRepeatCount = 0;
         
-        // 텍스트 정리
         if (pingText != null)
         {
             pingText.text = "";
         }
         
-        // 남아있는 신호 제거
         ClearAllSignals();
     }
     
-    /// <summary>
-    /// 모든 신호 오브젝트 제거
-    /// </summary>
     private void ClearAllSignals()
     {
-        GameObject[] dots = GameObject.FindGameObjectsWithTag("Untagged");
-        foreach (var obj in dots)
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Untagged");
+        foreach (var obj in allObjects)
         {
             if (obj.name == "Dot" || obj.name == "Dash")
             {
@@ -480,12 +521,9 @@ public class GeneratorIndicator : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 수동으로 인디케이터 시작 (외부 호출용)
-    /// </summary>
     public void StartIndicating()
     {
-        hasCompletedOnce = false; // 수동 시작 시 플래그 리셋
+        hasCompletedOnce = false;
         
         if (!isIndicating && generatorManager != null)
         {
@@ -493,12 +531,9 @@ public class GeneratorIndicator : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 특정 발전기를 타겟으로 설정하고 인디케이터 시작
-    /// </summary>
     public void StartIndicating(LightGaugeSystem target)
     {
-        hasCompletedOnce = false; // 수동 시작 시 플래그 리셋
+        hasCompletedOnce = false;
         
         if (!isIndicating && target != null)
         {
@@ -508,9 +543,6 @@ public class GeneratorIndicator : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 완료 상태를 리셋하여 다시 자동 시작 가능하게 만듦
-    /// </summary>
     public void ResetCompletion()
     {
         hasCompletedOnce = false;
@@ -519,7 +551,6 @@ public class GeneratorIndicator : MonoBehaviour
     
     private void OnDestroy()
     {
-        // 이벤트 구독 해제
         if (lightGaugeSystem != null)
         {
             lightGaugeSystem.onConditionMet.RemoveListener(OnGeneratorCompleted);
@@ -542,7 +573,6 @@ public class GeneratorIndicator : MonoBehaviour
             Gizmos.DrawLine(transform.position, targetGenerator.transform.position);
             
 #if UNITY_EDITOR
-            // 현재 반복 횟수 표시
             UnityEditor.Handles.Label(
                 transform.position + Vector3.up * 1.5f,
                 $"Repeat: {currentRepeatCount + 1}/{(repeatCount == 0 ? "∞" : repeatCount.ToString())}"

@@ -23,6 +23,11 @@ public class GeneratorIndicatorEditor : Editor
     private SerializedProperty sortingLayerName;
     private SerializedProperty orderInLayer;
 
+    private SerializedProperty enableOutline;
+    private SerializedProperty outlineColor;
+    private SerializedProperty outlineThickness;
+    private SerializedProperty outlineDirections;
+
     private SerializedProperty typingSpeed;
     private SerializedProperty textDisplayDuration;
 
@@ -55,6 +60,11 @@ public class GeneratorIndicatorEditor : Editor
         sortingLayerName = serializedObject.FindProperty("sortingLayerName");
         orderInLayer = serializedObject.FindProperty("orderInLayer");
 
+        enableOutline = serializedObject.FindProperty("enableOutline");
+        outlineColor = serializedObject.FindProperty("outlineColor");
+        outlineThickness = serializedObject.FindProperty("outlineThickness");
+        outlineDirections = serializedObject.FindProperty("outlineDirections");
+
         typingSpeed = serializedObject.FindProperty("typingSpeed");
         textDisplayDuration = serializedObject.FindProperty("textDisplayDuration");
 
@@ -81,7 +91,8 @@ public class GeneratorIndicatorEditor : Editor
             "• 터미널 스타일 텍스트 표시 (미리 배치된 TMP 사용)\n" +
             "• 모스 부호로 신호 전송 (약 3초)\n" +
             "• 신호가 목표 지점에 도달하면 사라짐\n" +
-            "• 반복 횟수 설정 가능",
+            "• 반복 횟수 설정 가능\n" +
+            "• 아웃라인 지원",
             MessageType.Info
         );
 
@@ -137,6 +148,46 @@ public class GeneratorIndicatorEditor : Editor
 
         EditorGUILayout.Space(10);
 
+        // === 아웃라인 설정 ===
+        EditorGUILayout.LabelField("아웃라인 설정", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(enableOutline, new GUIContent("Enable Outline", "아웃라인 활성화"));
+
+        if (enableOutline.boolValue)
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(outlineColor, new GUIContent("Outline Color", "아웃라인 색상"));
+            EditorGUILayout.PropertyField(outlineThickness, new GUIContent("Outline Thickness", "아웃라인 굵기 (0.01 ~ 0.2 권장)"));
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel("Outline Directions");
+            if (GUILayout.Toggle(outlineDirections.intValue == 4, "4방향", EditorStyles.radioButton))
+            {
+                outlineDirections.intValue = 4;
+            }
+            if (GUILayout.Toggle(outlineDirections.intValue == 8, "8방향", EditorStyles.radioButton))
+            {
+                outlineDirections.intValue = 8;
+            }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.HelpBox(
+                "🎨 아웃라인 추천 설정:\n" +
+                "• Outline Color: Black (검은색)\n" +
+                "• Outline Thickness: 0.05 (얇게) ~ 0.1 (두껍게)\n" +
+                "• Directions: 8방향 (부드러운 아웃라인)\n\n" +
+                "※ 두께가 너무 크면 신호 본체가 가려질 수 있습니다.",
+                MessageType.Info
+            );
+            
+            EditorGUI.indentLevel--;
+        }
+        else
+        {
+            EditorGUILayout.HelpBox("아웃라인이 비활성화되었습니다.", MessageType.Info);
+        }
+
+        EditorGUILayout.Space(10);
+
         // === 텍스트 설정 ===
         EditorGUILayout.LabelField("텍스트 설정", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(typingSpeed, new GUIContent("Typing Speed", "글자 타이핑 속도 (초/글자)"));
@@ -160,7 +211,7 @@ public class GeneratorIndicatorEditor : Editor
         EditorGUILayout.PropertyField(repeatInterval, new GUIContent("Repeat Interval", "각 반복 사이의 대기 시간 (초)"));
         EditorGUILayout.PropertyField(keepTextDuringRepeat, new GUIContent("Keep Text During Repeat", "반복 중에도 텍스트 유지"));
 
-        // 총 소요 시간 계산
+        // 이 소요 시간 계산
         float morseTime = CalculateTotalMorseTime(
             dotDuration.floatValue,
             dashDuration.floatValue,
@@ -180,11 +231,11 @@ public class GeneratorIndicatorEditor : Editor
         if (repeatCount.intValue > 0)
         {
             float totalTime = (totalCycleTime * repeatCount.intValue) - repeatInterval.floatValue;
-            EditorGUILayout.LabelField($"  • 총 소요 시간: {totalTime:F2}초", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"  • 이 소요 시간: {totalTime:F2}초", EditorStyles.boldLabel);
         }
         else
         {
-            EditorGUILayout.LabelField($"  • 총 소요 시간: 무한 ∞", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"  • 이 소요 시간: 무한 ∞", EditorStyles.boldLabel);
         }
         EditorGUILayout.EndVertical();
 
@@ -211,7 +262,6 @@ public class GeneratorIndicatorEditor : Editor
             EditorGUILayout.PropertyField(letterGap, new GUIContent("Letter Gap", "글자 사이 간격"));
             EditorGUILayout.PropertyField(wordGap, new GUIContent("Word Gap", "단어 사이 간격 (사용 안 함)"));
 
-            // 전체 시간 계산
             EditorGUILayout.Space(5);
             float totalTime = CalculateTotalMorseTime(
                 dotDuration.floatValue,
@@ -234,7 +284,6 @@ public class GeneratorIndicatorEditor : Editor
 
             EditorGUI.BeginDisabledGroup(true);
 
-            // 반사를 통해 private 필드 접근
             var isIndicatingField = typeof(GeneratorIndicator).GetField("isIndicating",
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var hasCompletedOnceField = typeof(GeneratorIndicator).GetField("hasCompletedOnce",
@@ -297,7 +346,6 @@ public class GeneratorIndicatorEditor : Editor
 
             EditorGUILayout.EndHorizontal();
 
-            // 완료 상태일 때 리셋 버튼 표시
             if (hasCompletedOnce && !isIndicating)
             {
                 EditorGUILayout.Space(5);
@@ -307,7 +355,6 @@ public class GeneratorIndicatorEditor : Editor
                 }
             }
 
-            // ExitDoor 조건 체크
             var generatorManagerField = typeof(GeneratorIndicator).GetField("generatorManager",
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var genManager = generatorManagerField?.GetValue(indicator) as GeneratorManager;
@@ -327,26 +374,12 @@ public class GeneratorIndicatorEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    /// <summary>
-    /// GENERATOR 모스 부호의 총 전송 시간 계산
-    /// </summary>
     private float CalculateTotalMorseTime(float dot, float dash, float symbolGap, float letterGap)
     {
-        // GENERATOR: --. . -. . .-. .- - --- .-.
-        // G(--.) = 2dash + 1dot + 2gap
-        // E(.) = 1dot
-        // N(-.) = 1dash + 1dot + 1gap
-        // E(.) = 1dot
-        // R(.-.) = 1dot + 1dash + 1dot + 2gap
-        // A(.-) = 1dot + 1dash + 1gap
-        // T(-) = 1dash
-        // O(---) = 3dash + 2gap
-        // R(.-.) = 1dot + 1dash + 1dot + 2gap
-
-        int totalDots = 9;      // G(1) + E(1) + N(1) + E(1) + R(2) + A(1) + O(0) + R(2)
-        int totalDashes = 14;   // G(2) + N(1) + R(1) + A(1) + T(1) + O(3) + R(1)
-        int totalSymbolGaps = 15; // 각 글자 내부 간격
-        int totalLetterGaps = 8;  // 9개 글자 사이의 8개 간격
+        int totalDots = 9;
+        int totalDashes = 14;
+        int totalSymbolGaps = 15;
+        int totalLetterGaps = 8;
 
         float total = (totalDots * dot) +
                       (totalDashes * dash) +
