@@ -8,7 +8,7 @@ public class PlayerContact : MonoBehaviour
     public LayerMask enemyLayer;
     bool isInverted = false;
     private WorldStateManager worldStateManager;
-    
+
     private void Awake()
     {
         isContact = false;
@@ -18,7 +18,7 @@ public class PlayerContact : MonoBehaviour
             Debug.LogError("WorldStateManager not found");
         }
     }
-    
+
     private void Start()
     {
         isContact = false;
@@ -28,14 +28,13 @@ public class PlayerContact : MonoBehaviour
             Debug.LogError("WorldStateManager not found");
         }
     }
-    
-    //무적 시간 종료 시 isContact 리셋하는 메서드
+
     public void ResetContact()
     {
         isContact = false;
     }
-    
-    public void CheckContact()//체크할 태그 이름
+
+    public void CheckContact()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, checkRadius.radius);
         foreach (Collider2D hit in hits)
@@ -52,22 +51,29 @@ public class PlayerContact : MonoBehaviour
                 {
                     Debug.Log("아이템 연결 안됨");
                 }
-                //아이템 효과 발동 시키는 코드
             }
-            //Debug.Log(isContact + " " + hit.gameObject.layer + " " + enemyLayer);
-            //if (isContact) break;
-            // 올바른 레이어 비교 방식
+
+            // 적 레이어 체크
             if ((enemyLayer.value & (1 << hit.gameObject.layer)) != 0)
             {
+                // ✅ EnemyWhite 태그 = LightSeeker
+                if (hit.CompareTag("EnemyWhite"))
+                {
+                    LightSeekerEnemy lightSeeker = hit.GetComponent<LightSeekerEnemy>();
+                    if (lightSeeker != null)
+                    {
+                        lightSeeker.TriggerCollisionStun();
+                    }
+                }
+
+                // 공통 처리 (모든 적)
                 playerLife.LifeDecrease();
                 Debug.Log(hit.gameObject.name);
                 isContact = true;
             }
-
-            
         }
     }
-    
+
     private void Update()
     {
         CheckContact();
