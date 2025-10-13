@@ -5,39 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 0
-    path: Assets/Scenes/BuildScene/StageScene.unity
-    guid: e92518b8121952946a2784fe1542f097
-  - enabled: 0
-    path: Assets/Scenes/BuildScene/StartScene.unity
-    guid: 804a1f49ab2ec544da56f4f0ae4b3419
-  - enabled: 0
-    path: Assets/Scenes/Juyoung.unity
-    guid: 8023b9c59f075bb4c9b97c255a64a2cb
   - enabled: 1
     path: Assets/Scenes/JieunTuto.unity
     guid: 967691f68f4029346aadb2fd9037f4cb
-  - enabled: 0
-    path: Assets/Scenes/BuildScene/StartScene 1010.unity
-    guid: f04477d0022cb6142a6fe7bc4262f5e9
   - enabled: 1
-    path: Assets/Scenes/BuildScene/StageScene1010.unity
-    guid: 3f4d6458e97aa4a4485dafc214d80840
-  - enabled: 0
-    path: Assets/Scenes/BuildScene/StageScene1010 1.unity
-    guid: 549aa18ba85300b4eae03fb07751c6df
-  - enabled: 0
-    path: Assets/Scenes/BuildScene/StageScene1010 2.unity
-    guid: 7c361301de3fde64391769d6e1fd1387
+    path: Assets/Scenes/BuildScene/1013/StageScene1013 0.unity
+    guid: 956b151f5b019f549a4bffae71442f14
   - enabled: 1
-    path: Assets/Scenes/BuildScene/StageScene1010 3.unity
-    guid: 681f987bdc6c5fd4f9a776d2519257ea
+    path: Assets/Scenes/BuildScene/1013/StageScene1013 1.unity
+    guid: 2ad3653103e1ff942b767d7ba6b431ce
   - enabled: 1
-    path: Assets/Scenes/BuildScene/StageScene1010 4.unity
-    guid: ac3b5d860dbeacb4780a81e976db213d
+    path: Assets/Scenes/BuildScene/1013/StageScene1013 2.unity
+    guid: 8d76ba068c0ed5d47871fd8f40ad3858
   - enabled: 1
     path: Assets/Scenes/BuildScene/EndScene.unity
     guid: 03d025b569c40124a8936bb2858fccae
