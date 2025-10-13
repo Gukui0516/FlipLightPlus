@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startLife: 3
-  maxLife: 5
+  maxLife: 4
   currentLife: 0
   lifeUI: {fileID: 0}
   invincibilityTime: 2
@@ -368,6 +368,7 @@ MonoBehaviour:
   flashLight: {fileID: 1044935700110006163}
   outlineRenderer: {fileID: 2302435188818434497}
   playerContact: {fileID: 3412208706143904603}
+  playerController: {fileID: 0}
 --- !u!1001 &4241213943732885808
 PrefabInstance:
   m_ObjectHideFlags: 0
