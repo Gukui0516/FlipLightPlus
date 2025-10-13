@@ -887,15 +887,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4167394994580402309, guid: be882a7dfdedeb94e9774f1b81860729, type: 3}
       propertyPath: 'stageRequiredCounts.Array.data[0]'
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4167394994580402309, guid: be882a7dfdedeb94e9774f1b81860729, type: 3}
       propertyPath: 'stageRequiredCounts.Array.data[1]'
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4167394994580402309, guid: be882a7dfdedeb94e9774f1b81860729, type: 3}
       propertyPath: 'stageRequiredCounts.Array.data[2]'
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6727648077056302959, guid: be882a7dfdedeb94e9774f1b81860729, type: 3}
       propertyPath: m_LocalPosition.x
@@ -360291,8 +360291,8 @@ MonoBehaviour:
     sceneAsset: {fileID: 102900000, guid: 03d025b569c40124a8936bb2858fccae, type: 3}
     sceneName: EndScene
   stageScenes:
-  - sceneAsset: {fileID: 102900000, guid: 3f4d6458e97aa4a4485dafc214d80840, type: 3}
-    sceneName: StageScene1011 0
+  - sceneAsset: {fileID: 102900000, guid: 2ad3653103e1ff942b767d7ba6b431ce, type: 3}
+    sceneName: StageScene1013 1
   - sceneAsset: {fileID: 102900000, guid: 549aa18ba85300b4eae03fb07751c6df, type: 3}
     sceneName: StageScene1010 1
   - sceneAsset: {fileID: 102900000, guid: 7c361301de3fde64391769d6e1fd1387, type: 3}
@@ -360676,7 +360676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].maxCount
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[1].itemName
@@ -360696,7 +360696,7 @@ PrefabInstance:
       objectReference: {fileID: 9089351352867651415, guid: 3b457a83d3ec8124595a4b2a1a0cf597, type: 3}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].poolMaxSize
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[1].poolMaxSize
@@ -360704,7 +360704,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].poolCapacity
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[1].poolCapacity
@@ -360712,11 +360712,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].spawnInterval
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[1].spawnInterval
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].despawnDistance
