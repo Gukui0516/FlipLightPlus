@@ -55,7 +55,7 @@ MonoBehaviour:
     despawnDistance: 25
     optionalMaxLifetime: -1
     currentCount: 0
-  - itemName: UpgradeItem
+  - itemName: LifeUpItem
     itemPrefab: {fileID: 9089351352867651415, guid: 3b457a83d3ec8124595a4b2a1a0cf597, type: 3}
     initialSpawnDelay: 2
     spawnInterval: 3
