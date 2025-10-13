@@ -5,7 +5,7 @@ using System.Collections;
 public class PlayerLife : MonoBehaviour
 {
     [SerializeField] public int startLife = 3;//시작 목숨
-    [SerializeField] public int maxLife = 3;//최대 목숨
+    [SerializeField] public int maxLife = 5;//최대 목숨
     public int currentLife;//현제체력
     [SerializeField] LifeUI lifeUI;//체력 UI
     [SerializeField] float invincibilityTime=2;//무적시간
@@ -13,6 +13,7 @@ public class PlayerLife : MonoBehaviour
     [SerializeField] bool invincibile;//무적중
     [SerializeField] SpriteRenderer playerImage;//플레이어 이미지
     [SerializeField] CircleCollider2D circleCollider;//무적시 적 충돌 안함 위해서
+    [SerializeField] FlashlightUpgradeManager flashLight;
 
     //[SerializeField] Flashlight2D flashlight;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,10 +31,12 @@ public class PlayerLife : MonoBehaviour
     void Start()
     {
         currentLife=startLife;
+        if(lifeUI!=null)
         lifeUI.LifeUIUpdate(currentLife);
         
         anim = GetComponent<Animator>();
         playerContact = GetComponent<PlayerContact>();
+        flashLight.SetLevel(currentLife + 1, flashLight.CurrentUpgradeType);//손전등 업데이트
     }
 
     public void LifeIncrease()
@@ -44,9 +47,11 @@ public class PlayerLife : MonoBehaviour
         }
         else
         {
-            currentLife++;
+            currentLife+=1;
+            flashLight.SetLevel(currentLife + 1, flashLight.CurrentUpgradeType);//손전등 업데이트
         }
-        lifeUI.LifeUIUpdate(currentLife);
+        if (lifeUI != null)
+            lifeUI.LifeUIUpdate(currentLife);
     }
     
     public void LifeDecrease()
@@ -60,9 +65,11 @@ public class PlayerLife : MonoBehaviour
             }
             else
             {
-                currentLife -= 1;
+                currentLife -=1;
+                flashLight.SetLevel(currentLife+1, flashLight.CurrentUpgradeType);//손전등 업데이트
             }
-            lifeUI.LifeUIUpdate(currentLife);
+            if (lifeUI != null)
+                lifeUI.LifeUIUpdate(currentLife);
             StartCoroutine(invincibilityTimes());//무적 시작
         }
         

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4273923196691011230}
   - component: {fileID: 8865217712806846047}
   - component: {fileID: 4818945696285585022}
+  - component: {fileID: 3772761840926297763}
   m_Layer: 8
   m_Name: Flashlight
   m_TagString: Untagged
@@ -123,8 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6ccef9587ed54642a2832c768305122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 10
-  viewAngle: 90
+  viewRadius: 5
+  viewAngle: 50
   uniformRayCount: 60
   obstacleLayer:
     serializedVersion: 2
@@ -168,3 +169,19 @@ MonoBehaviour:
     m_Bits: 128
   useImmediateDetection: 1
   showDebugLogs: 1
+--- !u!114 &3772761840926297763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5886815308704194425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0c0e6703027044896ae4019440dbc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightUpgradeManager
+  upgradeData: {fileID: 11400000, guid: a1e4f5cb91f170e4cb1f6dc623deea5d, type: 2}
+  currentLevel: 1
+  currentUpgradeType: 2
+  temporaryUpgradeDuration: 10
