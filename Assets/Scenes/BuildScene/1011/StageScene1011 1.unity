@@ -360264,7 +360264,7 @@ MonoBehaviour:
     sceneName: EndScene
   stageScenes:
   - sceneAsset: {fileID: 102900000, guid: 3f4d6458e97aa4a4485dafc214d80840, type: 3}
-    sceneName: StageScene1010
+    sceneName: StageScene1011 0
   - sceneAsset: {fileID: 102900000, guid: 549aa18ba85300b4eae03fb07751c6df, type: 3}
     sceneName: StageScene1010 1
   - sceneAsset: {fileID: 102900000, guid: 7c361301de3fde64391769d6e1fd1387, type: 3}
@@ -360700,7 +360700,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].initialSpawnDelay
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[1].initialSpawnDelay
