@@ -245,6 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AgwiEnemy
   speed: 20
   stoppingDistance: 1.5
+  useObjectPooling: 1
   worldStateManager: {fileID: 0}
   detectionRange: 8
   eyebrows: {fileID: 1739637055597289970}
@@ -267,6 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arriveEpsilon: 0.1
+  decelerationDistance: 0.5
 --- !u!114 &2653086107433009462
 MonoBehaviour:
   m_ObjectHideFlags: 0
