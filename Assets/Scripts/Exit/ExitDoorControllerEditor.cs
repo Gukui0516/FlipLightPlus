@@ -58,13 +58,53 @@ public class ExitDoorControllerEditor : Editor
         }
         else
         {
-            // 수동 모드 - 숫자 입력 필드 표시
+            // 수동 모드 - 스테이지별 리스트 표시
             EditorGUI.indentLevel++;
-            SerializedProperty manualCountProp = serializedObject.FindProperty("manualRequiredGaugeCount");
-            EditorGUILayout.PropertyField(manualCountProp, new GUIContent("Manual Required Count", "수동으로 설정할 필요 게이지 개수"));
+            
+            SerializedProperty listProp = serializedObject.FindProperty("stageRequiredCounts");
+            EditorGUILayout.PropertyField(listProp, new GUIContent("Stage Required Counts", "스테이지별 필요 게이지 개수 리스트"), true);
+            
             EditorGUI.indentLevel--;
 
-            EditorGUILayout.HelpBox("수동 모드: 직접 입력한 개수만큼 게이지를 만족해야 문이 열립니다.", MessageType.Info);
+            // 수동 모드 설명
+            EditorGUILayout.HelpBox(
+                "📝 수동 모드: 스테이지별 요구 게이지 개수 설정\n\n" +
+                "• 리스트의 각 요소는 해당 스테이지의 요구 개수를 나타냅니다\n" +
+                "  (첫 번째 = 스테이지 1, 두 번째 = 스테이지 2, ...)\n\n" +
+                "• 리스트 개수를 초과하는 스테이지는 마지막 값의 1.5배(반올림)가 적용됩니다\n" +
+                "  예) 리스트가 [1, 2, 3]이고 스테이지 4면 3 * 1.5 = 5개 필요",
+                MessageType.Info
+            );
+
+            // 리스트 미리보기
+            if (listProp.arraySize > 0)
+            {
+                EditorGUILayout.Space(5);
+                EditorGUILayout.BeginVertical("box");
+                EditorGUILayout.LabelField("리스트 미리보기", EditorStyles.miniLabel);
+                
+                for (int i = 0; i < Mathf.Min(listProp.arraySize, 5); i++)
+                {
+                    int requiredCount = listProp.GetArrayElementAtIndex(i).intValue;
+                    EditorGUILayout.LabelField($"  스테이지 {i + 1}: {requiredCount}개 필요");
+                }
+                
+                if (listProp.arraySize > 5)
+                {
+                    EditorGUILayout.LabelField($"  ... 외 {listProp.arraySize - 5}개 더");
+                }
+                
+                // 초과 스테이지 예시
+                if (listProp.arraySize > 0)
+                {
+                    int lastValue = listProp.GetArrayElementAtIndex(listProp.arraySize - 1).intValue;
+                    int nextStageValue = Mathf.RoundToInt(lastValue * 1.5f);
+                    EditorGUILayout.Space(3);
+                    EditorGUILayout.LabelField($"  스테이지 {listProp.arraySize + 1}+ : {nextStageValue}개 필요 (마지막 값 * 1.5)", EditorStyles.miniLabel);
+                }
+                
+                EditorGUILayout.EndVertical();
+            }
         }
 
         EditorGUILayout.Space(10);
@@ -121,6 +161,13 @@ public class ExitDoorControllerEditor : Editor
             EditorGUILayout.BeginVertical("box");
             EditorGUILayout.LabelField("문 상태", EditorStyles.miniLabel);
             EditorGUILayout.Toggle("등록 완료", controller.IsRegistrationFinalized);
+            
+            // 수동 모드일 때 추가 정보
+            if (!autoSetProp.boolValue && controller.StageRequiredCounts != null && controller.StageRequiredCounts.Count > 0)
+            {
+                EditorGUILayout.Space(3);
+                EditorGUILayout.LabelField($"스테이지별 리스트 크기: {controller.StageRequiredCounts.Count}개", EditorStyles.miniLabel);
+            }
             EditorGUILayout.EndVertical();
 
             EditorGUI.EndDisabledGroup();
