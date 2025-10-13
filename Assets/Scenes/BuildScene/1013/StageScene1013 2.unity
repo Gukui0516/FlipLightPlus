@@ -462,9 +462,37 @@ PrefabInstance:
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
+      propertyPath: terrains.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
       propertyPath: terrains.Array.data[0].weight
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
+      propertyPath: terrains.Array.data[10].weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
+      propertyPath: terrains.Array.data[11].weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
+      propertyPath: terrains.Array.data[12].weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
+      propertyPath: terrains.Array.data[10].terrain
+      value: 
+      objectReference: {fileID: 500338914748388705, guid: 6f2e3ea525720b747ae606897baa01f4, type: 3}
+    - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
+      propertyPath: terrains.Array.data[11].terrain
+      value: 
+      objectReference: {fileID: 500338914748388705, guid: 30239fc5df141574786612668a17bc7f, type: 3}
+    - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
+      propertyPath: terrains.Array.data[12].terrain
+      value: 
+      objectReference: {fileID: 500338914748388705, guid: fce01d6dd6ce2034eb3c98c0ff544c02, type: 3}
     - target: {fileID: 8787830186533157106, guid: fa043effae583e8488a723d9305058fb, type: 3}
       propertyPath: m_Name
       value: TerrainSpawner
@@ -1319,7 +1347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[0].maxCount
@@ -1331,11 +1359,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].maxCount
-      value: 3
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[3].maxCount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].enemyName
       value: AgwiEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[3].enemyName
+      value: AgwiSquareEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[0].poolMaxSize
@@ -1351,6 +1387,14 @@ PrefabInstance:
       objectReference: {fileID: 3217619446867333131, guid: 795eb77e202f151448f1b9e8920b0f92, type: 3}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].poolMaxSize
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[3].enemyPrefab
+      value: 
+      objectReference: {fileID: 3217619446867333131, guid: 7b87ac81af4d48641adfd9ec9f6e3920, type: 3}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[3].poolMaxSize
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
@@ -1363,6 +1407,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].poolCapacity
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[3].poolCapacity
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
@@ -1375,7 +1423,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].spawnInterval
-      value: 12
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[3].spawnInterval
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[0].initialSpawnDelay
@@ -1387,6 +1439,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[2].initialSpawnDelay
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[3].initialSpawnDelay
       value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -463,7 +463,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
       propertyPath: terrains.Array.data[0].weight
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8787830186533157106, guid: fa043effae583e8488a723d9305058fb, type: 3}
       propertyPath: m_Name
