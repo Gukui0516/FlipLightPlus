@@ -26,6 +26,7 @@ public class PlayerLife : MonoBehaviour
 
 
     [SerializeField] PlayerContact playerContact;//플레이어 접촉 스크립트
+    [SerializeField] PlayerControllerRB playerController;//플레이어 컨트롤러
     
     
     void Start()
@@ -46,6 +47,7 @@ public class PlayerLife : MonoBehaviour
         anim = GetComponent<Animator>();
         playerContact = GetComponent<PlayerContact>();
         flashLight.SetLevel(currentLife + 1, flashLight.CurrentUpgradeType);//손전등 업데이트
+        playerController = GetComponent<PlayerControllerRB>();
     }
 
     public void LifeIncrease()
@@ -91,9 +93,9 @@ public class PlayerLife : MonoBehaviour
 
             // (정지 전에 대비하려면) 애니를 리얼타임으로 돌리기
             anim.updateMode = AnimatorUpdateMode.UnscaledTime;
-
+            playerController.CanMove = false;
             anim.SetBool("IsDead", true);          // 죽음 애니 트리거
-
+            GameManager.Instance.GameOverUIActive();
 
         }
     }

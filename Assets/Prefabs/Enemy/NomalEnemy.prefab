@@ -282,6 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6
   stoppingDistance: 0
+  useObjectPooling: 1
   worldStateManager: {fileID: 0}
 --- !u!114 &5965394269043838820
 MonoBehaviour:

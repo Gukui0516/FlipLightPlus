@@ -1,12 +1,12 @@
 // C:/Users/jungle/Documents/GitHub/W5PlusTeam1/Assets/Scripts\Enemy\CommonEnemy\BaseEnemy.cs
 
 using UnityEngine;
-using UnityEngine.AI; // NavMeshAgent를 사용하기 위해 추가
+using UnityEngine.AI;
 
 /// <summary>
 /// 모든 적의 기본 클래스 - 공통 기능 제공
 /// </summary>
-[RequireComponent(typeof(Rigidbody2D))] // NavMeshAgent를 사용하더라도 Rigidbody는 있는 것이 좋음
+[RequireComponent(typeof(Rigidbody2D))]
 public abstract class BaseEnemy : MonoBehaviour
 {
     #region Protected Variables
@@ -14,6 +14,9 @@ public abstract class BaseEnemy : MonoBehaviour
     [Header("Basic Settings")]
     [SerializeField] protected float speed = 3f;
     [SerializeField] protected float stoppingDistance = 1.5f;
+
+    [Header("Object Pooling Settings")]
+    [SerializeField] protected bool useObjectPooling = true; // ✅ 오브젝트 풀링 사용 여부 (기본값: true)
 
     [Header("References")]
     [SerializeField] protected WorldStateManager worldStateManager;
@@ -30,7 +33,7 @@ public abstract class BaseEnemy : MonoBehaviour
     protected EnemyDespawn despawnModule;
     protected EnemyDieAnimation dieAnimationModule;
     protected Rigidbody2D rb;
-    protected NavMeshAgent agent; // NavMeshAgent 참조 추가
+    protected NavMeshAgent agent;
 
     #endregion
 
@@ -56,8 +59,8 @@ public abstract class BaseEnemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         if (agent != null)
         {
-            agent.updateRotation = false; // 회전은 EnemyRotation.cs에서 처리
-            agent.updateUpAxis = false;   // 2D 환경에서는 Z축 사용 안 함
+            agent.updateRotation = false;
+            agent.updateUpAxis = false;
         }
     }
 
@@ -76,7 +79,6 @@ public abstract class BaseEnemy : MonoBehaviour
         // NavMeshAgent 활성화 시 위치 동기화
         if (agent != null && !agent.isOnNavMesh)
         {
-            // 위치가 유효한지 확인 후 워프
             if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
             {
                 agent.Warp(hit.position);
@@ -95,7 +97,6 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             dieAnimationModule.onDeathAnimationComplete -= OnDeathComplete;
         }
-        // NavMeshAgent 비활성화
         if (agent != null && agent.isActiveAndEnabled)
         {
             agent.isStopped = true;
@@ -154,7 +155,6 @@ public abstract class BaseEnemy : MonoBehaviour
             return;
         }
 
-        // 월드 인버전 등으로 정지해야 한다면 즉시 제동
         if (IsStoppedByInversion())
         {
             movementModule?.StopImmediate();
@@ -173,58 +173,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
         else
         {
-            // 손전등 조건 등으로 '멈춤' 판정일 때도 관성 없이 즉시 정지
             movementModule?.StopImmediate();
-        }
-    }
-
-    /// <summary>
-    /// NavMeshAgent를 사용한 이동 처리
-    /// </summary>
-    private void HandleNavMeshMovement()
-    {
-        if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh) return;
-
-        if (ShouldMove() && player != null)
-        {
-            agent.isStopped = false;
-            agent.speed = GetCurrentSpeed();
-            agent.stoppingDistance = stoppingDistance;
-            agent.SetDestination(player.position);
-        }
-        else
-        {
-            agent.isStopped = true;
-            // 멈출 때 관성을 없애기 위해 속도를 직접 0으로 설정
-            if (agent.hasPath)
-            {
-                agent.ResetPath();
-            }
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector2.zero;
-            }
-        }
-    }
-
-    /// <summary>
-    /// 기존 Rigidbody를 사용한 이동 처리 (AgwiEnemy 등)
-    /// </summary>
-    private void HandleRigidbodyMovement()
-    {
-        if (ShouldMove())
-        {
-            if (movementModule != null)
-            {
-                movementModule.MoveTowardsPlayer(player, GetCurrentSpeed(), stoppingDistance);
-            }
-        }
-        else
-        {
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector2.zero;
-            }
         }
     }
 
@@ -237,9 +186,6 @@ public abstract class BaseEnemy : MonoBehaviour
     protected abstract float GetCurrentSpeed();
     protected abstract void InitializeEnemy();
 
-    /// <summary>
-    /// 이 적이 NavMeshAgent를 사용하는지 여부를 반환. (AgwiEnemy처럼 사용하지 않는 경우 false를 반환하도록 오버라이드)
-    /// </summary>
     protected virtual bool UsesNavMesh() => true;
 
     protected virtual bool IsStoppedByInversion()
@@ -261,7 +207,6 @@ public abstract class BaseEnemy : MonoBehaviour
 
     #region Flashlight Events
 
-    // ... (OnTriggerEnter2D, OnTriggerExit2D, OnEnterLight, OnExitLight) 기존 코드 유지 ...
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (isDead) return;
@@ -316,9 +261,21 @@ public abstract class BaseEnemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ✅ 사망 애니메이션 완료 후 호출 - 오브젝트 풀링 여부에 따라 처리
+    /// </summary>
     private void OnDeathComplete()
     {
-        EnemySpawner.Instance?.ReturnEnemy(gameObject);
+        if (useObjectPooling)
+        {
+            // 오브젝트 풀링 사용: 풀로 반환
+            EnemySpawner.Instance?.ReturnEnemy(gameObject);
+        }
+        else
+        {
+            // 오브젝트 풀링 미사용: 즉시 파괴
+            Destroy(gameObject);
+        }
     }
 
     #endregion
