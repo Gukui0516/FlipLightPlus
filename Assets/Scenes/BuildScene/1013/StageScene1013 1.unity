@@ -459,7 +459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
       propertyPath: generatorNum
-      value: 20
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 3781168845795697989, guid: fa043effae583e8488a723d9305058fb, type: 3}
       propertyPath: terrains.Array.data[0].weight
@@ -1421,6 +1421,14 @@ PrefabInstance:
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[1].poolCapacity
       value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[0].spawnInterval
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
+      propertyPath: enemyTypes.Array.data[1].spawnInterval
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9207251951477027796, guid: 0433e4847222fb443996a52ab03b8cb7, type: 3}
       propertyPath: enemyTypes.Array.data[0].initialSpawnDelay
@@ -360728,7 +360736,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[0].initialSpawnDelay
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 140075585349572814, guid: c32e03c7758bc3d4cb0aa19e69b3ef6a, type: 3}
       propertyPath: itemTypes.Array.data[1].initialSpawnDelay
