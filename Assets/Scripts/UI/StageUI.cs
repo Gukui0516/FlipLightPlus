@@ -21,6 +21,11 @@ public class StageUI : MonoBehaviour
     [SerializeField] private Vector2 targetAnchoredPos;           // 원래 자리(오른쪽 위)
     [SerializeField] private float moveDuration = 0.6f;           // 이동 시간
 
+    // ▶ 추가: Intro 동안 플레이어 이동 잠그기
+    [Header("Player Lock")]
+    [SerializeField] private bool lockMoveDuringIntro = true;
+    [SerializeField] private PlayerControllerRB player; // 인스펙터에서 연결(없으면 자동 탐색)
+
     // 1) 스테이지별 첫 문장 (기존 배열)
     private readonly string[] stageInfoMessages = new string[]
     {
@@ -46,8 +51,24 @@ public class StageUI : MonoBehaviour
         if (GameManager.Instance != null)
             currentStage = GameManager.Instance.CurrentStage;
 
+        // ▶ 시작하자마자 이동 잠금
+        if (lockMoveDuringIntro) LockPlayerMovement(true);
+
+        StartCoroutine(DisplayStageInfo());
+
         // 순차 표시 시작
         StartCoroutine(DisplayStageInfo());
+    }
+
+    private void LockPlayerMovement(bool locked)
+    {
+        if (!player) return;
+        player.CanMove = !locked;
+        if (locked)
+        {
+            // 미세한 잔류 속도/입력 제거(플레이어 컨트롤러가 이미 처리하지만 한 번 더 보강)
+            player.SetVelocityAndSync(Vector2.zero);
+        }
     }
 
     private IEnumerator DisplayStageInfo()
@@ -97,6 +118,9 @@ public class StageUI : MonoBehaviour
         // 완전히 투명 보장
         SetTextAlpha(stageInfoText, 0f);
         SetTextAlpha(stageNumberText, 0f);
+
+        // ▶ 안내 끝: 이동 해제
+        if (lockMoveDuringIntro) LockPlayerMovement(false);
 
         // 선택: UI 비활성화
         // gameObject.SetActive(false);
