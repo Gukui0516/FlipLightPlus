@@ -8,19 +8,9 @@
 
 플레이어는 검은 배경 속에서 손전등을 사용해 적을 멈추게 하거나 피하며, **발전기에 빛을 충전해 문을 여는 것**이 목표입니다. 맵 곳곳에 숨겨진 **반전 아이템**을 획득하면 세계가 흑에서 백으로 뒤집히며, 적은 일시적으로 멈추고 플레이어는 손전등으로 적을 제거할 수 있게 됩니다. "빛과 어둠의 대비"에서 오는 긴장과 해방감이 게임의 핵심 경험입니다.
 
+## 팀
 
-## 목차
-
-- [게임 개요](#게임-개요)
-- [핵심 컨셉](#핵심-컨셉)
-- [코어 루프 & 조작법](#코어-루프--조작법)
-- [Flip Light+에서 달라진 점](#flip-light에서-달라진-점)
-- [게임 요소](#게임-요소)
-- [추가 스크린샷](#추가-스크린샷)
-- [개발 환경](#개발-환경)
-- [프로젝트 구조](#프로젝트-구조)
-- [팀](#팀)
-- [제작 회고](#제작-회고)
+오상협, 이정민, 조지은, 최주영
 
 ## 게임 개요
 
@@ -193,39 +183,8 @@
 - **렌더 파이프라인**: Universal Render Pipeline (2D)
 - **주요 패키지**: `com.unity.inputsystem`, `com.unity.ai.navigation`(NavMesh), `com.h8man.2d.navmeshplus`, `com.unity.2d.tilemap`, `com.unity.2d.animation`, `com.unity.timeline`, TextMesh Pro
 
-### 실행 방법
 
-1. [Unity Hub](https://unity.com/download)에서 `6000.2.6f2` 이상의 에디터를 설치합니다.
-2. 저장소를 클론한 뒤 Unity Hub에서 프로젝트 폴더를 엽니다.
-3. `Assets/Scenes` 하위의 씬(타이틀 또는 스테이지 씬)을 열어 재생합니다.
 
-## 프로젝트 구조
-
-```
-Assets/
-├── Prefabs/          # 플레이어, 적, 발전기, 아이템, UI 등 프리팹
-├── Resources/         # 스프라이트, 애니메이션 리소스
-├── Scenes/             # 타이틀 및 스테이지 씬
-├── Scripts/
-│   ├── Battery/        # 발전기 게이지 시스템
-│   ├── Camera/          # 카메라 추적/배경
-│   ├── Enemy/            # 적 AI (공통 모듈 + 개별 타입, 아귀 몬스터 포함)
-│   ├── Exit/              # 탈출구 / 발전기 매니저 / 인디케이터
-│   ├── Flashlight/         # 손전등 시야/반전 로직
-│   ├── Item/                # 아이템 및 색상 반전 처리
-│   ├── Manager/               # GameManager, SceneManager
-│   ├── Map/                    # 내비메시 베이킹
-│   ├── Player/                  # 이동, 생명(손전등 범위), 접촉 처리
-│   ├── Spawner/                   # 적/지형 스포너
-│   ├── StateManager/               # WorldStateManager (반전 상태 관리)
-│   ├── UI/                          # HUD, 온보딩 UI 등
-│   └── Wall/                         # 장애물/시야 차단 처리
-└── SO/                # ScriptableObject 기반 설정 데이터
-```
-
-## 팀
-
-오상협, 이정민, 조지은, 최주영
 
 ## 제작 회고
 
